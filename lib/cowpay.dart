@@ -13,8 +13,6 @@ class Calculator {
 }
 
 class Cowpay {
-
-
   static final Cowpay _instance = Cowpay._internal();
 
   factory Cowpay() {
@@ -26,27 +24,54 @@ class Cowpay {
   String? _merchantHash;
   static CowpayEnvironment? activeEnvironment;
   static String? token;
-  FawryUseCase  useCase = FawryUseCase();
+  FawryUseCase _useCase = FawryUseCase();
 
   Cowpay._internal();
 
-  void init(
-      {required CowpayEnvironment cowpayEnvironment, required String token, required String merchantCode,
-        required String merchantHash,
-        required String authToken,}) {
+  void init({
+    required CowpayEnvironment cowpayEnvironment,
+    required String token,
+    required String merchantCode,
+    required String merchantHash,
+  }) {
     activeEnvironment = cowpayEnvironment;
     Cowpay.token = token;
-    this._authToken = authToken;
     this._merchantCode = merchantCode;
     this._merchantHash = merchantHash;
   }
 
+  Future<FawryResponseModel> createFawryReceipt(
+      {required String merchantReferenceId,
+      required String customerMerchantProfileId,
+      String? customerName,
+      String? customerEmail,
+      String? customerMobile,
+      required String amount,
+      required String description}) async {
 
-  Future <FawryResponseModel> createFawryReceipt(FawryRequestModel fawryRequestModel)async{
-    return await this.useCase.createFawrReceipt(fawryRequestModel);
+    String signature = this._useCase.generateSignature([
+      this._merchantCode,
+      merchantReferenceId,
+      customerMerchantProfileId,
+      amount,
+      this._merchantHash
+    ]);
+    FawryRequestModel fawryRequestModel = FawryRequestModel(
+      merchantReferenceId: merchantReferenceId,
+      amount: amount,
+      customerEmail: customerMobile,
+      description: description,
+      customerMerchantProfileId: customerMerchantProfileId,
+      customerMobile: customerMobile,
+      customerName: customerName,
+      signature: signature
+    );
+    try{
+      return await this._useCase.createFawrReceipt(fawryRequestModel);
+    } catch (error){
+      throw(error);
+    }
   }
 
-
   static Cowpay get instance => _instance;
-
 }
