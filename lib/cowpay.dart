@@ -1,10 +1,10 @@
 library cowpay;
 
 import 'package:cowpay/models/fawry_request_model.dart';
-import 'package:cowpay/models/fawry_response_model.dart';
 import 'package:cowpay/src/fawry_usecase.dart';
 
 import 'helpers/enum_models.dart';
+import 'models/fawry_response_model.dart';
 
 /// A Calculator.
 class Calculator {
@@ -19,11 +19,11 @@ class Cowpay {
     return _instance;
   }
 
-  String? _authToken;
   String? _merchantCode;
   String? _merchantHash;
   static CowpayEnvironment? activeEnvironment;
   static String? token;
+
   FawryUseCase _useCase = FawryUseCase();
 
   Cowpay._internal();
@@ -40,15 +40,16 @@ class Cowpay {
     this._merchantHash = merchantHash;
   }
 
-  Future<FawryResponseModel> createFawryReceipt(
+  Future<void> createFawryReceipt(
       {required String merchantReferenceId,
       required String customerMerchantProfileId,
       String? customerName,
       String? customerEmail,
       String? customerMobile,
       required String amount,
-      required String description}) async {
-
+      required String description,
+      required Function(FawryResponseModel fawryResponseModel) onSuccess,
+      required Function(String messagge) onError}) async {
     String signature = this._useCase.generateSignature([
       this._merchantCode,
       merchantReferenceId,
@@ -57,19 +58,19 @@ class Cowpay {
       this._merchantHash
     ]);
     FawryRequestModel fawryRequestModel = FawryRequestModel(
-      merchantReferenceId: merchantReferenceId,
-      amount: amount,
-      customerEmail: customerMobile,
-      description: description,
-      customerMerchantProfileId: customerMerchantProfileId,
-      customerMobile: customerMobile,
-      customerName: customerName,
-      signature: signature
-    );
-    try{
-      return await this._useCase.createFawrReceipt(fawryRequestModel);
-    } catch (error){
-      throw(error);
+        merchantReferenceId: merchantReferenceId,
+        amount: amount,
+        customerEmail: customerEmail,
+        description: description,
+        customerMerchantProfileId: customerMerchantProfileId,
+        customerMobile: customerMobile,
+        customerName: customerName,
+        signature: signature);
+    try {
+      var model = await this._useCase.createFawryReceipt(fawryRequestModel);
+      onSuccess(model);
+    } catch (error) {
+      onError(error.toString());
     }
   }
 
