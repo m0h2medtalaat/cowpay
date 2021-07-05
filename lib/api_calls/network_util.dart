@@ -57,31 +57,22 @@ class NetworkUtil {
         parsed = jsonDecode(res).cast<String, dynamic>();
       }
     } catch (e) {
-      throw ('Error Call');
+      throw (e);
     }
 
     switch (statusCode) {
       case 401:
-        throw ('Error Call');
-        return false;
+        throw (res);
       case 400:
-        throw ('Error Call');
-
+        throw (res);
       case 500:
-        throw ('Error Call');
-
+        throw (res);
       case 200:
         if (res.isEmpty) return true;
         return parsed;
-      //TODO
-      case 204:
-        return true;
 
       default:
-        String message = 'somethingWentWrong';
-        if (parsed.containsKey("message") && parsed['message'] != null)
-          message = parsed['message'];
-        throw ('Error Call');
+        throw (res);
     }
   }
 

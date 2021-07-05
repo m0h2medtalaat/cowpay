@@ -4,8 +4,8 @@ import 'package:cowpay/helpers/enum_models.dart';
 class UrlsData {
   CowpayEnvironment cowpayEnvironment = CowpayEnvironment.staging;
 
-  static const String host_production = "cowpay.me";
-  static const String host_staging = "staging.cowpay.me";
+  static const String host_production = "https://cowpay.me";
+  static const String host_staging = "https://staging.cowpay.me";
 
   static const basicUrl = '/api/v1/';
 

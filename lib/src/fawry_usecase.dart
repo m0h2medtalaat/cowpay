@@ -2,16 +2,15 @@ import 'dart:convert';
 
 import 'package:cowpay/api_calls/api_calls.dart';
 import 'package:cowpay/models/fawry_request_model.dart';
-import 'package:cowpay/models/fawry_response_model.dart';
 import 'package:crypto/crypto.dart';
 
-class FawryUseCase{
-
-  Future <FawryResponseModel> createFawrReceipt(FawryRequestModel fawryRequestModel) async{
+class FawryUseCase {
+  Future<dynamic> createFawryReceipt(
+      FawryRequestModel fawryRequestModel) async {
     try {
       return await ApiCallsClass().fawryChargeCall(fawryRequestModel);
     } catch (error) {
-      throw(error);
+      throw (error);
     }
   }
 

@@ -19,14 +19,13 @@ class ApiCallsClass {
   //region Fawry
   Future<dynamic> fawryChargeCall(FawryRequestModel fawryRequestModel) async {
     try {
-     return await _netUtil
-          .post(UrlsData.fawryUrl, body: fawryRequestModel.toJson())
-          .then((dynamic res) async {
-        FawryResponseModel fawryResponseModel =
-            FawryResponseModel.fromJson(json.decode(json.encode(res)));
-      });
+      var res = await _netUtil.post(UrlsData.fawryUrl,
+          body: fawryRequestModel.toJson());
+      FawryResponseModel fawryResponseModel =
+          FawryResponseModel.fromJson(json.decode(json.encode(res)));
+      debugPrint('Success ${fawryResponseModel.statusCode.toString()}');
+      return fawryResponseModel;
     } catch (error) {
-      debugPrint(error.toString());
       throw error;
     }
   }
