@@ -27,12 +27,7 @@ class ApiCallsClass {
           FawryResponseModel.fromJson(json.decode(json.encode(res)));
       debugPrint('Success ${fawryResponseModel.statusCode.toString()}');
       return fawryResponseModel;
-    } on TimeoutException catch (error) {
-      throw error;
-    } on SocketException catch (error) {
-      throw error;
-    }
-    catch (error) {
+    } catch (error) {
       throw error;
     }
   }

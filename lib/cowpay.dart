@@ -45,7 +45,7 @@ class Cowpay {
     this._merchantHash = merchantHash;
   }
 
-  Future<void> createFawryReceipt(
+  Future<FawryRequestModel> createFawryReceipt(
       {required String merchantReferenceId,
       required String customerMerchantProfileId,
       String? customerName,
@@ -53,8 +53,8 @@ class Cowpay {
       String? customerMobile,
       required String amount,
       required String description,
-      required Function(FawryResponseModel fawryResponseModel) onSuccess,
-      required Function(CowpayErrorModel error) onError}) async {
+      /*required Function(FawryResponseModel fawryResponseModel) onSuccess,
+      required Function(CowpayErrorModel error) onError*/}) async {
     String signature = this._useCase.generateSignature([
       this._merchantCode,
       merchantReferenceId,
@@ -72,22 +72,14 @@ class Cowpay {
         customerName: customerName,
         signature: signature);
     try {
-      var model = await this._useCase.createFawryReceipt(fawryRequestModel);
-      onSuccess(model);
-    }on TimeoutException catch (error) {
-      var errorModel = CowpayErrorModel(statusCode: 500, success: false,statusDescription: "", type: "Time out error", errors: error );
-      onError(errorModel);
+      return await this._useCase.createFawryReceipt(fawryRequestModel);
+      // onSuccess(model);
+    } on TimeoutException catch (error) {
+      throw error;
     } on SocketException catch (error) {
-      var errorModel = CowpayErrorModel(statusCode: 512, success: false,statusDescription: "", type: "internet connection error", errors: error );
-      onError(errorModel);
-    } catch (error) {
-      try {
-        CowpayErrorModel errorModel = CowpayErrorModel.fromJson(json.decode(error.toString()));
-        onError(errorModel);
-      } catch (e) {
-        var errorModel = CowpayErrorModel(statusCode: 512, success: false,statusDescription: "Invalid response", type: "Response format error", errors: error );
-        onError(errorModel);
-      }
+      throw error;
+    } on CowpayErrorModel catch (error){
+      throw error;
     }
   }
 

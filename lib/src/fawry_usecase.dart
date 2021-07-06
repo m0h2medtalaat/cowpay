@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cowpay/api_calls/api_calls.dart';
+import 'package:cowpay/models/cowpay_error_model.dart';
 import 'package:cowpay/models/fawry_request_model.dart';
 import 'package:crypto/crypto.dart';
 
@@ -11,12 +12,9 @@ class FawryUseCase {
       FawryRequestModel fawryRequestModel) async {
     try {
       return await ApiCallsClass().fawryChargeCall(fawryRequestModel);
-    } on TimeoutException catch (error) {
-      throw error;
-    } on SocketException catch (error) {
-      throw error;
     } catch (error) {
-      throw (error);
+      var errorModel = CowpayErrorModel(statusCode: 512, success: false,statusDescription: "", type: "internet connection error", errors: error );
+      throw (errorModel);
     }
   }
 
