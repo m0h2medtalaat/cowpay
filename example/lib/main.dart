@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
                       description: 'description',
                       amount: '32',
                       customerMerchantProfileId: '2312',
-                      merchantReferenceId: '123456',
+                      merchantReferenceId: getRandString(),
                       customerEmail: 'sqeqedqqw@gmail.com',
                       customerMobile: '01234567890',
                       customerName: 'customerName',
@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
                         debugPrint('fawrySuccess ${val.type}');
                       },
                       onError: (val) {
-                        debugPrint('fawryError $val');
+                        debugPrint('fawryError ${val.type}');
                       });
                 },
                 child: Text('Fawry')),

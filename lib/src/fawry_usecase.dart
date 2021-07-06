@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:cowpay/api_calls/api_calls.dart';
 import 'package:cowpay/models/fawry_request_model.dart';
@@ -9,6 +11,10 @@ class FawryUseCase {
       FawryRequestModel fawryRequestModel) async {
     try {
       return await ApiCallsClass().fawryChargeCall(fawryRequestModel);
+    } on TimeoutException catch (error) {
+      throw error;
+    } on SocketException catch (error) {
+      throw error;
     } catch (error) {
       throw (error);
     }

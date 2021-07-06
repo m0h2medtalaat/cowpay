@@ -1,5 +1,10 @@
 library cowpay;
 
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:cowpay/models/cowpay_error_model.dart';
 import 'package:cowpay/models/fawry_request_model.dart';
 import 'package:cowpay/src/fawry_usecase.dart';
 
@@ -49,7 +54,7 @@ class Cowpay {
       required String amount,
       required String description,
       required Function(FawryResponseModel fawryResponseModel) onSuccess,
-      required Function(String messagge) onError}) async {
+      required Function(CowpayErrorModel error) onError}) async {
     String signature = this._useCase.generateSignature([
       this._merchantCode,
       merchantReferenceId,
@@ -69,8 +74,20 @@ class Cowpay {
     try {
       var model = await this._useCase.createFawryReceipt(fawryRequestModel);
       onSuccess(model);
+    }on TimeoutException catch (error) {
+      var errorModel = CowpayErrorModel(statusCode: 500, success: false,statusDescription: "", type: "Time out error", errors: error );
+      onError(errorModel);
+    } on SocketException catch (error) {
+      var errorModel = CowpayErrorModel(statusCode: 512, success: false,statusDescription: "", type: "internet connection error", errors: error );
+      onError(errorModel);
     } catch (error) {
-      onError(error.toString());
+      try {
+        CowpayErrorModel errorModel = CowpayErrorModel.fromJson(json.decode(error.toString()));
+        onError(errorModel);
+      } catch (e) {
+        var errorModel = CowpayErrorModel(statusCode: 512, success: false,statusDescription: "Invalid response", type: "Response format error", errors: error );
+        onError(errorModel);
+      }
     }
   }
 
