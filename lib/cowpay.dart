@@ -1,11 +1,18 @@
 library cowpay;
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:cowpay/models/cach_collection_request_model.dart';
+import 'package:cowpay/models/cach_collection_response_model.dart';
 import 'package:cowpay/models/cowpay_error_model.dart';
+import 'package:cowpay/models/credit_card_request_model.dart';
 import 'package:cowpay/models/fawry_request_model.dart';
+import 'package:cowpay/src/cash_collection_usercase.dart';
+import 'package:cowpay/src/credit_card_usercase.dart';
 import 'package:cowpay/src/fawry_usecase.dart';
+import 'package:crypto/crypto.dart';
 
 import 'helpers/enum_models.dart';
 
@@ -26,8 +33,6 @@ class Cowpay {
   String? _merchantHash;
   static CowpayEnvironment? activeEnvironment;
   static String? token;
-
-  FawryUseCase _useCase = FawryUseCase();
 
   Cowpay._internal();
 
@@ -54,7 +59,9 @@ class Cowpay {
     /*required Function(FawryResponseModel fawryResponseModel) onSuccess,
       required Function(CowpayErrorModel error) onError*/
   }) async {
-    String signature = this._useCase.generateSignature([
+    FawryUseCase _fawryUseCase = FawryUseCase();
+
+    String signature = generateSignature([
       this._merchantCode,
       merchantReferenceId,
       customerMerchantProfileId,
@@ -71,7 +78,7 @@ class Cowpay {
         customerName: customerName,
         signature: signature);
     try {
-      return await this._useCase.createFawryReceipt(fawryRequestModel);
+      return await _fawryUseCase.createFawryReceipt(fawryRequestModel);
       // onSuccess(model);
     } on TimeoutException catch (error) {
       throw error;
@@ -82,5 +89,100 @@ class Cowpay {
     }
   }
 
+  Future<CreditCardResponseModel> creditCardCharge({
+    required String merchantReferenceId,
+    required String customerMerchantProfileId,
+    required String customerName,
+    required String customerEmail,
+    required String customerMobile,
+    required String cvv,
+    required String cardNumber,
+    required String expiryYear,
+    required String expiryMonth,
+    required String amount,
+    required String description,
+  }) async {
+    CreditCardUseCase _creditCardUseCase = CreditCardUseCase();
+
+    String signature = generateSignature([
+      this._merchantCode,
+      merchantReferenceId,
+      customerMerchantProfileId,
+      amount,
+      this._merchantHash
+    ]);
+    CreditCardRequestModel creditCardRequestModel = CreditCardRequestModel(
+        cardNumber: cardNumber,
+        cvv: cvv,
+        expiryMonth: expiryMonth,
+        expiryYear: expiryYear,
+        merchantReferenceId: merchantReferenceId,
+        amount: amount,
+        customerEmail: customerEmail,
+        description: description,
+        customerMerchantProfileId: customerMerchantProfileId,
+        customerMobile: customerMobile,
+        customerName: customerName,
+        signature: signature);
+    try {
+      return await _creditCardUseCase
+          .createCreditCardCharge(creditCardRequestModel);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  Future<dynamic> cashCollectionCharge({
+    required String merchantReferenceId,
+    required String customerMerchantProfileId,
+    required String customerName,
+    required String customerEmail,
+    required String customerMobile,
+    required String address,
+    required String apartment,
+    required String cityCode,
+    required String district,
+    required floor,
+    required String amount,
+    required String description,
+  }) async {
+    CashCollectionUseCase _cashCollectionUseCase = CashCollectionUseCase();
+
+    String signature = generateSignature([
+      this._merchantCode,
+      merchantReferenceId,
+      customerMerchantProfileId,
+      amount,
+      this._merchantHash
+    ]);
+    CashCollectionRequestModel cashCollectionRequestModel =
+        CashCollectionRequestModel(
+            address: address,
+            apartment: apartment,
+            cityCode: cityCode,
+            district: district,
+            floor: floor,
+            merchantReferenceId: merchantReferenceId,
+            amount: amount,
+            customerEmail: customerEmail,
+            description: description,
+            customerMerchantProfileId: customerMerchantProfileId,
+            customerMobile: customerMobile,
+            customerName: customerName,
+            signature: signature);
+    try {
+      return await _cashCollectionUseCase
+          .cashCollectionCharge(cashCollectionRequestModel);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   static Cowpay get instance => _instance;
+
+  String generateSignature(List params) {
+    String concatenated = params.join("");
+    String res = sha256.convert(utf8.encode(concatenated)).toString();
+    return res;
+  }
 }
