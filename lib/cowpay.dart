@@ -1,7 +1,6 @@
 library cowpay;
 
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:cowpay/models/cowpay_error_model.dart';
@@ -9,7 +8,6 @@ import 'package:cowpay/models/fawry_request_model.dart';
 import 'package:cowpay/src/fawry_usecase.dart';
 
 import 'helpers/enum_models.dart';
-import 'models/fawry_response_model.dart';
 
 /// A Calculator.
 class Calculator {
@@ -45,16 +43,17 @@ class Cowpay {
     this._merchantHash = merchantHash;
   }
 
-  Future<FawryRequestModel> createFawryReceipt(
-      {required String merchantReferenceId,
-      required String customerMerchantProfileId,
-      String? customerName,
-      String? customerEmail,
-      String? customerMobile,
-      required String amount,
-      required String description,
-      /*required Function(FawryResponseModel fawryResponseModel) onSuccess,
-      required Function(CowpayErrorModel error) onError*/}) async {
+  Future<FawryRequestModel> createFawryReceipt({
+    required String merchantReferenceId,
+    required String customerMerchantProfileId,
+    String? customerName,
+    String? customerEmail,
+    String? customerMobile,
+    required String amount,
+    required String description,
+    /*required Function(FawryResponseModel fawryResponseModel) onSuccess,
+      required Function(CowpayErrorModel error) onError*/
+  }) async {
     String signature = this._useCase.generateSignature([
       this._merchantCode,
       merchantReferenceId,
@@ -78,7 +77,7 @@ class Cowpay {
       throw error;
     } on SocketException catch (error) {
       throw error;
-    } on CowpayErrorModel catch (error){
+    } on CowpayErrorModel catch (error) {
       throw error;
     }
   }

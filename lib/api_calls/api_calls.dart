@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:cowpay/api_calls/urls_data.dart';
 import 'package:cowpay/models/fawry_request_model.dart';
@@ -26,6 +25,7 @@ class ApiCallsClass {
       FawryResponseModel fawryResponseModel =
           FawryResponseModel.fromJson(json.decode(json.encode(res)));
       debugPrint('Success ${fawryResponseModel.statusCode.toString()}');
+
       return fawryResponseModel;
     } catch (error) {
       throw error;

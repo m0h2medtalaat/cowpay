@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:math';
-
+import 'dart:math';'package:cowpay/api_calls/exceptions.dart';
 import 'package:cowpay/cowpay.dart';
 import 'package:cowpay/helpers/enum_models.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +45,8 @@ class MyApp extends StatelessWidget {
                     print(error);
                   } on SocketException catch (error) {
                     print(error);
-                  } catch (error) {
+                  } on InternalServerException catch (error) {
+                    print(error.code);
                   }
                 },
                 child: Text('Fawry')),
