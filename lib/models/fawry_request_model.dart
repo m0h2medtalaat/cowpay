@@ -1,9 +1,9 @@
 class FawryRequestModel {
   late String merchantReferenceId;
   late String customerMerchantProfileId;
-  late String customerName;
-  late String customerEmail;
-  late String customerMobile;
+  late String? customerName;
+  late String? customerEmail;
+  late String? customerMobile;
   late String amount;
   late String signature;
   late String description;
@@ -11,9 +11,9 @@ class FawryRequestModel {
   FawryRequestModel(
       {required this.merchantReferenceId,
       required this.customerMerchantProfileId,
-      required this.customerName,
-      required this.customerEmail,
-      required this.customerMobile,
+      this.customerName,
+      this.customerEmail,
+      this.customerMobile,
       required this.amount,
       required this.signature,
       required this.description});

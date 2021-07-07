@@ -60,7 +60,6 @@ class Cowpay {
       required Function(CowpayErrorModel error) onError*/
   }) async {
     FawryUseCase _fawryUseCase = FawryUseCase();
-
     String signature = generateSignature([
       this._merchantCode,
       merchantReferenceId,

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:math';'package:cowpay/api_calls/exceptions.dart';
+import 'dart:math';
+import 'package:cowpay/api_calls/exceptions.dart';
 import 'package:cowpay/cowpay.dart';
 import 'package:cowpay/helpers/enum_models.dart';
 import 'package:flutter/material.dart';
@@ -27,29 +28,35 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
+        appBar: AppBar(
+          title: Text('Cowpay'),
+          centerTitle: true,
+        ),
         body: Center(
-          child: Container(
-            child: InkWell(
-                onTap: () async {
-                  try {
-                    await Cowpay.instance.createFawryReceipt(
-                      description: 'description',
-                      amount: '32',
-                      customerMerchantProfileId: '2312',
-                      merchantReferenceId: getRandString(),
-                      customerEmail: 'sqeqedqqw@gmail.com',
-                      customerMobile: '01234567890',
-                      customerName: 'customerName',
-                    );
-                  } on TimeoutException catch (error) {
-                    print(error);
-                  } on SocketException catch (error) {
-                    print(error);
-                  } on InternalServerException catch (error) {
-                    print(error.code);
-                  }
-                },
-                child: Text('Fawry')),
+          child: Column(
+            children: [
+              SizedBox(
+                height: 70,
+              ),
+              SizedBox(
+                width: 300,
+                child: ElevatedButton(
+                    onPressed: () => _fawryOnCLick, child: Text('Fawry')),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 20),
+                width: 300,
+                child: ElevatedButton(
+                    onPressed: () => _fawryOnCLick, child: Text('Credit Card')),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 20),
+                width: 300,
+                child: ElevatedButton(
+                    onPressed: () => _fawryOnCLick,
+                    child: Text('Cash Collection')),
+              ),
+            ],
           ),
         ),
       ),
@@ -60,5 +67,25 @@ class MyApp extends StatelessWidget {
     Random random = new Random();
     int randomNumber = random.nextInt(9000) + 1000;
     return randomNumber.toString();
+  }
+
+  Future<void> _fawryOnCLick() async {
+    try {
+      await Cowpay.instance.createFawryReceipt(
+        description: 'description',
+        amount: '32',
+        customerMerchantProfileId: '2312',
+        merchantReferenceId: getRandString(),
+        customerEmail: 'sqeqedqqw@gmail.com',
+        customerMobile: '01234567890',
+        customerName: 'customerName',
+      );
+    } on TimeoutException catch (error) {
+      print(error);
+    } on SocketException catch (error) {
+      print(error);
+    } on InternalServerException catch (error) {
+      print(error.code);
+    }
   }
 }
