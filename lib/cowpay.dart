@@ -2,13 +2,12 @@ library cowpay;
 
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:cowpay/models/cach_collection_request_model.dart';
 import 'package:cowpay/models/cach_collection_response_model.dart';
-import 'package:cowpay/models/cowpay_error_model.dart';
 import 'package:cowpay/models/credit_card_request_model.dart';
 import 'package:cowpay/models/fawry_request_model.dart';
+import 'package:cowpay/models/fawry_response_model.dart';
 import 'package:cowpay/src/cash_collection_usercase.dart';
 import 'package:cowpay/src/credit_card_usercase.dart';
 import 'package:cowpay/src/fawry_usecase.dart';
@@ -48,7 +47,7 @@ class Cowpay {
     this._merchantHash = merchantHash;
   }
 
-  Future<FawryRequestModel> createFawryReceipt({
+  Future<FawryResponseModel> createFawryReceipt({
     required String merchantReferenceId,
     required String customerMerchantProfileId,
     String? customerName,
@@ -56,8 +55,6 @@ class Cowpay {
     String? customerMobile,
     required String amount,
     required String description,
-    /*required Function(FawryResponseModel fawryResponseModel) onSuccess,
-      required Function(CowpayErrorModel error) onError*/
   }) async {
     FawryUseCase _fawryUseCase = FawryUseCase();
     String signature = generateSignature([
@@ -78,13 +75,8 @@ class Cowpay {
         signature: signature);
     try {
       return await _fawryUseCase.createFawryReceipt(fawryRequestModel);
-      // onSuccess(model);
-    } on TimeoutException catch (error) {
-      throw error;
-    } on SocketException catch (error) {
-      throw error;
-    } on CowpayErrorModel catch (error) {
-      throw error;
+    } catch (error) {
+      throw (error);
     }
   }
 
