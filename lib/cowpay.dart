@@ -15,12 +15,6 @@ import 'package:crypto/crypto.dart';
 
 import 'helpers/enum_models.dart';
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
-
 class Cowpay {
   static final Cowpay _instance = Cowpay._internal();
 

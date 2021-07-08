@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:math';
+
 import 'package:cowpay/api_calls/exceptions.dart';
 import 'package:cowpay/cowpay.dart';
 import 'package:cowpay/helpers/enum_models.dart';
+import 'package:example/credit_card_example.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -20,44 +22,48 @@ void main() {
     merchantCode: merchantCode,
     merchantHash: merchantHash,
   );
-  runApp(MyApp());
+  runApp(MaterialApp(
+    home: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Cowpay'),
-          centerTitle: true,
-        ),
-        body: Center(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 70,
-              ),
-              SizedBox(
-                width: 300,
-                child: ElevatedButton(
-                    onPressed: () => _fawryOnCLick, child: Text('Fawry')),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 20),
-                width: 300,
-                child: ElevatedButton(
-                    onPressed: () => _fawryOnCLick, child: Text('Credit Card')),
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 20),
-                width: 300,
-                child: ElevatedButton(
-                    onPressed: () => _fawryOnCLick,
-                    child: Text('Cash Collection')),
-              ),
-            ],
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Cowpay'),
+        centerTitle: true,
+      ),
+      body: Center(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 70,
+            ),
+            SizedBox(
+              width: 300,
+              child: ElevatedButton(
+                  onPressed: () => _fawryOnCLick, child: Text('Fawry')),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 20),
+              width: 300,
+              child: ElevatedButton(
+                  onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CreditCardExample())),
+                  child: Text('Credit Card')),
+            ),
+            Container(
+              margin: EdgeInsets.only(top: 20),
+              width: 300,
+              child: ElevatedButton(
+                  onPressed: () => _fawryOnCLick,
+                  child: Text('Cash Collection')),
+            ),
+          ],
         ),
       ),
     );
