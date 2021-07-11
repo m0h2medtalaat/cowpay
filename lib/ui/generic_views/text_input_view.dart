@@ -21,6 +21,7 @@ class TextInputView extends StatelessWidget {
   final Widget? suffixIcon;
   final TextEditingController? controller;
   final Function(BuildContext)? onFieldSubmitted;
+  final double? width;
 
   const TextInputView(
       {/*Key key,*/
@@ -44,7 +45,8 @@ class TextInputView extends StatelessWidget {
       this.initialValue,
       this.showHelpIcon = false,
       this.suffixIcon,
-      this.controller})
+      this.controller,
+      this.width})
       : super(/*key: key*/);
 
   @override
@@ -66,7 +68,7 @@ class TextInputView extends StatelessWidget {
         padding: EdgeInsets.symmetric(
             horizontal: (0.02 * ScreenSize().width!),
             vertical: (0.007 * ScreenSize().height!)),
-        width: ScreenSize().width!,
+        width: width ?? ScreenSize().width!,
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(7)),
             color: Colors.black),

@@ -6,7 +6,7 @@ extension errorMessage on CreditCardHolderNameError {
   String get message {
     switch (this) {
       case CreditCardHolderNameError.empty:
-        return 'passwordEmptyError';
+        return 'CreditCardHolderNameEmptyError';
       case CreditCardHolderNameError.format:
         return 'invalidFormat';
       default:
@@ -24,7 +24,7 @@ class CreditCardHolderName
   @override
   CreditCardHolderNameError? validator(String value) {
     if (value.trim().isEmpty) return CreditCardHolderNameError.empty;
-    if (!RegExp(r'^[a-zA-Z]+$').hasMatch(value))
+    if (!RegExp(r'^[a-z A-Z]+$').hasMatch(value))
       return CreditCardHolderNameError.format;
 
     return null;

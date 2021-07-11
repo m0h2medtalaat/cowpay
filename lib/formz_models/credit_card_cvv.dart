@@ -1,18 +1,12 @@
 import 'package:formz/formz.dart';
 
-enum CreditCardCvvError {
-  empty,
-  lengthMin,
-  lengthMax,
-  format,
-  whiteSpace
-}
+enum CreditCardCvvError { empty, lengthMin, lengthMax, format, whiteSpace }
 
 extension errorMessage on CreditCardCvvError {
   String get message {
     switch (this) {
       case CreditCardCvvError.empty:
-        return 'passwordEmptyError';
+        return 'cvvEmptyError';
       case CreditCardCvvError.lengthMin:
         return 'lengthMin';
       case CreditCardCvvError.lengthMax:
@@ -25,8 +19,7 @@ extension errorMessage on CreditCardCvvError {
   }
 }
 
-class CreditCardCvv
-    extends FormzInput<String, CreditCardCvvError> {
+class CreditCardCvv extends FormzInput<String, CreditCardCvvError> {
   const CreditCardCvv.pure() : super.pure('');
 
   const CreditCardCvv.dirty([String value = '']) : super.dirty(value);

@@ -6,7 +6,7 @@ extension errorMessage on CreditCardNumberError {
   String get message {
     switch (this) {
       case CreditCardNumberError.empty:
-        return 'passwordEmptyError';
+        return 'creditCardNumberEmptyError';
       case CreditCardNumberError.lengthMin:
         return 'lengthMin';
       case CreditCardNumberError.lengthMax:
