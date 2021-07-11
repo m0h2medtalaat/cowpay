@@ -197,6 +197,7 @@ class _CreditCardNumberInput extends StatelessWidget {
           obscureText: false,
           textInputAction: TextInputAction.next,
           textInputType: TextInputType.text,
+          maxLength: 16,
           hintText: 'Card Number',
           onChange: onChangeCreditCardNumber,
           currentFocus: _creditCardNumberFocusNode,
