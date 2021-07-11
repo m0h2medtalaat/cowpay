@@ -5,11 +5,11 @@ class CreditCardRequestModel {
   late String cvv;
   late String expiryMonth;
   late String expiryYear;
-  late String customerName;
-  late String customerEmail;
-  late String customerMobile;
+  String? customerName;
+  String? customerEmail;
+  String? customerMobile;
   late String amount;
-  late String signature;
+  String? signature;
   late String description;
 
   CreditCardRequestModel(
@@ -19,11 +19,11 @@ class CreditCardRequestModel {
       required this.cvv,
       required this.expiryMonth,
       required this.expiryYear,
-      required this.customerName,
-      required this.customerEmail,
-      required this.customerMobile,
+      this.customerName,
+      this.customerEmail,
+      this.customerMobile,
       required this.amount,
-      required this.signature,
+      this.signature,
       required this.description});
 
   CreditCardRequestModel.fromJson(Map<String, dynamic> json) {

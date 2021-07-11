@@ -67,7 +67,14 @@ class CreditCardWidget extends StatelessWidget {
 
     return BlocProvider<CreditCardBloc>(
       create: (context) {
-        return CreditCardBloc();
+        return CreditCardBloc()
+          ..add(CreditCardChargeStarted(
+              merchantReferenceId: merchantReferenceId,
+              customerMerchantProfileId: customerMerchantProfileId,
+              amount: amount.toString(),
+              customerEmail: customerEmail,
+              customerMobile: customerMobile,
+              description: description));
       },
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
@@ -240,7 +247,7 @@ class _CreditCardNumberInput extends StatelessWidget {
           isNotValid: isNotValid,
           obscureText: false,
           textInputAction: TextInputAction.next,
-          textInputType: TextInputType.text,
+          textInputType: TextInputType.number,
           maxLength: 16,
           hintText: 'Card Number',
           onChange: onChangeCreditCardNumber,
@@ -280,7 +287,7 @@ class _CreditCardExpiryMonthInput extends StatelessWidget {
           isNotValid: isNotValid,
           obscureText: false,
           textInputAction: TextInputAction.next,
-          textInputType: TextInputType.text,
+          textInputType: TextInputType.number,
           hintText: 'Card Expiry Month',
           maxLength: 2,
           onChange: onChangeCreditCardExpiryMonth,
@@ -320,7 +327,7 @@ class _CreditCardExpiryYearInput extends StatelessWidget {
           width: (ScreenSize().width! * 0.2),
           obscureText: false,
           textInputAction: TextInputAction.next,
-          textInputType: TextInputType.text,
+          textInputType: TextInputType.number,
           hintText: 'Card Expiry Year',
           maxLength: 2,
           onChange: onChangeCreditCardExpiryYear,
@@ -360,7 +367,7 @@ class _CreditCardCvvInput extends StatelessWidget {
           width: (ScreenSize().width! * 0.4),
           obscureText: false,
           textInputAction: TextInputAction.next,
-          textInputType: TextInputType.text,
+          textInputType: TextInputType.number,
           maxLength: 3,
           hintText: 'Card Cvv',
           onChange: onChangeCreditCardCvv,

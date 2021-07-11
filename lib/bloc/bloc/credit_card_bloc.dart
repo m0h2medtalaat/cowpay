@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:cowpay/api_calls/api_calls.dart';
 import 'package:cowpay/bloc/event/credit_card_event.dart';
 import 'package:cowpay/bloc/state/credit_card_state.dart';
+import 'package:cowpay/cowpay.dart';
 import 'package:cowpay/formz_models/credit_card_cvv.dart';
 import 'package:cowpay/formz_models/credit_card_expiry_month.dart';
 import 'package:cowpay/formz_models/credit_card_expiry_year.dart';
@@ -18,6 +20,9 @@ class CreditCardBloc extends Bloc<CreditCardEvent, CreditCardState> {
   Stream<CreditCardState> mapEventToState(
     CreditCardEvent event,
   ) async* {
+    if (event is CreditCardChargeStarted) {
+      yield _mapCardStartToState(event, state);
+    }
     if (event is CreditCardNameChange) {
       yield _mapCardHolderNameChangedToState(event, state);
     } else if (event is CreditCardNumberChange) {
@@ -60,6 +65,21 @@ class CreditCardBloc extends Bloc<CreditCardEvent, CreditCardState> {
     }
     return state.copyWith(
       creditCardHolderName: name,
+    );
+  }
+
+  CreditCardState _mapCardStartToState(
+    CreditCardChargeStarted event,
+    CreditCardState state,
+  ) {
+    return state.copyWith(
+      merchantReferenceId: event.merchantReferenceId,
+      customerMerchantProfileId: event.customerMerchantProfileId,
+      customerName: event.customerName,
+      customerEmail: event.customerEmail,
+      customerMobile: event.customerMobile,
+      amount: event.amount,
+      description: event.description,
     );
   }
 
@@ -251,7 +271,18 @@ class CreditCardBloc extends Bloc<CreditCardEvent, CreditCardState> {
       int length) async* {
     yield state.copyWith(status: FormzStatus.submissionInProgress);
     try {
-      Future.delayed(Duration(seconds: 5));
+      await Cowpay.instance.creditCardCharge(
+          merchantReferenceId: state.merchantReferenceId!,
+          customerMerchantProfileId: state.customerMerchantProfileId!,
+          customerName: state.customerName??null,
+          customerEmail: state.customerEmail??null,
+          customerMobile: state.customerMobile??null,
+          cvv: creditCardCvv.value,
+          cardNumber: creditCardNumber.value,
+          expiryYear: creditCardExpiryYear.value,
+          expiryMonth: creditCardExpiryMonth.value,
+          amount: state.amount!,
+          description: state.description!);
 
       yield state.copyWith(status: FormzStatus.submissionSuccess);
     } catch (error) {

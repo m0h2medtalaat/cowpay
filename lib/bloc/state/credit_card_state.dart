@@ -7,16 +7,22 @@ import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 
 class CreditCardState extends Equatable {
-  const CreditCardState({
-    this.status = FormzStatus.pure,
-    this.creditCardNumber = const CreditCardNumber.pure(),
-    this.creditCardExpiryMonth = const CreditCardExpiryMonth.pure(),
-    this.creditCardExpiryYear = const CreditCardExpiryYear.pure(),
-    this.creditCardCvv = const CreditCardCvv.pure(),
-    this.creditCardHolderName = const CreditCardHolderName.pure(),
-    this.notValid = 0,
-    this.checkValidation = false,
-  });
+  const CreditCardState(
+      {this.status = FormzStatus.pure,
+      this.creditCardNumber = const CreditCardNumber.pure(),
+      this.creditCardExpiryMonth = const CreditCardExpiryMonth.pure(),
+      this.creditCardExpiryYear = const CreditCardExpiryYear.pure(),
+      this.creditCardCvv = const CreditCardCvv.pure(),
+      this.creditCardHolderName = const CreditCardHolderName.pure(),
+      this.notValid = 0,
+      this.checkValidation = false,
+      this.merchantReferenceId,
+      this.customerMerchantProfileId,
+      this.customerName,
+      this.customerEmail,
+      this.customerMobile,
+      this.amount,
+      this.description});
 
   final FormzStatus status;
   final CreditCardExpiryMonth creditCardExpiryMonth;
@@ -25,28 +31,53 @@ class CreditCardState extends Equatable {
   final CreditCardNumber creditCardNumber;
   final CreditCardHolderName creditCardHolderName;
 
+  final String? merchantReferenceId;
+  final String? customerMerchantProfileId;
+  final String? customerName;
+  final String? customerEmail;
+  final String? customerMobile;
+  final String? amount;
+  final String? description;
+
   final int notValid;
   final bool checkValidation;
 
-  CreditCardState copyWith(
-      {FormzStatus? status,
-      CreditCardExpiryMonth? creditCardExpiryMonth,
-      CreditCardExpiryYear? creditCardExpiryYear,
-      CreditCardCvv? creditCardCvv,
-      CreditCardNumber? creditCardNumber,
-      CreditCardHolderName? creditCardHolderName,
-      bool? checkValidation,
-      int? notValid}) {
+  CreditCardState copyWith({
+    FormzStatus? status,
+    CreditCardExpiryMonth? creditCardExpiryMonth,
+    CreditCardExpiryYear? creditCardExpiryYear,
+    CreditCardCvv? creditCardCvv,
+    CreditCardNumber? creditCardNumber,
+    CreditCardHolderName? creditCardHolderName,
+    bool? checkValidation,
+    int? notValid,
+    String? merchantReferenceId,
+    String? customerMerchantProfileId,
+    String? customerName,
+    String? customerEmail,
+    String? customerMobile,
+    String? amount,
+    String? description,
+  }) {
     return CreditCardState(
-        status: status ?? this.status,
-        creditCardExpiryMonth:
-            creditCardExpiryMonth ?? this.creditCardExpiryMonth,
-        creditCardExpiryYear: creditCardExpiryYear ?? this.creditCardExpiryYear,
-        creditCardCvv: creditCardCvv ?? this.creditCardCvv,
-        creditCardNumber: creditCardNumber ?? this.creditCardNumber,
-        creditCardHolderName: creditCardHolderName ?? this.creditCardHolderName,
-        notValid: notValid ?? this.notValid,
-        checkValidation: checkValidation ?? this.checkValidation);
+      status: status ?? this.status,
+      creditCardExpiryMonth:
+          creditCardExpiryMonth ?? this.creditCardExpiryMonth,
+      creditCardExpiryYear: creditCardExpiryYear ?? this.creditCardExpiryYear,
+      creditCardCvv: creditCardCvv ?? this.creditCardCvv,
+      creditCardNumber: creditCardNumber ?? this.creditCardNumber,
+      creditCardHolderName: creditCardHolderName ?? this.creditCardHolderName,
+      notValid: notValid ?? this.notValid,
+      checkValidation: checkValidation ?? this.checkValidation,
+      merchantReferenceId: merchantReferenceId ?? this.merchantReferenceId,
+      customerMerchantProfileId:
+          customerMerchantProfileId ?? this.customerMerchantProfileId,
+      customerName: customerName ?? this.customerName,
+      customerEmail: customerEmail ?? this.customerEmail,
+      customerMobile: customerMobile ?? this.customerMobile,
+      amount: amount ?? this.amount,
+      description: description ?? this.description,
+    );
   }
 
   @override

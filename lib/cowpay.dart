@@ -81,9 +81,9 @@ class Cowpay {
   Future<CreditCardResponseModel> creditCardCharge({
     required String merchantReferenceId,
     required String customerMerchantProfileId,
-    required String customerName,
-    required String customerEmail,
-    required String customerMobile,
+     String? customerName,
+     String? customerEmail,
+     String? customerMobile,
     required String cvv,
     required String cardNumber,
     required String expiryYear,

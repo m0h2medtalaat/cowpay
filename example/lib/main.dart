@@ -10,7 +10,7 @@ void main() {
   //TODO Delete this bullshit before publish
 
   String token =
-      "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NasfasdasdiJ9.eyJhdWQiOiIxIiwianRpIjoiYjI3ZjQyNmU3MmE5NTdkN2Q2ZTU4YzU5NzgzMjZmNGZhOTQyZDMyZDRhYTI3OTcyNmY0ZmM3ZjJiN2ViNTE3ZGI4OWMyMjQwNzVmZmM1YTEiLCJpYXQiOiIxNjI1NDc2MDEzLjA4MTMzNSIsIm5iZiI6IjE2MjU0NzYwMTMuMDgxMzQxIiwiZXhwIjoiMTY1NzAxMjAxMy4wNzAyNDMiLCJzdWIiOiI2MTgiLCJzY29wZXMiOltdfQ.OeuZviB9L67k8WLKxWq2h-McrtglnVDP7xsuqIIvgxyA8WslrCDgYEOg5v2LPpiXbNB8p0oS-FyZdjAQf6mfDA";
+      "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiM2E3ZjUxMjBkOWE0ZjM5Y2Y0YjAzOGFlODVmMWY4ZDBmYWM4ZWZhZWFkZDgzZTcyZWZmZDI1YzdlYmM4ZWYxOTlkZjAxNjIwZmMyN2NhOWEiLCJpYXQiOiIxNjI2MDEzNjQ1LjA4NDAwOCIsIm5iZiI6IjE2MjYwMTM2NDUuMDg0MDEzIiwiZXhwIjoiMTY1NzU0OTY0NS4wNzkwMjYiLCJzdWIiOiI2MTgiLCJzY29wZXMiOltdfQ.BSvvHMcdAq-Q10dn1HvSKdXBpecel25oXE9UU9Fm1FsUtrAcDhTrXNGJs_pklmczmBFSXcVTR1Te7W2fwK1uxA";
   String merchantCode = "Chy9jpiJSONq";
   String merchantHash =
       "\$2y\$10\$2it43S96/fgf4VdiQKeQDeowX0T9RDmA3fRuZe8pRl8UmOYEAwz.6";
@@ -58,7 +58,23 @@ class MyApp extends StatelessWidget {
               margin: EdgeInsets.only(top: 20),
               width: 300,
               child: ElevatedButton(
-                  onPressed: () => _fawryOnCLick,
+                  onPressed: () async { try {
+                    await Cowpay.instance.createFawryReceipt(
+                      description: 'description',
+                      amount: '32',
+                      customerMerchantProfileId: '2312',
+                      merchantReferenceId: getRandString(),
+                      customerEmail: 'sqeqedqqw@gmail.com',
+                      customerMobile: '01234567890',
+                      customerName: 'customerName',
+                    );
+                  } on TimeoutException catch (error) {
+                    print(error);
+                  } on SocketException catch (error) {
+                    print(error);
+                  } on InternalServerException catch (error) {
+                    print(error.code);
+                  }},
                   child: Text('Cash Collection')),
             ),
           ],
