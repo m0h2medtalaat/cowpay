@@ -9,7 +9,7 @@ class ButtonView extends StatelessWidget {
   final double height;
   final BuildContext? mainContext;
   final double fontSize;
-
+  final TextStyle? buttonTextStyle;
   const ButtonView(
       {/*Key key,*/
       required this.backgroundColor,
@@ -19,6 +19,7 @@ class ButtonView extends StatelessWidget {
       this.onClickFunction,
       this.width,
       this.mainContext,
+      this.buttonTextStyle,
       this.height = 0.06,
       this.fontSize = 12.8})
       : super(/*key: key*/);
@@ -36,10 +37,11 @@ class ButtonView extends StatelessWidget {
               border: Border.all(color: borderColor ?? backgroundColor!),
               borderRadius: BorderRadius.all(Radius.circular(10))),
           child: Text(title ?? "",
-              style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: fontSize * ScreenSize().height!,
-                  color: textColor ?? Colors.white),
+              style: buttonTextStyle ??
+                  TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: fontSize * ScreenSize().height!,
+                      color: textColor ?? Colors.white),
               textScaleFactor: 1)),
     );
   }
