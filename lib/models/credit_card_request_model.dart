@@ -1,30 +1,30 @@
 class CreditCardRequestModel {
-  String? merchantReferenceId;
-  String? customerMerchantProfileId;
-  String? cardNumber;
-  String? cvv;
-  String? expiryMonth;
-  String? expiryYear;
-  String? customerName;
-  String? customerEmail;
-  String? customerMobile;
-  String? amount;
-  String? signature;
-  String? description;
+  late String merchantReferenceId;
+  late String customerMerchantProfileId;
+  late String cardNumber;
+  late String cvv;
+  late String expiryMonth;
+  late String expiryYear;
+  late String customerName;
+  late String customerEmail;
+  late String customerMobile;
+  late String amount;
+  late String signature;
+  late String description;
 
   CreditCardRequestModel(
-      {this.merchantReferenceId,
-      this.customerMerchantProfileId,
-      this.cardNumber,
-      this.cvv,
-      this.expiryMonth,
-      this.expiryYear,
-      this.customerName,
-      this.customerEmail,
-      this.customerMobile,
-      this.amount,
-      this.signature,
-      this.description});
+      {required this.merchantReferenceId,
+      required this.customerMerchantProfileId,
+      required this.cardNumber,
+      required this.cvv,
+      required this.expiryMonth,
+      required this.expiryYear,
+      required this.customerName,
+      required this.customerEmail,
+      required this.customerMobile,
+      required this.amount,
+      required this.signature,
+      required this.description});
 
   CreditCardRequestModel.fromJson(Map<String, dynamic> json) {
     merchantReferenceId = json['merchant_reference_id'];

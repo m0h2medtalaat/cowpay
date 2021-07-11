@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cowpay/api_calls/exceptions.dart';
 import 'package:cowpay/cowpay.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -62,11 +63,13 @@ class NetworkUtil {
 
     switch (statusCode) {
       case 401:
-        throw (res);
+        throw UnauthorisedException(res, statusCode);
+      case 403:
+        throw UnauthorisedException(res, statusCode);
       case 400:
-        throw (res);
+        throw BadRequestException(res, statusCode);
       case 500:
-        throw (res);
+        throw InternalServerException(res, statusCode);
       case 200:
         if (res.isEmpty) return true;
         return parsed;

@@ -1,32 +1,32 @@
 class CashCollectionRequestModel {
-  String? merchantReferenceId;
-  String? customerMerchantProfileId;
-  String? amount;
-  String? customerName;
-  String? customerEmail;
-  String? customerMobile;
-  String? address;
-  String? district;
-  String? apartment;
-  String? floor;
-  String? signature;
-  String? description;
-  String? cityCode;
+  late String merchantReferenceId;
+  late String customerMerchantProfileId;
+  late String amount;
+  late String customerName;
+  late String customerEmail;
+  late String customerMobile;
+  late String address;
+  late String district;
+  late String apartment;
+  late String floor;
+  late String signature;
+  late String description;
+  late String cityCode;
 
   CashCollectionRequestModel(
-      {this.merchantReferenceId,
-      this.customerMerchantProfileId,
-      this.amount,
-      this.customerName,
-      this.customerEmail,
-      this.customerMobile,
-      this.address,
-      this.district,
-      this.apartment,
-      this.floor,
-      this.signature,
-      this.description,
-      this.cityCode});
+      {required this.merchantReferenceId,
+      required this.customerMerchantProfileId,
+      required this.amount,
+      required this.customerName,
+      required this.customerEmail,
+      required this.customerMobile,
+      required this.address,
+      required this.district,
+      required this.apartment,
+      required this.floor,
+      required this.signature,
+      required this.description,
+      required this.cityCode});
 
   CashCollectionRequestModel.fromJson(Map<String, dynamic> json) {
     merchantReferenceId = json['merchant_reference_id'];
