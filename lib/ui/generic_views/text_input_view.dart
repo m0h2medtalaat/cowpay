@@ -22,6 +22,8 @@ class TextInputView extends StatelessWidget {
   final TextEditingController? controller;
   final Function(BuildContext)? onFieldSubmitted;
   final double? width;
+  final InputDecoration? inputDecoration;
+  final TextStyle? style;
 
   const TextInputView(
       {/*Key key,*/
@@ -46,6 +48,8 @@ class TextInputView extends StatelessWidget {
       this.showHelpIcon = false,
       this.suffixIcon,
       this.controller,
+      this.style,
+      this.inputDecoration,
       this.width})
       : super(/*key: key*/);
 
@@ -100,13 +104,12 @@ class TextInputView extends StatelessWidget {
           onFieldSubmitted!(mainContext!);
         }
       },
-      style: enabled!
-          ? null
-          : TextStyle(
-              color: Colors.black, fontSize: 0.03 * ScreenSize().width!),
+      style: style ??
+          TextStyle(color: Colors.black, fontSize: 0.03 * ScreenSize().width!),
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(
-            vertical: 0.0, horizontal: 0.04 * ScreenSize().width!),
+        contentPadding: inputDecoration?.contentPadding ??
+            EdgeInsets.symmetric(
+                vertical: 0.0, horizontal: 0.04 * ScreenSize().width!),
         counterText: '',
         prefixIcon: image != null
             ? Column(
@@ -146,13 +149,14 @@ class TextInputView extends StatelessWidget {
         //         : suffixIcon,
         hintText: hintText!,
         labelText: hintText!,
-        hintStyle:
+        hintStyle: inputDecoration?.hintStyle ??
             TextStyle(color: Colors.grey, fontSize: 0.03 * ScreenSize().width!),
-        labelStyle: TextStyle(
-            color: Colors.black, fontSize: 0.04 * ScreenSize().width!),
-        focusedBorder: buildBorder(),
-        enabledBorder: buildBorder(),
-        disabledBorder: buildBorder(),
+        labelStyle: inputDecoration?.labelStyle ??
+            TextStyle(
+                color: Colors.black, fontSize: 0.04 * ScreenSize().width!),
+        focusedBorder: inputDecoration?.focusedBorder ?? buildBorder(),
+        enabledBorder: inputDecoration?.enabledBorder ?? buildBorder(),
+        disabledBorder: inputDecoration?.disabledBorder ?? buildBorder(),
       ),
       keyboardType: textInputType,
       textInputAction: textInputAction,
