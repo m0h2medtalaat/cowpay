@@ -3,6 +3,7 @@ import 'package:cowpay/formz_models/credit_card_expiry_month.dart';
 import 'package:cowpay/formz_models/credit_card_expiry_year.dart';
 import 'package:cowpay/formz_models/credit_card_holder_name.dart';
 import 'package:cowpay/formz_models/credit_card_number.dart';
+import 'package:cowpay/models/cach_collection_response_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 
@@ -22,6 +23,8 @@ class CreditCardState extends Equatable {
       this.customerEmail,
       this.customerMobile,
       this.amount,
+      this.creditCardResponseModel,
+      this.errorModel,
       this.description});
 
   final FormzStatus status;
@@ -42,23 +45,27 @@ class CreditCardState extends Equatable {
   final int notValid;
   final bool checkValidation;
 
-  CreditCardState copyWith({
-    FormzStatus? status,
-    CreditCardExpiryMonth? creditCardExpiryMonth,
-    CreditCardExpiryYear? creditCardExpiryYear,
-    CreditCardCvv? creditCardCvv,
-    CreditCardNumber? creditCardNumber,
-    CreditCardHolderName? creditCardHolderName,
-    bool? checkValidation,
-    int? notValid,
-    String? merchantReferenceId,
-    String? customerMerchantProfileId,
-    String? customerName,
-    String? customerEmail,
-    String? customerMobile,
-    String? amount,
-    String? description,
-  }) {
+  final CreditCardResponseModel? creditCardResponseModel;
+  final dynamic? errorModel;
+
+  CreditCardState copyWith(
+      {FormzStatus? status,
+      CreditCardExpiryMonth? creditCardExpiryMonth,
+      CreditCardExpiryYear? creditCardExpiryYear,
+      CreditCardCvv? creditCardCvv,
+      CreditCardNumber? creditCardNumber,
+      CreditCardHolderName? creditCardHolderName,
+      bool? checkValidation,
+      int? notValid,
+      String? merchantReferenceId,
+      String? customerMerchantProfileId,
+      String? customerName,
+      String? customerEmail,
+      String? customerMobile,
+      String? amount,
+      String? description,
+      CreditCardResponseModel? creditCardResponseModel,
+      dynamic? errorModel}) {
     return CreditCardState(
       status: status ?? this.status,
       creditCardExpiryMonth:
@@ -77,6 +84,9 @@ class CreditCardState extends Equatable {
       customerMobile: customerMobile ?? this.customerMobile,
       amount: amount ?? this.amount,
       description: description ?? this.description,
+      creditCardResponseModel:
+          creditCardResponseModel ?? this.creditCardResponseModel,
+      errorModel: errorModel ?? this.errorModel,
     );
   }
 

@@ -271,12 +271,12 @@ class CreditCardBloc extends Bloc<CreditCardEvent, CreditCardState> {
       int length) async* {
     yield state.copyWith(status: FormzStatus.submissionInProgress);
     try {
-      await Cowpay.instance.creditCardCharge(
+      var model = await Cowpay.instance.creditCardCharge(
           merchantReferenceId: state.merchantReferenceId!,
           customerMerchantProfileId: state.customerMerchantProfileId!,
-          customerName: state.customerName??null,
-          customerEmail: state.customerEmail??null,
-          customerMobile: state.customerMobile??null,
+          customerName: state.customerName ?? null,
+          customerEmail: state.customerEmail ?? null,
+          customerMobile: state.customerMobile ?? null,
           cvv: creditCardCvv.value,
           cardNumber: creditCardNumber.value,
           expiryYear: creditCardExpiryYear.value,
@@ -284,7 +284,7 @@ class CreditCardBloc extends Bloc<CreditCardEvent, CreditCardState> {
           amount: state.amount!,
           description: state.description!);
 
-      yield state.copyWith(status: FormzStatus.submissionSuccess);
+      yield state.copyWith(status: FormzStatus.submissionSuccess,creditCardResponseModel: model);
     } catch (error) {
       state.copyWith(
           creditCardHolderName: creditCardHolderName,
@@ -302,7 +302,7 @@ class CreditCardBloc extends Bloc<CreditCardEvent, CreditCardState> {
           ]),
           notValid: length);
 
-      yield state.copyWith(status: FormzStatus.submissionFailure);
+      yield state.copyWith(status: FormzStatus.submissionFailure,errorModel: error);
     }
   }
 }

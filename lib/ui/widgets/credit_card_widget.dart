@@ -10,6 +10,8 @@ import 'package:cowpay/formz_models/credit_card_holder_name.dart';
 import 'package:cowpay/formz_models/credit_card_number.dart';
 import 'package:cowpay/helpers/enum_models.dart';
 import 'package:cowpay/helpers/screen_size.dart';
+import 'package:cowpay/models/cach_collection_response_model.dart';
+import 'package:cowpay/models/fawry_response_model.dart';
 import 'package:cowpay/ui/generic_views/button_loading_view.dart';
 import 'package:cowpay/ui/generic_views/button_view.dart';
 import 'package:cowpay/ui/generic_views/text_input_view.dart';
@@ -40,6 +42,9 @@ class CreditCardWidget extends StatelessWidget {
   final TextStyle? buttonTextStyle, textFieldStyle;
   final InputDecoration? textFieldInputDecoration;
 
+  final Function(CreditCardResponseModel creditCardResponseModel) onSuccess;
+  final Function(dynamic error) onError;
+
   CreditCardWidget(
       {required this.amount,
       required this.activeEnvironment,
@@ -56,7 +61,9 @@ class CreditCardWidget extends StatelessWidget {
       this.buttonColor,
       this.buttonTextStyle,
       this.textFieldStyle,
-      this.textFieldInputDecoration});
+      this.textFieldInputDecoration,
+      required this.onSuccess,
+      required this.onError});
 
   @override
   Widget build(BuildContext context) {
@@ -135,6 +142,8 @@ class CreditCardWidget extends StatelessWidget {
                           buttonColor: buttonColor,
                           buttonTextColor: buttonTextColor,
                           buttonTextStyle: buttonTextStyle,
+                          onSuccess: (val) => onSuccess(val),
+                          onError: (error) => onError(error),
                         )
                       ],
                     ),
@@ -152,18 +161,26 @@ class CreditCardWidget extends StatelessWidget {
 class _ChargeButton extends StatelessWidget {
   final Color? buttonColor, buttonTextColor;
   final TextStyle? buttonTextStyle;
+  final Function(CreditCardResponseModel creditCardResponseModel) onSuccess;
+  final Function(dynamic error) onError;
 
-  _ChargeButton({this.buttonTextStyle, this.buttonColor, this.buttonTextColor});
+  _ChargeButton(
+      {this.buttonTextStyle,
+      this.buttonColor,
+      this.buttonTextColor,
+      required this.onSuccess,
+      required this.onError});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CreditCardBloc, CreditCardState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
-        if (state.status.isSubmissionSuccess)
-          SchedulerBinding.instance!.addPostFrameCallback((_) {
-            Navigator.pop(context);
-          });
+        SchedulerBinding.instance!.addPostFrameCallback((_) {
+          if (state.status.isSubmissionSuccess)
+            onSuccess(state.creditCardResponseModel!);
+          else if (state.status.isSubmissionFailure) onError(state.errorModel);
+        });
         return state.status.isSubmissionInProgress
             ? ButtonLoadingView()
             : ButtonView(
