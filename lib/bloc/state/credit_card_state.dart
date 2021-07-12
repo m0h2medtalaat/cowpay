@@ -3,7 +3,7 @@ import 'package:cowpay/formz_models/credit_card_expiry_month.dart';
 import 'package:cowpay/formz_models/credit_card_expiry_year.dart';
 import 'package:cowpay/formz_models/credit_card_holder_name.dart';
 import 'package:cowpay/formz_models/credit_card_number.dart';
-import 'package:cowpay/models/cach_collection_response_model.dart';
+import 'package:cowpay/models/credit_card_response_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 
@@ -19,7 +19,6 @@ class CreditCardState extends Equatable {
       this.checkValidation = false,
       this.merchantReferenceId,
       this.customerMerchantProfileId,
-      this.customerName,
       this.customerEmail,
       this.customerMobile,
       this.amount,
@@ -36,7 +35,6 @@ class CreditCardState extends Equatable {
 
   final String? merchantReferenceId;
   final String? customerMerchantProfileId;
-  final String? customerName;
   final String? customerEmail;
   final String? customerMobile;
   final String? amount;
@@ -79,7 +77,6 @@ class CreditCardState extends Equatable {
       merchantReferenceId: merchantReferenceId ?? this.merchantReferenceId,
       customerMerchantProfileId:
           customerMerchantProfileId ?? this.customerMerchantProfileId,
-      customerName: customerName ?? this.customerName,
       customerEmail: customerEmail ?? this.customerEmail,
       customerMobile: customerMobile ?? this.customerMobile,
       amount: amount ?? this.amount,

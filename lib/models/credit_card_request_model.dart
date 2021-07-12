@@ -5,9 +5,9 @@ class CreditCardRequestModel {
   late String cvv;
   late String expiryMonth;
   late String expiryYear;
-  String? customerName;
-  String? customerEmail;
-  String? customerMobile;
+  late String customerName;
+  late String customerEmail;
+  late String customerMobile;
   late String amount;
   String? signature;
   late String description;
@@ -19,9 +19,9 @@ class CreditCardRequestModel {
       required this.cvv,
       required this.expiryMonth,
       required this.expiryYear,
-      this.customerName,
-      this.customerEmail,
-      this.customerMobile,
+      required this.customerName,
+      required this.customerEmail,
+      required this.customerMobile,
       required this.amount,
       this.signature,
       required this.description});

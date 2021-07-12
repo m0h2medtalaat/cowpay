@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:cowpay/api_calls/exceptions.dart';
 import 'package:cowpay/cowpay.dart';
 import 'package:cowpay/helpers/enum_models.dart';
-import 'package:cowpay/models/cach_collection_response_model.dart';
+import 'package:cowpay/models/credit_card_response_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

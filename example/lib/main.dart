@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:cowpay/cowpay.dart';
+import 'package:example/cash_collection_example.dart';
 import 'package:example/credit_card_example.dart';
 import 'package:flutter/material.dart';
 
@@ -58,7 +59,10 @@ class MyApp extends StatelessWidget {
               margin: EdgeInsets.only(top: 20),
               width: 300,
               child: ElevatedButton(
-                  onPressed: () =>_fawryOnCLick(),
+                  onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CashCollectionExample())),
                   child: Text('Cash Collection')),
             ),
           ],
