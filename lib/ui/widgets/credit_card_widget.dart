@@ -97,6 +97,9 @@ class CreditCardWidget extends StatelessWidget {
                     padding: EdgeInsets.all(ScreenSize().width! * 0.05),
                     child: Column(
                       children: [
+                        Image(
+                            image: AssetImage('resources/box.png',
+                                package: 'cowpay')),
                         _CreditCardHolderNameInput(
                           style: textFieldStyle,
                           inputDecoration: textFieldInputDecoration,
