@@ -117,8 +117,8 @@ class CreditCardWidget extends StatelessWidget {
         child: Stack(
           children: [
             Container(
-              child: Image.asset(AssetImage("assets/page_bg.png").assetName,
-                package: 'cowpay-package',),
+//              child: Image.asset(AssetImage("assets/page_bg.png").assetName,
+//                package: 'cowpay-package',),
             ),
             SingleChildScrollView(
               child: Padding(
@@ -126,8 +126,10 @@ class CreditCardWidget extends StatelessWidget {
                 child: Column(
                   children: [
                     Container(
-//                      child: Image.asset("icon"),
-                      color: Colors.red,
+//                      child: Image(
+//                        image: AssetImage('resources/box.png', package: 'cowpay-package',
+//                      )),
+//                      color: Colors.red,
                       height: ScreenSize().height! * 0.3,
                       width: ScreenSize().width! * 0.6,
                     ),
@@ -262,12 +264,13 @@ class _ChargeButton extends StatelessWidget {
           textColor: buttonTextColor ?? Colors.white,
           fontSize: 0.025,
           backgroundColor: buttonColor ?? Theme
-              .of(context)
-              .primaryColor,
+                .of(context)
+                .primaryColor,
           mainContext: context,
           buttonTextStyle: buttonTextStyle,
           onClickFunction: onClickSubmit,
-        );
+
+            );
       },
     );
   }
