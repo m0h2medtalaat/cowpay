@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:cowpay/api_calls/api_calls.dart';
 import 'package:cowpay/bloc/event/credit_card_event.dart';
 import 'package:cowpay/bloc/state/credit_card_state.dart';
 import 'package:cowpay/cowpay.dart';
@@ -75,7 +74,6 @@ class CreditCardBloc extends Bloc<CreditCardEvent, CreditCardState> {
     return state.copyWith(
       merchantReferenceId: event.merchantReferenceId,
       customerMerchantProfileId: event.customerMerchantProfileId,
-      customerName: event.customerName,
       customerEmail: event.customerEmail,
       customerMobile: event.customerMobile,
       amount: event.amount,
@@ -274,9 +272,9 @@ class CreditCardBloc extends Bloc<CreditCardEvent, CreditCardState> {
       var model = await Cowpay.instance.creditCardCharge(
           merchantReferenceId: state.merchantReferenceId!,
           customerMerchantProfileId: state.customerMerchantProfileId!,
-          customerName: state.customerName ?? null,
-          customerEmail: state.customerEmail ?? null,
-          customerMobile: state.customerMobile ?? null,
+          customerEmail: state.customerEmail!,
+          customerMobile: state.customerMobile!,
+          customerName: state.creditCardHolderName.value,
           cvv: creditCardCvv.value,
           cardNumber: creditCardNumber.value,
           expiryYear: creditCardExpiryYear.value,
@@ -284,7 +282,9 @@ class CreditCardBloc extends Bloc<CreditCardEvent, CreditCardState> {
           amount: state.amount!,
           description: state.description!);
 
-      yield state.copyWith(status: FormzStatus.submissionSuccess,creditCardResponseModel: model);
+      yield state.copyWith(
+          status: FormzStatus.submissionSuccess,
+          creditCardResponseModel: model);
     } catch (error) {
       state.copyWith(
           creditCardHolderName: creditCardHolderName,
@@ -302,7 +302,8 @@ class CreditCardBloc extends Bloc<CreditCardEvent, CreditCardState> {
           ]),
           notValid: length);
 
-      yield state.copyWith(status: FormzStatus.submissionFailure,errorModel: error);
+      yield state.copyWith(
+          status: FormzStatus.submissionFailure, errorModel: error);
     }
   }
 }

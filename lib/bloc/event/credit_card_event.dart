@@ -7,18 +7,16 @@ abstract class CreditCardEvent {
 class CreditCardChargeStarted extends CreditCardEvent {
   final String merchantReferenceId;
   final String customerMerchantProfileId;
-  final String? customerName;
-  final String? customerEmail;
-  final String? customerMobile;
+  final String customerEmail;
+  final String customerMobile;
   final String amount;
   final String description;
 
   const CreditCardChargeStarted(
       {required this.merchantReferenceId,
       required this.customerMerchantProfileId,
-      this.customerName,
-      this.customerEmail,
-      this.customerMobile,
+      required this.customerEmail,
+      required this.customerMobile,
       required this.amount,
       required this.description});
 }

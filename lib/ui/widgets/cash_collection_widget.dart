@@ -1,16 +1,13 @@
 library cowpay;
 
-import 'package:cowpay/bloc/bloc/credit_card_bloc.dart';
-import 'package:cowpay/bloc/event/credit_card_event.dart';
-import 'package:cowpay/bloc/state/credit_card_state.dart';
-import 'package:cowpay/formz_models/credit_card_cvv.dart';
-import 'package:cowpay/formz_models/credit_card_expiry_month.dart';
-import 'package:cowpay/formz_models/credit_card_expiry_year.dart';
-import 'package:cowpay/formz_models/credit_card_holder_name.dart';
-import 'package:cowpay/formz_models/credit_card_number.dart';
+import 'package:cowpay/bloc/bloc/cash_collection_bloc.dart';
+import 'package:cowpay/bloc/event/cash_collection_event.dart';
+import 'package:cowpay/bloc/state/cash_collection_state.dart';
+import 'package:cowpay/formz_models/num_text_input.dart';
+import 'package:cowpay/formz_models/text_input.dart';
 import 'package:cowpay/helpers/enum_models.dart';
 import 'package:cowpay/helpers/screen_size.dart';
-import 'package:cowpay/models/credit_card_response_model.dart';
+import 'package:cowpay/models/cash_collection_response_model.dart';
 import 'package:cowpay/ui/generic_views/button_loading_view.dart';
 import 'package:cowpay/ui/generic_views/button_view.dart';
 import 'package:cowpay/ui/generic_views/text_input_view.dart';
@@ -19,18 +16,19 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
-class CreditCardWidget extends StatelessWidget {
-  final _creditCardHolderNameFocusNode = FocusNode();
-  final _creditCardNumberFocusNode = FocusNode();
-  final _creditCardExpiryMonthFocusNode = FocusNode();
-  final _creditCardExpiryYearFocusNode = FocusNode();
-  final _creditCardCvvFocusNode = FocusNode();
+class CashCollectionWidget extends StatelessWidget {
+  final _cashDistrictFocusNode = FocusNode();
+  final _cashAddressFocusNode = FocusNode();
+  final _cashFloorFocusNode = FocusNode();
+  final _cashApartmentFocusNode = FocusNode();
+  final _cashCityCodeFocusNode = FocusNode();
+  final String customerName,
+      description,
+      merchantReferenceId,
+      customerMerchantProfileId,
+      customerEmail,
+      customerMobile;
 
-  final String description, merchantReferenceId, customerMerchantProfileId;
-
-  final String customerEmail;
-
-  final String customerMobile;
   final CowpayEnvironment activeEnvironment;
   final double amount;
   final double? height;
@@ -38,14 +36,15 @@ class CreditCardWidget extends StatelessWidget {
   final TextStyle? buttonTextStyle, textFieldStyle;
   final InputDecoration? textFieldInputDecoration;
 
-  final Function(CreditCardResponseModel creditCardResponseModel) onSuccess;
+  final Function(CashCollectionResponseModel creditCardResponseModel) onSuccess;
   final Function(dynamic error) onError;
 
-  CreditCardWidget(
+  CashCollectionWidget(
       {required this.amount,
       required this.activeEnvironment,
       required this.customerEmail,
       required this.customerMobile,
+      required this.customerName,
       required this.description,
       required this.customerMerchantProfileId,
       required this.merchantReferenceId,
@@ -65,15 +64,16 @@ class CreditCardWidget extends StatelessWidget {
     ScreenSize().height = MediaQuery.of(context).size.height;
     ScreenSize().width = MediaQuery.of(context).size.width;
 
-    return BlocProvider<CreditCardBloc>(
+    return BlocProvider<CashCollectionBloc>(
       create: (context) {
-        return CreditCardBloc()
-          ..add(CreditCardChargeStarted(
+        return CashCollectionBloc()
+          ..add(CashCollectionChargeStarted(
               merchantReferenceId: merchantReferenceId,
               customerMerchantProfileId: customerMerchantProfileId,
               amount: amount.toString(),
               customerEmail: customerEmail,
               customerMobile: customerMobile,
+              customerName: customerName,
               description: description));
       },
       child: GestureDetector(
@@ -97,45 +97,40 @@ class CreditCardWidget extends StatelessWidget {
                     padding: EdgeInsets.all(ScreenSize().width! * 0.05),
                     child: Column(
                       children: [
-                        _CreditCardHolderNameInput(
+                        _DistrictInput(
                           style: textFieldStyle,
                           inputDecoration: textFieldInputDecoration,
-                          currentNode: _creditCardHolderNameFocusNode,
-                          nextNode: _creditCardNumberFocusNode,
+                          currentFocusNode: _cashDistrictFocusNode,
+                          nextFocusNode: _cashAddressFocusNode,
+                        ),
+                        _AddressInput(
+                          style: textFieldStyle,
+                          inputDecoration: textFieldInputDecoration,
+                          currentFocusNode: _cashAddressFocusNode,
+                          nextFocusNode: _cashFloorFocusNode,
                         ),
                         SizedBox(
                           height: ScreenSize().height! * 0.01,
                         ),
-                        _CreditCardNumberInput(
-                            style: textFieldStyle,
-                            inputDecoration: textFieldInputDecoration,
-                            currentNode: _creditCardNumberFocusNode,
-                            nextNode: _creditCardExpiryMonthFocusNode),
-                        SizedBox(
-                          height: ScreenSize().height! * 0.01,
-                        ),
-                        _CreditCardExpiryMonthInput(
+                        _FloorInput(
                           style: textFieldStyle,
                           inputDecoration: textFieldInputDecoration,
-                          currentNode: _creditCardExpiryMonthFocusNode,
-                          nextNode: _creditCardExpiryYearFocusNode,
+                          nextFocusNode: _cashApartmentFocusNode,
+                          currentFocusNode: _cashFloorFocusNode,
                         ),
                         SizedBox(
                           height: ScreenSize().height! * 0.01,
                         ),
-                        _CreditCardExpiryYearInput(
+                        _ApartmentInput(
                           style: textFieldStyle,
                           inputDecoration: textFieldInputDecoration,
-                          currentNode: _creditCardExpiryYearFocusNode,
-                          nextNode: _creditCardCvvFocusNode,
+                          currentFocusNode: _cashApartmentFocusNode,
+                          nextFocusNode: _cashCityCodeFocusNode,
                         ),
-                        SizedBox(
-                          height: ScreenSize().height! * 0.01,
-                        ),
-                        _CreditCardCvvInput(
+                        _CityCodeInput(
                           style: textFieldStyle,
                           inputDecoration: textFieldInputDecoration,
-                          currentNode: _creditCardCvvFocusNode,
+                          currentFocusNode: _cashCityCodeFocusNode,
                         ),
                         SizedBox(
                           height: ScreenSize().height! * 0.01,
@@ -163,7 +158,7 @@ class CreditCardWidget extends StatelessWidget {
 class _ChargeButton extends StatelessWidget {
   final Color? buttonColor, buttonTextColor;
   final TextStyle? buttonTextStyle;
-  final Function(CreditCardResponseModel creditCardResponseModel) onSuccess;
+  final Function(CashCollectionResponseModel cashCollectionModel) onSuccess;
   final Function(dynamic error) onError;
 
   _ChargeButton(
@@ -175,12 +170,12 @@ class _ChargeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CreditCardBloc, CreditCardState>(
+    return BlocBuilder<CashCollectionBloc, CashCollectionState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
         SchedulerBinding.instance!.addPostFrameCallback((_) {
           if (state.status.isSubmissionSuccess)
-            onSuccess(state.creditCardResponseModel!);
+            onSuccess(state.cashCollectionResponseModel!);
           else if (state.status.isSubmissionFailure) onError(state.errorModel);
         });
         return state.status.isSubmissionInProgress
@@ -192,39 +187,40 @@ class _ChargeButton extends StatelessWidget {
                 backgroundColor: buttonColor ?? Theme.of(context).primaryColor,
                 mainContext: context,
                 buttonTextStyle: buttonTextStyle,
-                onClickFunction: onClickSubmit,
+                onClickFunction: onClickLogin,
               );
       },
     );
   }
 
-  void onClickSubmit(
+  void onClickLogin(
     BuildContext context,
   ) {
-    context.read<CreditCardBloc>().add(ChargeValidation(context));
+    context.read<CashCollectionBloc>().add(ChargeValidation(context));
   }
 }
 
-class _CreditCardHolderNameInput extends StatelessWidget {
+class _DistrictInput extends StatelessWidget {
   final TextStyle? style;
+  final FocusNode currentFocusNode;
+  final FocusNode nextFocusNode;
   final InputDecoration? inputDecoration;
-  final FocusNode currentNode, nextNode;
 
-  _CreditCardHolderNameInput(
+  _DistrictInput(
       {this.style,
       this.inputDecoration,
-      required this.currentNode,
-      required this.nextNode});
+      required this.currentFocusNode,
+      required this.nextFocusNode});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CreditCardBloc, CreditCardState>(
+    return BlocBuilder<CashCollectionBloc, CashCollectionState>(
       buildWhen: (previous, current) =>
-          previous.creditCardHolderName != current.creditCardHolderName ||
+          previous.cashCollectionDistrict != current.cashCollectionDistrict ||
           previous.status != current.status,
       builder: (context, state) {
         bool isNotValid =
-            state.creditCardHolderName.invalid && state.status.isInvalid;
+            state.cashCollectionDistrict.invalid && state.status.isInvalid;
         return TextInputView(
           style: style,
           inputDecoration: inputDecoration,
@@ -233,40 +229,86 @@ class _CreditCardHolderNameInput extends StatelessWidget {
           obscureText: false,
           textInputAction: TextInputAction.next,
           textInputType: TextInputType.text,
-          hintText: 'Card Holder Name',
-          onChange: onChangeCreditCardHolderName,
-          currentFocus: currentNode,
-          nextFocus: nextNode,
-          errorMessage: state.creditCardHolderName.error?.message,
+          hintText: 'District',
+          onChange: onCashCollectionDistrictChange,
+          currentFocus: currentFocusNode,
+          nextFocus: nextFocusNode,
+          errorMessage: state.cashCollectionDistrict.error?.message,
         );
       },
     );
   }
 
-  void onChangeCreditCardHolderName(BuildContext context, String value) {
-    context.read<CreditCardBloc>().add(CreditCardNameChange(value));
+  void onCashCollectionDistrictChange(BuildContext context, String value) {
+    context.read<CashCollectionBloc>().add(CashCollectionDistrictChange(value));
   }
 }
 
-class _CreditCardNumberInput extends StatelessWidget {
+class _AddressInput extends StatelessWidget {
   final TextStyle? style;
+  final FocusNode currentFocusNode;
+  final FocusNode nextFocusNode;
   final InputDecoration? inputDecoration;
-  final FocusNode currentNode, nextNode;
-  _CreditCardNumberInput(
+
+  _AddressInput(
       {this.style,
       this.inputDecoration,
-      required this.currentNode,
-      required this.nextNode});
+      required this.currentFocusNode,
+      required this.nextFocusNode});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CreditCardBloc, CreditCardState>(
+    return BlocBuilder<CashCollectionBloc, CashCollectionState>(
       buildWhen: (previous, current) =>
-          previous.creditCardNumber != current.creditCardNumber ||
+          previous.cashCollectionAddress != current.cashCollectionAddress ||
           previous.status != current.status,
       builder: (context, state) {
         bool isNotValid =
-            state.creditCardNumber.invalid && state.status.isInvalid;
+            state.cashCollectionAddress.invalid && state.status.isInvalid;
+        return TextInputView(
+          style: style,
+          inputDecoration: inputDecoration,
+          mainContext: context,
+          isNotValid: isNotValid,
+          obscureText: false,
+          textInputAction: TextInputAction.next,
+          textInputType: TextInputType.text,
+          hintText: 'Address',
+          onChange: onCashCollectionAddressChange,
+          currentFocus: currentFocusNode,
+          nextFocus: nextFocusNode,
+          errorMessage: state.cashCollectionAddress.error?.message,
+        );
+      },
+    );
+  }
+
+  void onCashCollectionAddressChange(BuildContext context, String value) {
+    context.read<CashCollectionBloc>().add(CashCollectionAddressChange(value));
+  }
+}
+
+class _FloorInput extends StatelessWidget {
+  final TextStyle? style;
+  final InputDecoration? inputDecoration;
+  final FocusNode nextFocusNode;
+  final FocusNode currentFocusNode;
+
+  _FloorInput(
+      {this.style,
+      this.inputDecoration,
+      required this.nextFocusNode,
+      required this.currentFocusNode});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CashCollectionBloc, CashCollectionState>(
+      buildWhen: (previous, current) =>
+          previous.cashCollectionFloor != current.cashCollectionFloor ||
+          previous.status != current.status,
+      builder: (context, state) {
+        bool isNotValid =
+            state.cashCollectionFloor.invalid && state.status.isInvalid;
         return TextInputView(
           style: style,
           inputDecoration: inputDecoration,
@@ -275,42 +317,42 @@ class _CreditCardNumberInput extends StatelessWidget {
           obscureText: false,
           textInputAction: TextInputAction.next,
           textInputType: TextInputType.number,
-          maxLength: 16,
-          hintText: 'Card Number',
-          onChange: onChangeCreditCardNumber,
-          currentFocus: currentNode,
-          nextFocus: nextNode,
-          errorMessage: state.creditCardNumber.error?.message,
+          hintText: 'Floor',
+          onChange: onCashCollectionFloorChange,
+          currentFocus: currentFocusNode,
+          nextFocus: nextFocusNode,
+          errorMessage: state.cashCollectionFloor.error?.message,
         );
       },
     );
   }
 
-  void onChangeCreditCardNumber(BuildContext context, String value) {
-    context.read<CreditCardBloc>().add(CreditCardNumberChange(value));
+  void onCashCollectionFloorChange(BuildContext context, String value) {
+    context.read<CashCollectionBloc>().add(CashCollectionFloorChange(value));
   }
 }
 
-class _CreditCardExpiryMonthInput extends StatelessWidget {
+class _ApartmentInput extends StatelessWidget {
   final TextStyle? style;
   final InputDecoration? inputDecoration;
-  final FocusNode currentNode, nextNode;
+  final FocusNode nextFocusNode;
+  final FocusNode currentFocusNode;
 
-  _CreditCardExpiryMonthInput(
+  _ApartmentInput(
       {this.style,
       this.inputDecoration,
-      required this.nextNode,
-      required this.currentNode});
+      required this.nextFocusNode,
+      required this.currentFocusNode});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CreditCardBloc, CreditCardState>(
+    return BlocBuilder<CashCollectionBloc, CashCollectionState>(
       buildWhen: (previous, current) =>
-          previous.creditCardExpiryMonth != current.creditCardExpiryMonth ||
+          previous.cashCollectionApartment != current.cashCollectionApartment ||
           previous.status != current.status,
       builder: (context, state) {
         bool isNotValid =
-            state.creditCardExpiryMonth.invalid && state.status.isInvalid;
+            state.cashCollectionApartment.invalid && state.status.isInvalid;
         return TextInputView(
           style: style,
           inputDecoration: inputDecoration,
@@ -320,111 +362,71 @@ class _CreditCardExpiryMonthInput extends StatelessWidget {
           obscureText: false,
           textInputAction: TextInputAction.next,
           textInputType: TextInputType.number,
-          hintText: 'Card Expiry Month',
-          maxLength: 2,
-          onChange: onChangeCreditCardExpiryMonth,
-          currentFocus: currentNode,
-          nextFocus: nextNode,
-          errorMessage: state.creditCardExpiryMonth.error?.message,
+          hintText: 'Apartment',
+          onChange: onCashCollectionApartmentChange,
+          currentFocus: currentFocusNode,
+          nextFocus: nextFocusNode,
+          errorMessage: state.cashCollectionApartment.error?.message,
         );
       },
     );
   }
 
-  void onChangeCreditCardExpiryMonth(BuildContext context, String value) {
-    context.read<CreditCardBloc>().add(CreditCardExpiryMonthChange(value));
+  void onCashCollectionApartmentChange(BuildContext context, String value) {
+    context
+        .read<CashCollectionBloc>()
+        .add(CashCollectionApartmentChange(value));
   }
 }
 
-class _CreditCardExpiryYearInput extends StatelessWidget {
+class _CityCodeInput extends StatelessWidget {
   final TextStyle? style;
   final InputDecoration? inputDecoration;
-  final FocusNode currentNode, nextNode;
+  final FocusNode currentFocusNode;
 
-  _CreditCardExpiryYearInput(
-      {this.style,
-      this.inputDecoration,
-      required this.currentNode,
-      required this.nextNode});
+  _CityCodeInput({
+    this.style,
+    this.inputDecoration,
+    required this.currentFocusNode,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CreditCardBloc, CreditCardState>(
+    return BlocBuilder<CashCollectionBloc, CashCollectionState>(
       buildWhen: (previous, current) =>
-          previous.creditCardExpiryYear != current.creditCardExpiryYear ||
+          previous.cashCollectionCityCode != current.cashCollectionCityCode ||
           previous.status != current.status,
       builder: (context, state) {
         bool isNotValid =
-            state.creditCardExpiryYear.invalid && state.status.isInvalid;
+            state.cashCollectionCityCode.invalid && state.status.isInvalid;
         return TextInputView(
           style: style,
           inputDecoration: inputDecoration,
+          width: (ScreenSize().width! * 0.2),
           mainContext: context,
           isNotValid: isNotValid,
-          width: (ScreenSize().width! * 0.2),
           obscureText: false,
           textInputAction: TextInputAction.next,
           textInputType: TextInputType.number,
-          hintText: 'Card Expiry Year',
-          maxLength: 2,
-          onChange: onChangeCreditCardExpiryYear,
-          currentFocus: currentNode,
-          nextFocus: nextNode,
-          errorMessage: state.creditCardExpiryYear.error?.message,
-        );
-      },
-    );
-  }
-
-  void onChangeCreditCardExpiryYear(BuildContext context, String value) {
-    context.read<CreditCardBloc>().add(CreditCardExpiryYearChange(value));
-  }
-}
-
-class _CreditCardCvvInput extends StatelessWidget {
-  final TextStyle? style;
-  final InputDecoration? inputDecoration;
-  final FocusNode currentNode;
-  _CreditCardCvvInput(
-      {this.style, this.inputDecoration, required this.currentNode});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<CreditCardBloc, CreditCardState>(
-      buildWhen: (previous, current) =>
-          previous.creditCardCvv != current.creditCardCvv ||
-          previous.status != current.status,
-      builder: (context, state) {
-        bool isNotValid = state.creditCardCvv.invalid && state.status.isInvalid;
-        return TextInputView(
-          inputDecoration: inputDecoration,
-          style: style,
-          mainContext: context,
-          isNotValid: isNotValid,
+          hintText: 'City code',
+          onChange: onCashCollectionCityCodeChange,
+          currentFocus: currentFocusNode,
           onFieldSubmitted: (_) {
             onClickSubmit(context);
           },
-          width: (ScreenSize().width! * 0.4),
-          obscureText: false,
-          textInputAction: TextInputAction.next,
-          textInputType: TextInputType.number,
-          maxLength: 3,
-          hintText: 'Card Cvv',
-          onChange: onChangeCreditCardCvv,
-          currentFocus: currentNode,
-          errorMessage: state.creditCardCvv.error?.message,
+          errorMessage: state.cashCollectionCityCode.error?.message,
         );
       },
     );
   }
 
-  void onChangeCreditCardCvv(BuildContext context, String value) {
-    context.read<CreditCardBloc>().add(CreditCardCvvChange(value));
+  void onCashCollectionCityCodeChange(BuildContext context, String value) {
+    context.read<CashCollectionBloc>().add(CashCollectionCityCodeChange(value));
   }
 
   void onClickSubmit(
     BuildContext context,
   ) {
-    context.read<CreditCardBloc>().add(ChargeValidation(context));
+    context.read<CashCollectionBloc>().add(ChargeValidation(context));
   }
 }

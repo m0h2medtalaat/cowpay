@@ -4,17 +4,18 @@ import 'package:cowpay/cowpay.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
-class CreditCardExample extends StatelessWidget {
+class CashCollectionExample extends StatelessWidget {
   double amount = 150.0;
   String customerEmail = "example@mail.com";
   String customerMobile = "01068890002";
   String description = "description";
+  String customerName = "test name";
   String customerMerchantProfileId = "ExmpleId122345682";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CreditCardWidget(
+      body: CashCollectionWidget(
         buttonColor: Colors.black,
         buttonTextColor: Colors.white,
         backGroundColor: Colors.red,
@@ -33,12 +34,13 @@ class CreditCardExample extends StatelessWidget {
         amount: amount,
         customerEmail: customerEmail,
         customerMobile: customerMobile,
+        customerName: customerName,
         description: description,
         customerMerchantProfileId: customerMerchantProfileId,
         merchantReferenceId: getRandString(),
         activeEnvironment: CowpayEnvironment.staging,
         onSuccess: (val) {
-          debugPrint(val.statusDescription);
+          debugPrint(val.result);
           // Navigator.pop(context);
         },
         onError: (val) {

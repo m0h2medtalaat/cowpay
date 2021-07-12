@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:cowpay/api_calls/api_calls.dart';
-import 'package:cowpay/models/cach_collection_request_model.dart';
+import 'package:cowpay/models/cash_collection_request_model.dart';
 import 'package:crypto/crypto.dart';
 
 class CashCollectionUseCase {

@@ -3,9 +3,9 @@ library cowpay;
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:cowpay/models/cach_collection_request_model.dart';
-import 'package:cowpay/models/cach_collection_response_model.dart';
+import 'package:cowpay/models/cash_collection_request_model.dart';
 import 'package:cowpay/models/credit_card_request_model.dart';
+import 'package:cowpay/models/credit_card_response_model.dart';
 import 'package:cowpay/models/fawry_request_model.dart';
 import 'package:cowpay/models/fawry_response_model.dart';
 import 'package:cowpay/src/cash_collection_usercase.dart';
@@ -17,6 +17,7 @@ import 'helpers/enum_models.dart';
 
 export 'package:cowpay/api_calls/exceptions.dart';
 export 'package:cowpay/helpers/enum_models.dart';
+export 'package:cowpay/ui/widgets/cash_collection_widget.dart';
 export 'package:cowpay/ui/widgets/credit_card_widget.dart';
 
 class Cowpay {
@@ -81,9 +82,9 @@ class Cowpay {
   Future<CreditCardResponseModel> creditCardCharge({
     required String merchantReferenceId,
     required String customerMerchantProfileId,
-     String? customerName,
-     String? customerEmail,
-     String? customerMobile,
+    required String customerEmail,
+    required String customerName,
+    required String customerMobile,
     required String cvv,
     required String cardNumber,
     required String expiryYear,
@@ -109,9 +110,9 @@ class Cowpay {
         amount: amount,
         customerEmail: customerEmail,
         description: description,
+        customerName: customerName,
         customerMerchantProfileId: customerMerchantProfileId,
         customerMobile: customerMobile,
-        customerName: customerName,
         signature: signature);
     try {
       return await _creditCardUseCase
@@ -131,7 +132,7 @@ class Cowpay {
     required String apartment,
     required String cityCode,
     required String district,
-    required floor,
+    required String floor,
     required String amount,
     required String description,
   }) async {

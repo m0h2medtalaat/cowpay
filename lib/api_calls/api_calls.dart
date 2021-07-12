@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:cowpay/api_calls/urls_data.dart';
-import 'package:cowpay/models/cach_collection_request_model.dart';
-import 'package:cowpay/models/cach_collection_response_model.dart';
+import 'package:cowpay/models/cash_collection_request_model.dart';
 import 'package:cowpay/models/credit_card_request_model.dart';
+import 'package:cowpay/models/credit_card_response_model.dart';
 import 'package:cowpay/models/fawry_request_model.dart';
 import 'package:cowpay/models/fawry_response_model.dart';
 import 'package:flutter/material.dart';
