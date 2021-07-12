@@ -38,7 +38,7 @@ class CreditCardWidget extends StatelessWidget {
   final CowpayEnvironment activeEnvironment;
   final double amount;
   final double? height;
-  final Color? backGroundColor, cardColor, buttonColor, buttonTextColor;
+  final Color? /*backGroundColor,*/ /*cardColor,*/ buttonColor, buttonTextColor, mainColor;
   final TextStyle? buttonTextStyle, textFieldStyle;
   final InputDecoration? textFieldInputDecoration;
 
@@ -56,12 +56,13 @@ class CreditCardWidget extends StatelessWidget {
       required this.merchantReferenceId,
       this.height,
       this.buttonTextColor,
-      this.cardColor,
-      this.backGroundColor,
+//      this.cardColor,
+//      this.backGroundColor,
       this.buttonColor,
       this.buttonTextStyle,
       this.textFieldStyle,
       this.textFieldInputDecoration,
+      this.mainColor,
       required this.onSuccess,
       required this.onError});
 
@@ -69,6 +70,30 @@ class CreditCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     ScreenSize().height = MediaQuery.of(context).size.height;
     ScreenSize().width = MediaQuery.of(context).size.width;
+
+    TextStyle defaultTextStyle =
+        TextStyle(color: mainColor ?? Colors.black, fontSize: 14);
+    TextStyle defaultHintStyle =
+        TextStyle(color: mainColor?.withOpacity(0.4) ?? Color(0x9066496A), fontSize: 14);
+    InputDecoration defaultInputDecoration = InputDecoration(
+        focusedBorder: OutlineInputBorder(
+          borderSide:
+              BorderSide(color: mainColor ?? Color(0xff66496A), width: 2.0),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(
+              color: mainColor?.withOpacity(0.5) ?? Color(0x3066496A),
+              width: 1.0),
+        ),
+//      fillColor: Colors.grey,
+
+        isDense: false,
+        contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+        hintText: "hintText.tr()",
+        hintStyle: defaultHintStyle,
+        labelStyle: defaultHintStyle);
 
     return BlocProvider<CreditCardBloc>(
       create: (context) {
@@ -87,71 +112,105 @@ class CreditCardWidget extends StatelessWidget {
         onPanDown: (_) {
           FocusScope.of(context).unfocus();
         },
-        child: Container(
-          height: height ?? (ScreenSize().height),
-          color: backGroundColor ?? Colors.grey.withOpacity(0.8),
-          child: SingleChildScrollView(
-            child: SafeArea(
+        child: Stack(
+          children: [
+            Container(
+              child: Image.asset(AssetImage("assets/page_bg.png").assetName, package: 'cowpay-package',),
+            ),
+            SingleChildScrollView(
               child: Padding(
-                padding: EdgeInsets.all(ScreenSize().width! * 0.05),
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: cardColor ?? Colors.white,
-                      borderRadius: BorderRadius.circular(
-                          MediaQuery.of(context).size.width * 0.05)),
-                  child: Padding(
-                    padding: EdgeInsets.all(ScreenSize().width! * 0.05),
-                    child: Column(
-                      children: [
-                        _CreditCardHolderNameInput(
-                          style: textFieldStyle,
-                          inputDecoration: textFieldInputDecoration,
-                        ),
-                        SizedBox(
-                          height: ScreenSize().height! * 0.01,
-                        ),
-                        _CreditCardNumberInput(
-                          style: textFieldStyle,
-                          inputDecoration: textFieldInputDecoration,
-                        ),
-                        SizedBox(
-                          height: ScreenSize().height! * 0.01,
-                        ),
-                        _CreditCardExpiryMonthInput(
-                          style: textFieldStyle,
-                          inputDecoration: textFieldInputDecoration,
-                        ),
-                        SizedBox(
-                          height: ScreenSize().height! * 0.01,
-                        ),
-                        _CreditCardExpiryYearInput(
-                          style: textFieldStyle,
-                          inputDecoration: textFieldInputDecoration,
-                        ),
-                        SizedBox(
-                          height: ScreenSize().height! * 0.01,
-                        ),
-                        _CreditCardCvvInput(
-                          style: textFieldStyle,
-                          inputDecoration: textFieldInputDecoration,
-                        ),
-                        SizedBox(
-                          height: ScreenSize().height! * 0.01,
-                        ),
-                        _ChargeButton(
-                          buttonColor: buttonColor,
-                          buttonTextColor: buttonTextColor,
-                          buttonTextStyle: buttonTextStyle,
-                          onSuccess: (val) => onSuccess(val),
-                          onError: (error) => onError(error),
-                        )
-                      ],
+                padding: EdgeInsets.only(top: ScreenSize().height! * 0.1),
+                child: Column(
+                  children: [
+                    Container(
+//                      child: Image.asset("icon"),
+                      color: Colors.red,
+                      height: ScreenSize().height! * 0.3,
+                      width: ScreenSize().width! * 0.6,
                     ),
-                  ),
+                    SizedBox(
+                      height: ScreenSize().height! * 0.05,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(ScreenSize().width! * 0.05),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.transparent,
+                            borderRadius: BorderRadius.circular(
+                                MediaQuery.of(context).size.width *
+                                    0.05)),
+                        child: Padding(
+                          padding:
+                              EdgeInsets.all(ScreenSize().width! * 0.05),
+                          child: Column(
+                            children: [
+                              _CreditCardHolderNameInput(
+                                style: textFieldStyle ?? defaultTextStyle,
+                                inputDecoration:
+                                    textFieldInputDecoration ??
+                                        defaultInputDecoration,
+                              ),
+                              SizedBox(
+                                height: ScreenSize().height! * 0.025,
+                              ),
+                              _CreditCardNumberInput(
+                                style: textFieldStyle ?? defaultTextStyle,
+                                inputDecoration:
+                                    textFieldInputDecoration ??
+                                        defaultInputDecoration,
+                              ),
+                              SizedBox(
+                                height: ScreenSize().height! * 0.025,
+                              ),
+                              _CreditCardExpiryMonthInput(
+                                style: textFieldStyle ?? defaultTextStyle,
+                                inputDecoration:
+                                    textFieldInputDecoration ??
+                                        defaultInputDecoration,
+                              ),
+                              SizedBox(
+                                height: ScreenSize().height! * 0.025,
+                              ),
+                              _CreditCardExpiryYearInput(
+                                style: textFieldStyle ?? defaultTextStyle,
+                                inputDecoration:
+                                    textFieldInputDecoration ??
+                                        defaultInputDecoration,
+                              ),
+                              SizedBox(
+                                height: ScreenSize().height! * 0.025,
+                              ),
+                              _CreditCardCvvInput(
+                                style: textFieldStyle ?? defaultTextStyle,
+                                inputDecoration:
+                                textFieldInputDecoration ??
+                                    defaultInputDecoration,
+                              ),
+                              SizedBox(
+                                height: ScreenSize().height! * 0.07,
+                              ),
+                              Container(
+                                height: ScreenSize().height! * 0.08,
+                                child: _ChargeButton(
+                                  buttonColor: buttonColor ??
+                                      mainColor ??
+                                      Color(0xff66496A),
+                                  buttonTextColor: buttonTextColor,
+                                  buttonTextStyle: buttonTextStyle,
+                                  onSuccess: (val) => onSuccess(val),
+                                  onError: (error) => onError(error),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-          ),
+            )
+          ],
         ),
       ),
     );
@@ -184,9 +243,10 @@ class _ChargeButton extends StatelessWidget {
         return state.status.isSubmissionInProgress
             ? ButtonLoadingView()
             : ButtonView(
-                title: 'Charge',
+                fontWeight: FontWeight.w300,
+                title: 'COMPLETE PAYMENT',
                 textColor: buttonTextColor ?? Colors.white,
-                fontSize: 0.02,
+                fontSize: 0.025,
                 backgroundColor: buttonColor ?? Theme.of(context).primaryColor,
                 mainContext: context,
                 buttonTextStyle: buttonTextStyle,
@@ -380,7 +440,6 @@ class _CreditCardCvvInput extends StatelessWidget {
           mainContext: context,
           isNotValid: isNotValid,
           onFieldSubmitted: (_) {},
-          width: (ScreenSize().width! * 0.4),
           obscureText: false,
           textInputAction: TextInputAction.next,
           textInputType: TextInputType.number,
