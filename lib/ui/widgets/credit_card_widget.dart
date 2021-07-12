@@ -20,12 +20,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
-FocusNode _creditCardHolderNameFocusNode = FocusNode();
-FocusNode _creditCardNumberFocusNode = FocusNode();
-FocusNode _creditCardExpiryMonthFocusNode = FocusNode();
-FocusNode _creditCardExpiryYearFocusNode = FocusNode();
-FocusNode _creditCardCvvFocusNode = FocusNode();
-
 class CreditCardWidget extends StatelessWidget {
   final _creditCardHolderNameFocusNode = FocusNode();
   final _creditCardNumberFocusNode = FocusNode();
