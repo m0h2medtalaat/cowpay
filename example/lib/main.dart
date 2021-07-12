@@ -58,23 +58,7 @@ class MyApp extends StatelessWidget {
               margin: EdgeInsets.only(top: 20),
               width: 300,
               child: ElevatedButton(
-                  onPressed: () async { try {
-                    await Cowpay.instance.createFawryReceipt(
-                      description: 'description',
-                      amount: '32',
-                      customerMerchantProfileId: '2312',
-                      merchantReferenceId: getRandString(),
-                      customerEmail: 'sqeqedqqw@gmail.com',
-                      customerMobile: '01234567890',
-                      customerName: 'customerName',
-                    );
-                  } on TimeoutException catch (error) {
-                    print(error);
-                  } on SocketException catch (error) {
-                    print(error);
-                  } on InternalServerException catch (error) {
-                    print(error.code);
-                  }},
+                  onPressed: () =>_fawryOnCLick(),
                   child: Text('Cash Collection')),
             ),
           ],

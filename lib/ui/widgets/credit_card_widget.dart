@@ -25,14 +25,14 @@ FocusNode _creditCardExpiryYearFocusNode = FocusNode();
 FocusNode _creditCardCvvFocusNode = FocusNode();
 
 class CreditCardWidget extends StatelessWidget {
-  final String merchantCode,
-      customerEmail,
-      token,
-      merchantHash,
-      customerMobile,
+  final String customerName,
       description,
       merchantReferenceId,
       customerMerchantProfileId;
+
+  final String? customerEmail;
+
+  final String? customerMobile;
   final CowpayEnvironment activeEnvironment;
   final double amount;
   final double? height;
@@ -41,13 +41,11 @@ class CreditCardWidget extends StatelessWidget {
   final InputDecoration? textFieldInputDecoration;
 
   CreditCardWidget(
-      {required this.merchantCode,
-      required this.merchantHash,
-      required this.amount,
+      {required this.amount,
       required this.activeEnvironment,
-      required this.token,
-      required this.customerEmail,
-      required this.customerMobile,
+      this.customerEmail,
+      this.customerMobile,
+      required this.customerName,
       required this.description,
       required this.customerMerchantProfileId,
       required this.merchantReferenceId,
@@ -74,6 +72,7 @@ class CreditCardWidget extends StatelessWidget {
               amount: amount.toString(),
               customerEmail: customerEmail,
               customerMobile: customerMobile,
+              customerName: customerName,
               description: description));
       },
       child: GestureDetector(
