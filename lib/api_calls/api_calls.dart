@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:cowpay/api_calls/urls_data.dart';
 import 'package:cowpay/models/cash_collection_request_model.dart';
+import 'package:cowpay/models/cash_collection_response_model.dart';
 import 'package:cowpay/models/credit_card_request_model.dart';
 import 'package:cowpay/models/credit_card_response_model.dart';
 import 'package:cowpay/models/fawry_request_model.dart';
@@ -59,12 +60,14 @@ class ApiCallsClass {
   Future<dynamic> cashCollectionChargeCall(
       CashCollectionRequestModel cashCollectionRequestModel) async {
     try {
-      var res = await _netUtil.post(UrlsData.creditCardUrl,
+      //TODO remove comment
+   /*   var res = await _netUtil.post(UrlsData.creditCardUrl,
           body: cashCollectionRequestModel.toJson());
-      //TODO response implementation
+      CashCollectionResponseModel model =
+          CashCollectionResponseModel.fromJson(json.decode(json.encode(res)));
       debugPrint('Success ${res.statusCode.toString()}');
 
-      return res;
+      return model;*/
     } catch (error) {
       throw error;
     }
