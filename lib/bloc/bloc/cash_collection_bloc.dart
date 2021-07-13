@@ -124,7 +124,7 @@ class CashCollectionBloc
       validationListState.add(Formz.validate([state.cashCollectionApartment]));
       validationListState.add(Formz.validate([state.cashCollectionCityCode]));
       return state.copyWith(
-          cashCollectionDistrict: state.cashCollectionDistrict,
+          cashCollectionFloor: cashCollectionFloor,
           status: Formz.validate([
             state.cashCollectionDistrict,
             state.cashCollectionAddress,

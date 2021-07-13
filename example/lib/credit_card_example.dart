@@ -13,9 +13,8 @@ class CreditCardExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CreditCardWidget(
-        buttonTextColor: Colors.white,
+    return
+      CreditCardWidget(
         amount: amount,
         customerEmail: customerEmail,
         customerMobile: customerMobile,
@@ -30,7 +29,7 @@ class CreditCardExample extends StatelessWidget {
         onError: (val) {
           debugPrint(val.toString());
         },
-      ),
+
     );
   }
 

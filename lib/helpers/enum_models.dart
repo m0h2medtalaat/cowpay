@@ -43,3 +43,29 @@ extension DialogTypeExtension on DialogType {
     }
   }
 }
+
+ Map<String,String> testList ={
+  "Cairo	Downtown":"EG-01" ,
+  "Giza & Haram":"EG-01" ,
+ "Downtown Alex": "EG-02" ,
+  "Sahel":"EG-03" ,
+  "Behira":"EG-04",
+  "Dakahlia":"EG-05" ,
+  "El Kalioubia":"EG-06" ,
+  "Gharbia":"EG-07" ,
+   "Kafr Alsheikh":"EG-08" ,
+   "Monufia":"EG-09",
+  "Sharqia":"EG-10" ,
+   "Isamilia":"EG-11" ,
+   "Suez":"EG-12" ,
+   "Port":"EG-13" ,
+   "Damietta":"EG-14",
+  "Fayoum":"EG-15" ,
+   "Bani Suif":"EG-16" ,
+   "Asyut":"EG-17",
+   "Sohag":"EG-18" ,
+   "Menya":"EG-19"
+,"Qena":"EG-20" ,
+   "Aswan":"EG-21",
+   "Luxor":"EG-22",
+};

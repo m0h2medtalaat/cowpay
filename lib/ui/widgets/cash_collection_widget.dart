@@ -10,6 +10,7 @@ import 'package:cowpay/helpers/screen_size.dart';
 import 'package:cowpay/models/cash_collection_response_model.dart';
 import 'package:cowpay/ui/generic_views/button_loading_view.dart';
 import 'package:cowpay/ui/generic_views/button_view.dart';
+import 'package:cowpay/ui/generic_views/text_input_error_view.dart';
 import 'package:cowpay/ui/generic_views/text_input_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -32,7 +33,9 @@ class CashCollectionWidget extends StatelessWidget {
   final CowpayEnvironment activeEnvironment;
   final double amount;
   final double? height;
-  final Color? backGroundColor, cardColor, buttonColor, buttonTextColor;
+  final Color? /*backGroundColor, cardColor,*/ buttonColor,
+      buttonTextColor,
+      mainColor;
   final TextStyle? buttonTextStyle, textFieldStyle;
   final InputDecoration? textFieldInputDecoration;
 
@@ -50,8 +53,9 @@ class CashCollectionWidget extends StatelessWidget {
       required this.merchantReferenceId,
       this.height,
       this.buttonTextColor,
-      this.cardColor,
-      this.backGroundColor,
+      this.mainColor,
+      // this.cardColor,
+      // this.backGroundColor,
       this.buttonColor,
       this.buttonTextStyle,
       this.textFieldStyle,
@@ -81,73 +85,121 @@ class CashCollectionWidget extends StatelessWidget {
         onPanDown: (_) {
           FocusScope.of(context).unfocus();
         },
-        child: Container(
-          height: height ?? (ScreenSize().height),
-          color: backGroundColor ?? Colors.grey.withOpacity(0.8),
-          child: SingleChildScrollView(
-            child: SafeArea(
-              child: Padding(
-                padding: EdgeInsets.all(ScreenSize().width! * 0.05),
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: cardColor ?? Colors.white,
-                      borderRadius: BorderRadius.circular(
-                          MediaQuery.of(context).size.width * 0.05)),
-                  child: Padding(
-                    padding: EdgeInsets.all(ScreenSize().width! * 0.05),
-                    child: Column(
-                      children: [
-                        _DistrictInput(
-                          style: textFieldStyle,
-                          inputDecoration: textFieldInputDecoration,
-                          currentFocusNode: _cashDistrictFocusNode,
-                          nextFocusNode: _cashAddressFocusNode,
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: Stack(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    image: new DecorationImage(
+                        image: new AssetImage(
+                          "assets/page_bg.png",
+                          package: 'cowpay',
                         ),
-                        _AddressInput(
-                          style: textFieldStyle,
-                          inputDecoration: textFieldInputDecoration,
-                          currentFocusNode: _cashAddressFocusNode,
-                          nextFocusNode: _cashFloorFocusNode,
+                        fit: BoxFit.fill)),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: ScreenSize().height! * 0.1),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Container(
+                        child: Image(
+                            image: AssetImage(
+                          'assets/cowpay_logo.png',
+                          package: 'cowpay',
+                        )),
+                        height: ScreenSize().height! * 0.2,
+                        width: ScreenSize().width! * 0.47,
+                      ),
+                      SizedBox(
+                        height: ScreenSize().height! * 0.03,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(ScreenSize().width! * 0.05),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              borderRadius: BorderRadius.circular(
+                                  MediaQuery.of(context).size.width * 0.05)),
+                          child: Padding(
+                            padding: EdgeInsets.all(ScreenSize().width! * 0.05),
+                            child: Column(
+                              children: [
+                                _DistrictInput(
+                                  mainColor: mainColor,
+                                  style: textFieldStyle,
+                                  inputDecoration: textFieldInputDecoration,
+                                  currentFocusNode: _cashDistrictFocusNode,
+                                  nextFocusNode: _cashAddressFocusNode,
+                                ),
+                                SizedBox(
+                                  height: ScreenSize().height! * 0.025,
+                                ),
+                                _AddressInput(
+                                  mainColor: mainColor,
+                                  style: textFieldStyle,
+                                  inputDecoration: textFieldInputDecoration,
+                                  currentFocusNode: _cashAddressFocusNode,
+                                  nextFocusNode: _cashFloorFocusNode,
+                                ),
+                                SizedBox(
+                                  height: ScreenSize().height! * 0.025,
+                                ),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: _FloorInput(
+                                        mainColor: mainColor,
+                                        style: textFieldStyle,
+                                        inputDecoration:
+                                            textFieldInputDecoration,
+                                        nextFocusNode: _cashApartmentFocusNode,
+                                        currentFocusNode: _cashFloorFocusNode,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: ScreenSize().width! * 0.012,
+                                    ),
+                                    Expanded(
+                                      child: _ApartmentInput(
+                                        mainColor: mainColor,
+                                        style: textFieldStyle,
+                                        inputDecoration:
+                                            textFieldInputDecoration,
+                                        currentFocusNode:
+                                            _cashApartmentFocusNode,
+                                        nextFocusNode: _cashCityCodeFocusNode,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: ScreenSize().height! * 0.025,
+                                ),
+                                _CityCodeDropDown(mainColor:  mainColor),
+                                SizedBox(
+                                  height: ScreenSize().height! * 0.04,
+                                ),
+                                _ChargeButton(
+                                  buttonColor: mainColor ?? Color(0xff66496A),
+                                  amount: amount,
+                                  buttonTextColor: buttonTextColor,
+                                  buttonTextStyle: buttonTextStyle,
+                                  onSuccess: (val) => onSuccess(val),
+                                  onError: (error) => onError(error),
+                                )
+                              ],
+                            ),
+                          ),
                         ),
-                        SizedBox(
-                          height: ScreenSize().height! * 0.01,
-                        ),
-                        _FloorInput(
-                          style: textFieldStyle,
-                          inputDecoration: textFieldInputDecoration,
-                          nextFocusNode: _cashApartmentFocusNode,
-                          currentFocusNode: _cashFloorFocusNode,
-                        ),
-                        SizedBox(
-                          height: ScreenSize().height! * 0.01,
-                        ),
-                        _ApartmentInput(
-                          style: textFieldStyle,
-                          inputDecoration: textFieldInputDecoration,
-                          currentFocusNode: _cashApartmentFocusNode,
-                          nextFocusNode: _cashCityCodeFocusNode,
-                        ),
-                        _CityCodeInput(
-                          style: textFieldStyle,
-                          inputDecoration: textFieldInputDecoration,
-                          currentFocusNode: _cashCityCodeFocusNode,
-                        ),
-                        SizedBox(
-                          height: ScreenSize().height! * 0.01,
-                        ),
-                        _ChargeButton(
-                          buttonColor: buttonColor,
-                          buttonTextColor: buttonTextColor,
-                          buttonTextStyle: buttonTextStyle,
-                          onSuccess: (val) => onSuccess(val),
-                          onError: (error) => onError(error),
-                        )
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ),
+              )
+            ],
           ),
         ),
       ),
@@ -155,9 +207,98 @@ class CashCollectionWidget extends StatelessWidget {
   }
 }
 
+class _CityCodeDropDown extends StatelessWidget {
+  Color? mainColor;
+
+  _CityCodeDropDown({this.mainColor});
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CashCollectionBloc, CashCollectionState>(
+        buildWhen: (previous, current) =>
+        previous.cashCollectionCityCode != current.cashCollectionCityCode ||
+            previous.checkValidation != current.checkValidation,
+        builder: (context, state) {
+          bool isNotValid =
+              state.checkValidation && state.cashCollectionCityCode.invalid;
+          return cityCodeDropdownMenu(state, context, isNotValid);
+        });
+  }
+
+  Widget cityCodeDropdownMenu(
+      CashCollectionState state, BuildContext context, bool isNotValid) {
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+          decoration: BoxDecoration(
+              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+              border: Border.all(
+                color: isNotValid
+                    ? Colors.red
+                    : mainColor ?? Color(0xff66496A),
+                width: 1,
+              ),
+              color: Colors.white),
+          child: Row(
+            children: [
+              /*Container(
+                width: 25.ssp,
+                height: 25.ssp,
+                margin: EdgeInsetsDirectional.only(end: 0.02.sw),
+                child: Image(
+                  image: AssetImage('resources/images/diploma.png'),
+                  color: isNotValid
+                      ? Colors.red
+                      : Color(0xff66496A),
+                ),
+              ),*/
+              Expanded(
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                    isExpanded: true,
+                    itemHeight: 50.0,
+                    style: TextStyle(color: mainColor ?? Color(0xff66496A)),
+                    dropdownColor: mainColor!=null?Colors.white:Color(0xffF0EDF0),
+                    hint: Text(
+                      'city code',
+                      style: TextStyle(
+                          color: /*mainColor?.withOpacity(0.4) ??*/ Color(0x9066496A),
+                          fontSize: 14),
+                    ),
+                    items: testList.entries.map((e) {
+                      return DropdownMenuItem<String>(
+                        value: e.value,
+                        child: Text(e.key),
+                      );
+                    }).toList(),
+                    onChanged: (String? value) {
+                      context.read<CashCollectionBloc>().add(CashCollectionCityCodeChange(value!));
+                    },
+                    value: state.cashCollectionCityCode.value == ''
+                        ? null
+                        : state.cashCollectionCityCode.value,
+                    iconEnabledColor: isNotValid
+                        ? Colors.red
+                        : Color(0x9066496A),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        if (isNotValid)
+          TextInputErrorView(
+            errorMessage: 'inputRequired',
+          )
+      ],
+    );
+  }
+}
+
 class _ChargeButton extends StatelessWidget {
   final Color? buttonColor, buttonTextColor;
   final TextStyle? buttonTextStyle;
+  final double amount;
   final Function(CashCollectionResponseModel cashCollectionModel) onSuccess;
   final Function(dynamic error) onError;
 
@@ -166,7 +307,8 @@ class _ChargeButton extends StatelessWidget {
       this.buttonColor,
       this.buttonTextColor,
       required this.onSuccess,
-      required this.onError});
+      required this.onError,
+      required this.amount});
 
   @override
   Widget build(BuildContext context) {
@@ -181,10 +323,34 @@ class _ChargeButton extends StatelessWidget {
         return state.status.isSubmissionInProgress
             ? ButtonLoadingView()
             : ButtonView(
-                title: 'Charge',
+                fontWeight: FontWeight.w300,
+                // title: 'Charge',
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: ScreenSize().width! * 0.04),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("CHARGE",
+                          style: buttonTextStyle ??
+                              TextStyle(
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 0.025 * ScreenSize().height!,
+                                  color: Colors.white),
+                          textScaleFactor: 1),
+                      Text("$amount EGP",
+                          style: buttonTextStyle ??
+                              TextStyle(
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 0.025 * ScreenSize().height!,
+                                  color: Colors.white),
+                          textScaleFactor: 1)
+                    ],
+                  ),
+                ),
                 textColor: buttonTextColor ?? Colors.white,
-                fontSize: 0.02,
-                backgroundColor: buttonColor ?? Theme.of(context).primaryColor,
+                fontSize: 0.025,
+                backgroundColor: buttonColor,
                 mainContext: context,
                 buttonTextStyle: buttonTextStyle,
                 onClickFunction: onClickLogin,
@@ -210,7 +376,8 @@ class _DistrictInput extends StatelessWidget {
       {this.style,
       this.inputDecoration,
       required this.currentFocusNode,
-      required this.nextFocusNode});
+      required this.nextFocusNode,
+      Color? mainColor});
 
   @override
   Widget build(BuildContext context) {
@@ -254,7 +421,8 @@ class _AddressInput extends StatelessWidget {
       {this.style,
       this.inputDecoration,
       required this.currentFocusNode,
-      required this.nextFocusNode});
+      required this.nextFocusNode,
+      Color? mainColor});
 
   @override
   Widget build(BuildContext context) {
@@ -298,7 +466,8 @@ class _FloorInput extends StatelessWidget {
       {this.style,
       this.inputDecoration,
       required this.nextFocusNode,
-      required this.currentFocusNode});
+      required this.currentFocusNode,
+      Color? mainColor});
 
   @override
   Widget build(BuildContext context) {
@@ -342,7 +511,8 @@ class _ApartmentInput extends StatelessWidget {
       {this.style,
       this.inputDecoration,
       required this.nextFocusNode,
-      required this.currentFocusNode});
+      required this.currentFocusNode,
+      Color? mainColor});
 
   @override
   Widget build(BuildContext context) {
@@ -388,6 +558,7 @@ class _CityCodeInput extends StatelessWidget {
     this.style,
     this.inputDecoration,
     required this.currentFocusNode,
+    Color? mainColor,
   });
 
   @override
