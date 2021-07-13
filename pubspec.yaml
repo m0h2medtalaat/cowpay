@@ -23,5 +23,5 @@ dev_dependencies:
 
 flutter:
   assets:
-    - resources/box.png
+    - assets/
 

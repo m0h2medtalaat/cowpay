@@ -11,7 +11,6 @@ import 'package:cowpay/formz_models/credit_card_number.dart';
 import 'package:cowpay/helpers/enum_models.dart';
 import 'package:cowpay/helpers/screen_size.dart';
 import 'package:cowpay/models/credit_card_response_model.dart';
-import 'package:cowpay/models/fawry_response_model.dart';
 import 'package:cowpay/ui/generic_views/button_loading_view.dart';
 import 'package:cowpay/ui/generic_views/button_view.dart';
 import 'package:cowpay/ui/generic_views/text_input_view.dart';
@@ -35,7 +34,8 @@ class CreditCardWidget extends StatelessWidget {
   final CowpayEnvironment activeEnvironment;
   final double amount;
   final double? height;
-  final Color? /*backGroundColor,*/ /*cardColor,*/ buttonColor, buttonTextColor,
+  final Color? /*backGroundColor,*/ /*cardColor,*/ buttonColor,
+      buttonTextColor,
       mainColor;
   final TextStyle? buttonTextStyle, textFieldStyle;
   final InputDecoration? textFieldInputDecoration;
@@ -43,45 +43,39 @@ class CreditCardWidget extends StatelessWidget {
   final Function(CreditCardResponseModel creditCardResponseModel) onSuccess;
   final Function(dynamic error) onError;
 
-  CreditCardWidget({required this.amount,
-    required this.activeEnvironment,
-    required this.customerEmail,
-    required this.customerMobile,
-    required this.description,
-    required this.customerMerchantProfileId,
-    required this.merchantReferenceId,
-    this.height,
-    this.buttonTextColor,
+  CreditCardWidget(
+      {required this.amount,
+      required this.activeEnvironment,
+      required this.customerEmail,
+      required this.customerMobile,
+      required this.description,
+      required this.customerMerchantProfileId,
+      required this.merchantReferenceId,
+      this.height,
+      this.buttonTextColor,
 //      this.cardColor,
 //      this.backGroundColor,
-    this.buttonColor,
-    this.buttonTextStyle,
-    this.textFieldStyle,
-    this.textFieldInputDecoration,
-    this.mainColor,
-    required this.onSuccess,
-    required this.onError});
+      this.buttonColor,
+      this.buttonTextStyle,
+      this.textFieldStyle,
+      this.textFieldInputDecoration,
+      this.mainColor,
+      required this.onSuccess,
+      required this.onError});
 
   @override
   Widget build(BuildContext context) {
-    ScreenSize().height = MediaQuery
-        .of(context)
-        .size
-        .height;
-    ScreenSize().width = MediaQuery
-        .of(context)
-        .size
-        .width;
+    ScreenSize().height = MediaQuery.of(context).size.height;
+    ScreenSize().width = MediaQuery.of(context).size.width;
 
     TextStyle defaultTextStyle =
-    TextStyle(color: mainColor ?? Colors.black, fontSize: 14);
-    TextStyle defaultHintStyle =
-    TextStyle(
+        TextStyle(color: mainColor ?? Colors.black, fontSize: 14);
+    TextStyle defaultHintStyle = TextStyle(
         color: mainColor?.withOpacity(0.4) ?? Color(0x9066496A), fontSize: 14);
     InputDecoration defaultInputDecoration = InputDecoration(
         focusedBorder: OutlineInputBorder(
           borderSide:
-          BorderSide(color: mainColor ?? Color(0xff66496A), width: 2.0),
+              BorderSide(color: mainColor ?? Color(0xff66496A), width: 2.0),
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         enabledBorder: OutlineInputBorder(
@@ -119,17 +113,18 @@ class CreditCardWidget extends StatelessWidget {
             Container(
 //              child: Image.asset(AssetImage("assets/page_bg.png").assetName,
 //                package: 'cowpay-package',),
-            ),
+                ),
             SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.only(top: ScreenSize().height! * 0.1),
                 child: Column(
                   children: [
                     Container(
-//                      child: Image(
-//                        image: AssetImage('resources/box.png', package: 'cowpay-package',
-//                      )),
-//                      color: Colors.red,
+                      child: Image(
+                          image: AssetImage(
+                        'assets/cowpay_logo.png',
+                        package: 'cowpay',
+                      )),
                       height: ScreenSize().height! * 0.3,
                       width: ScreenSize().width! * 0.6,
                     ),
@@ -142,20 +137,14 @@ class CreditCardWidget extends StatelessWidget {
                         decoration: BoxDecoration(
                             color: Colors.transparent,
                             borderRadius: BorderRadius.circular(
-                                MediaQuery
-                                    .of(context)
-                                    .size
-                                    .width *
-                                    0.05)),
+                                MediaQuery.of(context).size.width * 0.05)),
                         child: Padding(
-                          padding:
-                          EdgeInsets.all(ScreenSize().width! * 0.05),
+                          padding: EdgeInsets.all(ScreenSize().width! * 0.05),
                           child: Column(
                             children: [
                               _CreditCardHolderNameInput(
                                 style: textFieldStyle ?? defaultTextStyle,
-                                inputDecoration:
-                                textFieldInputDecoration ??
+                                inputDecoration: textFieldInputDecoration ??
                                     defaultInputDecoration,
                                 currentNode: _creditCardHolderNameFocusNode,
                                 nextNode: _creditCardNumberFocusNode,
@@ -165,41 +154,34 @@ class CreditCardWidget extends StatelessWidget {
                               ),
                               _CreditCardNumberInput(
                                   style: textFieldStyle ?? defaultTextStyle,
-                                  inputDecoration:
-                                  textFieldInputDecoration ??
+                                  inputDecoration: textFieldInputDecoration ??
                                       defaultInputDecoration,
                                   currentNode: _creditCardNumberFocusNode,
-                                  nextNode: _creditCardExpiryMonthFocusNode
-                              ),
+                                  nextNode: _creditCardExpiryMonthFocusNode),
                               SizedBox(
                                 height: ScreenSize().height! * 0.025,
                               ),
                               _CreditCardExpiryMonthInput(
                                   style: textFieldStyle ?? defaultTextStyle,
-                                  inputDecoration:
-                                  textFieldInputDecoration ??
+                                  inputDecoration: textFieldInputDecoration ??
                                       defaultInputDecoration,
                                   currentNode: _creditCardExpiryMonthFocusNode,
-                                  nextNode: _creditCardExpiryYearFocusNode
-                              ),
+                                  nextNode: _creditCardExpiryYearFocusNode),
                               SizedBox(
                                 height: ScreenSize().height! * 0.025,
                               ),
                               _CreditCardExpiryYearInput(
                                   style: textFieldStyle ?? defaultTextStyle,
-                                  inputDecoration:
-                                  textFieldInputDecoration ??
+                                  inputDecoration: textFieldInputDecoration ??
                                       defaultInputDecoration,
                                   currentNode: _creditCardExpiryYearFocusNode,
-                                  nextNode: _creditCardCvvFocusNode
-                              ),
+                                  nextNode: _creditCardCvvFocusNode),
                               SizedBox(
                                 height: ScreenSize().height! * 0.025,
                               ),
                               _CreditCardCvvInput(
                                 style: textFieldStyle ?? defaultTextStyle,
-                                inputDecoration:
-                                textFieldInputDecoration ??
+                                inputDecoration: textFieldInputDecoration ??
                                     defaultInputDecoration,
                                 currentNode: _creditCardCvvFocusNode,
                               ),
@@ -240,11 +222,12 @@ class _ChargeButton extends StatelessWidget {
   final Function(CreditCardResponseModel creditCardResponseModel) onSuccess;
   final Function(dynamic error) onError;
 
-  _ChargeButton({this.buttonTextStyle,
-    this.buttonColor,
-    this.buttonTextColor,
-    required this.onSuccess,
-    required this.onError});
+  _ChargeButton(
+      {this.buttonTextStyle,
+      this.buttonColor,
+      this.buttonTextColor,
+      required this.onSuccess,
+      required this.onError});
 
   @override
   Widget build(BuildContext context) {
@@ -259,23 +242,22 @@ class _ChargeButton extends StatelessWidget {
         return state.status.isSubmissionInProgress
             ? ButtonLoadingView()
             : ButtonView(
-          fontWeight: FontWeight.w300,
-          title: 'COMPLETE PAYMENT',
-          textColor: buttonTextColor ?? Colors.white,
-          fontSize: 0.025,
-          backgroundColor: buttonColor ?? Theme
-                .of(context)
-                .primaryColor,
-          mainContext: context,
-          buttonTextStyle: buttonTextStyle,
-          onClickFunction: onClickSubmit,
-
-            );
+                fontWeight: FontWeight.w300,
+                title: 'COMPLETE PAYMENT',
+                textColor: buttonTextColor ?? Colors.white,
+                fontSize: 0.025,
+                backgroundColor: buttonColor ?? Theme.of(context).primaryColor,
+                mainContext: context,
+                buttonTextStyle: buttonTextStyle,
+                onClickFunction: onClickSubmit,
+              );
       },
     );
   }
 
-  void onClickSubmit(BuildContext context,) {
+  void onClickSubmit(
+    BuildContext context,
+  ) {
     context.read<CreditCardBloc>().add(ChargeValidation(context));
   }
 }
@@ -285,16 +267,17 @@ class _CreditCardHolderNameInput extends StatelessWidget {
   final InputDecoration? inputDecoration;
   final FocusNode currentNode, nextNode;
 
-  _CreditCardHolderNameInput({this.style,
-    this.inputDecoration,
-    required this.currentNode,
-    required this.nextNode});
+  _CreditCardHolderNameInput(
+      {this.style,
+      this.inputDecoration,
+      required this.currentNode,
+      required this.nextNode});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CreditCardBloc, CreditCardState>(
       buildWhen: (previous, current) =>
-      previous.creditCardHolderName != current.creditCardHolderName ||
+          previous.creditCardHolderName != current.creditCardHolderName ||
           previous.status != current.status,
       builder: (context, state) {
         bool isNotValid =
@@ -327,16 +310,17 @@ class _CreditCardNumberInput extends StatelessWidget {
   final InputDecoration? inputDecoration;
   final FocusNode currentNode, nextNode;
 
-  _CreditCardNumberInput({this.style,
-    this.inputDecoration,
-    required this.currentNode,
-    required this.nextNode});
+  _CreditCardNumberInput(
+      {this.style,
+      this.inputDecoration,
+      required this.currentNode,
+      required this.nextNode});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CreditCardBloc, CreditCardState>(
       buildWhen: (previous, current) =>
-      previous.creditCardNumber != current.creditCardNumber ||
+          previous.creditCardNumber != current.creditCardNumber ||
           previous.status != current.status,
       builder: (context, state) {
         bool isNotValid =
@@ -370,16 +354,17 @@ class _CreditCardExpiryMonthInput extends StatelessWidget {
   final InputDecoration? inputDecoration;
   final FocusNode currentNode, nextNode;
 
-  _CreditCardExpiryMonthInput({this.style,
-    this.inputDecoration,
-    required this.nextNode,
-    required this.currentNode});
+  _CreditCardExpiryMonthInput(
+      {this.style,
+      this.inputDecoration,
+      required this.nextNode,
+      required this.currentNode});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CreditCardBloc, CreditCardState>(
       buildWhen: (previous, current) =>
-      previous.creditCardExpiryMonth != current.creditCardExpiryMonth ||
+          previous.creditCardExpiryMonth != current.creditCardExpiryMonth ||
           previous.status != current.status,
       builder: (context, state) {
         bool isNotValid =
@@ -414,16 +399,17 @@ class _CreditCardExpiryYearInput extends StatelessWidget {
   final InputDecoration? inputDecoration;
   final FocusNode currentNode, nextNode;
 
-  _CreditCardExpiryYearInput({this.style,
-    this.inputDecoration,
-    required this.currentNode,
-    required this.nextNode});
+  _CreditCardExpiryYearInput(
+      {this.style,
+      this.inputDecoration,
+      required this.currentNode,
+      required this.nextNode});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CreditCardBloc, CreditCardState>(
       buildWhen: (previous, current) =>
-      previous.creditCardExpiryYear != current.creditCardExpiryYear ||
+          previous.creditCardExpiryYear != current.creditCardExpiryYear ||
           previous.status != current.status,
       builder: (context, state) {
         bool isNotValid =
@@ -465,7 +451,7 @@ class _CreditCardCvvInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CreditCardBloc, CreditCardState>(
       buildWhen: (previous, current) =>
-      previous.creditCardCvv != current.creditCardCvv ||
+          previous.creditCardCvv != current.creditCardCvv ||
           previous.status != current.status,
       builder: (context, state) {
         bool isNotValid = state.creditCardCvv.invalid && state.status.isInvalid;
@@ -495,7 +481,9 @@ class _CreditCardCvvInput extends StatelessWidget {
     context.read<CreditCardBloc>().add(CreditCardCvvChange(value));
   }
 
-  void onClickSubmit(BuildContext context,) {
+  void onClickSubmit(
+    BuildContext context,
+  ) {
     context.read<CreditCardBloc>().add(ChargeValidation(context));
   }
 }
