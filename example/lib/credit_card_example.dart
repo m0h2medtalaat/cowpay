@@ -30,7 +30,6 @@ class CreditCardExample extends StatelessWidget {
         onError: (val) {
           debugPrint(val.toString());
         },
-
     );
   }
 
