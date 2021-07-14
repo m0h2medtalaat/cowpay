@@ -24,6 +24,7 @@ class TextInputView extends StatelessWidget {
   final double? width;
   final InputDecoration? inputDecoration;
   final TextStyle? style;
+  final Color? mainColor;
 
   const TextInputView(
       {/*Key key,*/
@@ -36,6 +37,7 @@ class TextInputView extends StatelessWidget {
       this.hintText,
       this.isNotValid,
       this.textInputType,
+      this.mainColor,
       this.textInputAction,
       this.errorMessage,
       this.currentFocus,
@@ -68,18 +70,19 @@ class TextInputView extends StatelessWidget {
 
   Container buildHelpText() {
     return Container(
-        margin: EdgeInsetsDirectional.only(top: (0.007 * ScreenSize().height!)),
-        padding: EdgeInsets.symmetric(
-            horizontal: (0.02 * ScreenSize().width!),
-            vertical: (0.007 * ScreenSize().height!)),
-        width: width ?? ScreenSize().width!,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(7)),
-            color: Colors.black),
-        child: Text(
-          helpText!,
-          style: TextStyle(height: 1.3),
-        ));
+      margin: EdgeInsetsDirectional.only(top: (0.007 * ScreenSize().height!)),
+      padding: EdgeInsets.symmetric(
+          horizontal: (0.02 * ScreenSize().width!),
+          vertical: (0.007 * ScreenSize().height!)),
+      width: width ?? ScreenSize().width!,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(7)),
+          color: Colors.black),
+      child: Text(
+        helpText!,
+        style: TextStyle(height: 1.3),
+      ),
+    );
   }
 
   TextFormField buildTextFormField(BuildContext context) {
@@ -104,60 +107,78 @@ class TextInputView extends StatelessWidget {
           onFieldSubmitted!(mainContext!);
         }
       },
-      style: style ??
-          TextStyle(color: Colors.black, fontSize: 0.03 * ScreenSize().width!),
-      decoration: InputDecoration(
-        contentPadding: inputDecoration?.contentPadding ??
-            EdgeInsets.symmetric(
-                vertical: 0.0, horizontal: 0.04 * ScreenSize().width!),
-        counterText: '',
-        prefixIcon: image != null
-            ? Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    width: 0.1 * ScreenSize().width!,
-                    height: 0.1 * ScreenSize().width!,
-                    child: Image(
-                      image: AssetImage('resources/images/$image.png'),
-                      color: enabled!
-                          ? isNotValid!
-                              ? Colors.red
-                              : Colors.white
-                          : Colors.black,
-                    ),
-                  ),
-                ],
-              )
-            : null,
-        // suffixIcon: showHelpIcon!
-        //     ? InkWell(
-        //         onTap: () => onHelpChange!(mainContext!),
-        //         child: Container(
-        //           width: 15.ssp,
-        //           height: 15.ssp,
-        //           padding: EdgeInsets.all(10.ssp),
-        //           child: Image.asset(
-        //             'resources/images/information.png',
-        //             height: 0.0.sh,
-        //           ),
-        //         ),
-        //       )
-        //     : suffixIcon == null
-        //         ? SizedBox()
-        //         : suffixIcon,
-        hintText: hintText!,
-        labelText: hintText!,
-        hintStyle: inputDecoration?.hintStyle ??
-            TextStyle(color: Colors.grey, fontSize: 0.03 * ScreenSize().width!),
-        labelStyle: inputDecoration?.labelStyle ??
-            TextStyle(
-                color: Colors.black, fontSize: 0.04 * ScreenSize().width!),
-        focusedBorder: inputDecoration?.focusedBorder ?? buildBorder(),
-        enabledBorder: inputDecoration?.enabledBorder ?? buildBorder(),
-        disabledBorder: inputDecoration?.disabledBorder ?? buildBorder(),
-      ),
+      style: style ?? TextStyle(color: mainColor ?? Colors.black, fontSize: 14),
+      decoration: inputDecoration ??
+          InputDecoration(
+            contentPadding: inputDecoration?.contentPadding ??
+                EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+            counterText: '',
+            prefixIcon: image != null
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 0.1 * ScreenSize().width!,
+                        height: 0.1 * ScreenSize().width!,
+                        child: Image(
+                          image: AssetImage('resources/images/$image.png'),
+                          color: enabled!
+                              ? isNotValid!
+                                  ? Colors.red
+                                  : Colors.white
+                              : Colors.black,
+                        ),
+                      ),
+                    ],
+                  )
+                : null,
+            // suffixIcon: showHelpIcon!
+            //     ? InkWell(
+            //         onTap: () => onHelpChange!(mainContext!),
+            //         child: Container(
+            //           width: 15.ssp,
+            //           height: 15.ssp,
+            //           padding: EdgeInsets.all(10.ssp),
+            //           child: Image.asset(
+            //             'resources/images/information.png',
+            //             height: 0.0.sh,
+            //           ),
+            //         ),
+            //       )
+            //     : suffixIcon == null
+            //         ? SizedBox()
+            //         : suffixIcon,
+            hintText: hintText!,
+            labelText: hintText!,
+            isDense: inputDecoration?.isDense ?? false,
+            hintStyle: inputDecoration?.hintStyle ??
+                TextStyle(
+                    color: mainColor?.withOpacity(0.4) ?? Color(0x9066496A),
+                    fontSize: 14),
+            labelStyle: inputDecoration?.labelStyle ??
+                TextStyle(
+                    color: mainColor?.withOpacity(0.4) ?? Color(0x9066496A),
+                    fontSize: 14),
+            focusedBorder: inputDecoration?.focusedBorder ??
+                OutlineInputBorder(
+                  borderSide: BorderSide(
+                      color: isNotValid!
+                          ? Colors.red
+                          : mainColor ?? Color(0xff66496A) , width: 2.0),
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+            enabledBorder: inputDecoration?.enabledBorder ??
+                OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  borderSide: BorderSide(
+                      color:isNotValid!
+                          ? Colors.red
+                          :  mainColor?.withOpacity(0.3) ?? Color(0x3066496A),
+                      width: 1.0),
+                ),
+            disabledBorder: inputDecoration?.disabledBorder ?? buildBorder(),
+          ),
       keyboardType: textInputType,
       textInputAction: textInputAction,
     );

@@ -37,7 +37,7 @@ class CreditCardExpiryMonth
     if (value.length < 2) return CreditCardExpiryMonthError.lengthMin;
     if (value.length > 2) return CreditCardExpiryMonthError.lengthMax;
     if (value.contains(" ")) return CreditCardExpiryMonthError.whiteSpace;
-    if (!RegExp(r'^[0-9]{02}$').hasMatch(value))
+    if (!RegExp(r'^0[1-9]|1[0-2]$').hasMatch(value))
       return CreditCardExpiryMonthError.format;
     return null;
   }

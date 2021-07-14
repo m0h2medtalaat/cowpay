@@ -14,23 +14,8 @@ class CashCollectionExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CashCollectionWidget(
-        buttonColor: Colors.black,
-        buttonTextColor: Colors.white,
-        backGroundColor: Colors.red,
-        cardColor: Colors.amber,
-        textFieldStyle: TextStyle(color: Colors.white),
-        textFieldInputDecoration: InputDecoration(
-          fillColor: Colors.grey,
-          filled: true,
-          isDense: false,
-          contentPadding: EdgeInsets.symmetric(vertical: 0.0),
-          counterText: '',
-          hintText: "hintText.tr()",
-          hintStyle:
-              Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 16),
-        ),
+    return CashCollectionWidget(
+      localizationCode: LocalizationCode.ar,
         amount: amount,
         customerEmail: customerEmail,
         customerMobile: customerMobile,
@@ -46,8 +31,7 @@ class CashCollectionExample extends StatelessWidget {
         onError: (val) {
           debugPrint(val.toString());
         },
-      ),
-    );
+      );
   }
 
   String getRandString() {

@@ -42,26 +42,6 @@ class CreditCardBloc extends Bloc<CreditCardEvent, CreditCardState> {
     CreditCardState state,
   ) {
     final name = CreditCardHolderName.dirty(event.creditCardHolderName);
-    if (state.status.isSubmissionFailure || state.checkValidation) {
-      List<FormzStatus> validationListState = [];
-      validationListState.add(Formz.validate([name]));
-      validationListState.add(Formz.validate([state.creditCardNumber]));
-      validationListState.add(Formz.validate([state.creditCardCvv]));
-      validationListState.add(Formz.validate([state.creditCardExpiryMonth]));
-      validationListState.add(Formz.validate([state.creditCardExpiryYear]));
-      return state.copyWith(
-          creditCardHolderName: name,
-          status: Formz.validate([
-            name,
-            state.creditCardNumber,
-            state.creditCardExpiryMonth,
-            state.creditCardExpiryYear,
-            state.creditCardCvv,
-          ]),
-          notValid: validationListState
-              .where((element) => element == FormzStatus.invalid)
-              .length);
-    }
     return state.copyWith(
       creditCardHolderName: name,
     );
@@ -86,27 +66,6 @@ class CreditCardBloc extends Bloc<CreditCardEvent, CreditCardState> {
     CreditCardState state,
   ) {
     final creditCardNumber = CreditCardNumber.dirty(event.creditCardNumber);
-    if (state.status.isSubmissionFailure || state.checkValidation) {
-      List<FormzStatus> validationListState = [];
-      validationListState.add(Formz.validate([state.creditCardHolderName]));
-      validationListState.add(Formz.validate([creditCardNumber]));
-      validationListState.add(Formz.validate([state.creditCardCvv]));
-      validationListState.add(Formz.validate([state.creditCardExpiryMonth]));
-      validationListState.add(Formz.validate([state.creditCardExpiryYear]));
-
-      return state.copyWith(
-          creditCardNumber: creditCardNumber,
-          status: Formz.validate([
-            state.creditCardHolderName,
-            creditCardNumber,
-            state.creditCardExpiryMonth,
-            state.creditCardExpiryYear,
-            state.creditCardCvv,
-          ]),
-          notValid: validationListState
-              .where((element) => element == FormzStatus.invalid)
-              .length);
-    }
     return state.copyWith(
       creditCardNumber: creditCardNumber,
     );
@@ -117,27 +76,6 @@ class CreditCardBloc extends Bloc<CreditCardEvent, CreditCardState> {
     CreditCardState state,
   ) {
     final creditCardCvv = CreditCardCvv.dirty(event.creditCardCvv);
-    if (state.status.isSubmissionFailure || state.checkValidation) {
-      List<FormzStatus> validationListState = [];
-      validationListState.add(Formz.validate([state.creditCardHolderName]));
-      validationListState.add(Formz.validate([state.creditCardNumber]));
-      validationListState.add(Formz.validate([creditCardCvv]));
-      validationListState.add(Formz.validate([state.creditCardExpiryMonth]));
-      validationListState.add(Formz.validate([state.creditCardExpiryYear]));
-
-      return state.copyWith(
-          creditCardCvv: creditCardCvv,
-          status: Formz.validate([
-            state.creditCardHolderName,
-            state.creditCardNumber,
-            creditCardCvv,
-            state.creditCardExpiryMonth,
-            state.creditCardExpiryYear,
-          ]),
-          notValid: validationListState
-              .where((element) => element == FormzStatus.invalid)
-              .length);
-    }
     return state.copyWith(
       creditCardCvv: creditCardCvv,
     );
@@ -149,29 +87,20 @@ class CreditCardBloc extends Bloc<CreditCardEvent, CreditCardState> {
   ) {
     final creditCardExpiryMonth =
         CreditCardExpiryMonth.dirty(event.creditCardExpiryMonth);
-    if (state.status.isSubmissionFailure || state.checkValidation) {
-      List<FormzStatus> validationListState = [];
-      validationListState.add(Formz.validate([state.creditCardHolderName]));
-      validationListState.add(Formz.validate([state.creditCardNumber]));
-      validationListState.add(Formz.validate([state.creditCardCvv]));
-      validationListState.add(Formz.validate([creditCardExpiryMonth]));
-      validationListState.add(Formz.validate([state.creditCardExpiryYear]));
+
+    bool isNotValidExpirationDate = true;
+    if (state.creditCardExpiryYear.value != "" && state.creditCardExpiryMonth.value != ""){
+      var expirationDate = DateTime(int.parse("20${state.creditCardExpiryYear.value}"), int.parse(creditCardExpiryMonth.value) +1);
+      //add 1 month
+      if( expirationDate.isAfter(DateTime.now())){
+        isNotValidExpirationDate = false;
+      }
+    }
+
       return state.copyWith(
           creditCardExpiryMonth: creditCardExpiryMonth,
-          status: Formz.validate([
-            state.creditCardHolderName,
-            state.creditCardNumber,
-            state.creditCardCvv,
-            creditCardExpiryMonth,
-            state.creditCardExpiryYear,
-          ]),
-          notValid: validationListState
-              .where((element) => element == FormzStatus.invalid)
-              .length);
-    }
-    return state.copyWith(
-      creditCardExpiryMonth: creditCardExpiryMonth,
-    );
+          isNotValidExpirationDate: isNotValidExpirationDate,
+      );
   }
 
   CreditCardState _mapCardExpiryYearChangedToState(
@@ -180,29 +109,22 @@ class CreditCardBloc extends Bloc<CreditCardEvent, CreditCardState> {
   ) {
     final creditCardExpiryYear =
         CreditCardExpiryYear.dirty(event.creditCardExpiryYear);
-    if (state.status.isSubmissionFailure || state.checkValidation) {
-      List<FormzStatus> validationListState = [];
-      validationListState.add(Formz.validate([state.creditCardHolderName]));
-      validationListState.add(Formz.validate([state.creditCardNumber]));
-      validationListState.add(Formz.validate([state.creditCardCvv]));
-      validationListState.add(Formz.validate([state.creditCardExpiryMonth]));
-      validationListState.add(Formz.validate([creditCardExpiryYear]));
+
+      bool isNotValidExpirationDate = true;
+      if (state.creditCardExpiryYear.value != "" && state.creditCardExpiryMonth.value != ""){
+        var expirationDate = DateTime(int.parse("20${creditCardExpiryYear.value}"), int.parse(state.creditCardExpiryMonth.value) +1);
+        //add 1 month
+       if( expirationDate.isAfter(DateTime.now())){
+          isNotValidExpirationDate = false;
+        }
+      }
+
+
       return state.copyWith(
-          creditCardExpiryYear: creditCardExpiryYear,
-          status: Formz.validate([
-            state.creditCardHolderName,
-            state.creditCardNumber,
-            state.creditCardCvv,
-            state.creditCardExpiryMonth,
-            creditCardExpiryYear,
-          ]),
-          notValid: validationListState
-              .where((element) => element == FormzStatus.invalid)
-              .length);
+        isNotValidExpirationDate: isNotValidExpirationDate,
+        creditCardExpiryYear: creditCardExpiryYear,
+      );
     }
-    return state.copyWith(
-      creditCardExpiryYear: creditCardExpiryYear,
-    );
   }
 
   Stream<CreditCardState> _validateChangedToState(
@@ -225,8 +147,7 @@ class CreditCardBloc extends Bloc<CreditCardEvent, CreditCardState> {
     validationListState.add(Formz.validate([creditCardCvv]));
     validationListState.add(Formz.validate([creditCardExpiryMonth]));
     validationListState.add(Formz.validate([creditCardExpiryYear]));
-
-    if (validationListState.where((element) => element.isInvalid).isEmpty)
+    if (validationListState.where((element) => element.isInvalid).isEmpty && !state.isNotValidExpirationDate)
       yield* _mapRegisterSubmittedToState(
           state,
           event.context,
@@ -240,6 +161,7 @@ class CreditCardBloc extends Bloc<CreditCardEvent, CreditCardState> {
               .length);
     else
       yield state.copyWith(
+        isNotValidExpirationDate: false,
           creditCardHolderName: creditCardHolderName,
           creditCardNumber: creditCardNumber,
           creditCardCvv: creditCardCvv,
@@ -283,6 +205,7 @@ class CreditCardBloc extends Bloc<CreditCardEvent, CreditCardState> {
           description: state.description!);
 
       yield state.copyWith(
+        isNotValidExpirationDate: false,
           status: FormzStatus.submissionSuccess,
           creditCardResponseModel: model);
     } catch (error) {
@@ -306,4 +229,3 @@ class CreditCardBloc extends Bloc<CreditCardEvent, CreditCardState> {
           status: FormzStatus.submissionFailure, errorModel: error);
     }
   }
-}

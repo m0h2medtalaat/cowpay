@@ -45,10 +45,9 @@ class CashCollectionApartmentChange extends CashCollectionEvent {
   final String cashCollectionApartment;
 }
 
-class CashCollectionCityCodeChange extends CashCollectionEvent {
-  const CashCollectionCityCodeChange(this.cashCollectionCityCode);
-
-  final String cashCollectionCityCode;
+class CashCollectionCityKeyChange extends CashCollectionEvent {
+  const CashCollectionCityKeyChange( this.cashCollectionCityKey );
+  final String cashCollectionCityKey;
 }
 
 class ChargeValidation extends CashCollectionEvent {

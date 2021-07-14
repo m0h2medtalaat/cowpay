@@ -121,8 +121,7 @@ class Cowpay {
       throw error;
     }
   }
-
-  Future<dynamic> cashCollectionCharge({
+    Future<dynamic> cashCollectionCharge({
     required String merchantReferenceId,
     required String customerMerchantProfileId,
     required String customerName,

@@ -12,6 +12,7 @@ class CashCollectionState extends Equatable {
       this.cashCollectionFloor = const NumTextInput.pure(),
       this.cashCollectionApartment = const NumTextInput.pure(),
       this.cashCollectionCityCode = const TextInput.pure(),
+        this.cityKey,
       this.notValid = 0,
       this.checkValidation = false,
       this.merchantReferenceId,
@@ -31,7 +32,7 @@ class CashCollectionState extends Equatable {
   final NumTextInput cashCollectionFloor;
   final NumTextInput cashCollectionApartment;
   final TextInput cashCollectionCityCode;
-
+  final String? cityKey;
   final String? merchantReferenceId;
   final String? customerMerchantProfileId;
   final String? customerEmail;
@@ -63,9 +64,11 @@ class CashCollectionState extends Equatable {
       String? amount,
       String? description,
       CashCollectionResponseModel? cashCollectionResponseModel,
+        String? cityKey,
       dynamic? errorModel}) {
     return CashCollectionState(
       status: status ?? this.status,
+      cityKey: cityKey ?? this.cityKey,
       notValid: notValid ?? this.notValid,
       checkValidation: checkValidation ?? this.checkValidation,
       merchantReferenceId: merchantReferenceId ?? this.merchantReferenceId,
@@ -92,13 +95,13 @@ class CashCollectionState extends Equatable {
   }
 
   @override
-  List<Object> get props => [
+  List<Object?> get props => [
         status,
         cashCollectionDistrict,
         cashCollectionAddress,
         cashCollectionFloor,
         cashCollectionApartment,
-        cashCollectionCityCode,
+        cityKey,
         checkValidation
       ];
 }
