@@ -17,7 +17,7 @@ class CreditCardState extends Equatable {
       this.creditCardHolderName = const CreditCardHolderName.pure(),
       this.notValid = 0,
       this.checkValidation = false,
-        this.isValidExpirationDate = false,
+        this.isNotValidExpirationDate = true,
       this.merchantReferenceId,
       this.customerMerchantProfileId,
       this.customerEmail,
@@ -43,7 +43,7 @@ class CreditCardState extends Equatable {
 
   final int notValid;
   final bool checkValidation;
-  final bool isValidExpirationDate;
+  final bool isNotValidExpirationDate;
 
   final CreditCardResponseModel? creditCardResponseModel;
   final dynamic? errorModel;
@@ -56,7 +56,7 @@ class CreditCardState extends Equatable {
       CreditCardNumber? creditCardNumber,
       CreditCardHolderName? creditCardHolderName,
       bool? checkValidation,
-      bool? isValidExpirationDate,
+      bool? isNotValidExpirationDate,
       int? notValid,
       String? merchantReferenceId,
       String? customerMerchantProfileId,
@@ -77,7 +77,7 @@ class CreditCardState extends Equatable {
       creditCardHolderName: creditCardHolderName ?? this.creditCardHolderName,
       notValid: notValid ?? this.notValid,
       checkValidation: checkValidation ?? this.checkValidation,
-      isValidExpirationDate: isValidExpirationDate ?? this.isValidExpirationDate,
+      isNotValidExpirationDate: isNotValidExpirationDate ?? this.isNotValidExpirationDate,
       merchantReferenceId: merchantReferenceId ?? this.merchantReferenceId,
       customerMerchantProfileId:
           customerMerchantProfileId ?? this.customerMerchantProfileId,
@@ -99,6 +99,7 @@ class CreditCardState extends Equatable {
         creditCardHolderName,
         creditCardNumber,
         creditCardCvv,
-        checkValidation
+        checkValidation,
+    isNotValidExpirationDate
       ];
 }

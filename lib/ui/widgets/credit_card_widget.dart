@@ -240,10 +240,10 @@ class CreditCardWidget extends StatelessWidget {
 Widget buildExpiryError(){
   return BlocBuilder<CreditCardBloc, CreditCardState>(
           buildWhen: (previous, current) => previous.creditCardExpiryMonth != current.creditCardExpiryMonth ||
-              previous.status != current.status || previous.creditCardExpiryYear != current.creditCardExpiryYear|| previous.isValidExpirationDate != current.isValidExpirationDate,
+              previous.status != current.status || previous.creditCardExpiryYear != current.creditCardExpiryYear|| previous.isNotValidExpirationDate != current.isNotValidExpirationDate,
           builder: (context, state) {
             bool isNotValid =
-                (state.creditCardExpiryMonth.invalid || state.creditCardExpiryYear.invalid || !state.isValidExpirationDate) && state.checkValidation ;
+                (state.creditCardExpiryMonth.invalid || state.creditCardExpiryYear.invalid || state.isNotValidExpirationDate) && state.checkValidation ;
             return isNotValid ?TextInputErrorView(
               errorMessage: "Expiration Error",
             ):SizedBox();
