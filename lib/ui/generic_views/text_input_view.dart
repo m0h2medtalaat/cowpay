@@ -163,14 +163,18 @@ class TextInputView extends StatelessWidget {
             focusedBorder: inputDecoration?.focusedBorder ??
                 OutlineInputBorder(
                   borderSide: BorderSide(
-                      color: mainColor ?? Color(0xff66496A), width: 2.0),
+                      color: isNotValid!
+                          ? Colors.red
+                          : mainColor ?? Color(0xff66496A) , width: 2.0),
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
             enabledBorder: inputDecoration?.enabledBorder ??
                 OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   borderSide: BorderSide(
-                      color: mainColor?.withOpacity(0.5) ?? Color(0x3066496A),
+                      color:isNotValid!
+                          ? Colors.red
+                          :  mainColor?.withOpacity(0.3) ?? Color(0x3066496A),
                       width: 1.0),
                 ),
             disabledBorder: inputDecoration?.disabledBorder ?? buildBorder(),

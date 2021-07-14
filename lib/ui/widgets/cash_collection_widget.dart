@@ -215,11 +215,11 @@ class _CityCodeDropDown extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CashCollectionBloc, CashCollectionState>(
         buildWhen: (previous, current) =>
-        previous.cashCollectionCityCode != current.cashCollectionCityCode ||
+        previous.cityKey != current.cityKey ||
             previous.checkValidation != current.checkValidation,
         builder: (context, state) {
           bool isNotValid =
-              state.checkValidation && state.cashCollectionCityCode.invalid;
+              state.status.isInvalid && state.cashCollectionCityCode.invalid;
           return cityCodeDropdownMenu(state, context, isNotValid);
         });
   }
@@ -235,7 +235,7 @@ class _CityCodeDropDown extends StatelessWidget {
               border: Border.all(
                 color: isNotValid
                     ? Colors.red
-                    : mainColor ?? Color(0xff66496A),
+                    : mainColor?.withOpacity(0.3) ?? Color(0x3066496A),
                 width: 1,
               ),
               color: Colors.white),
@@ -267,16 +267,14 @@ class _CityCodeDropDown extends StatelessWidget {
                     ),
                     items: testList.entries.map((e) {
                       return DropdownMenuItem<String>(
-                        value: e.value,
+                        value: e.key,
                         child: Text(e.key),
                       );
                     }).toList(),
-                    onChanged: (String? value) {
-                      context.read<CashCollectionBloc>().add(CashCollectionCityCodeChange(value!));
+                    onChanged: (String? key) {
+                      context.read<CashCollectionBloc>().add(CashCollectionCityKeyChange(key!));
                     },
-                    value: state.cashCollectionCityCode.value == ''
-                        ? null
-                        : state.cashCollectionCityCode.value,
+                    value: state.cityKey,
                     iconEnabledColor: isNotValid
                         ? Colors.red
                         : Color(0x9066496A),
@@ -592,7 +590,7 @@ class _CityCodeInput extends StatelessWidget {
   }
 
   void onCashCollectionCityCodeChange(BuildContext context, String value) {
-    context.read<CashCollectionBloc>().add(CashCollectionCityCodeChange(value));
+    context.read<CashCollectionBloc>().add(CashCollectionCityKeyChange(value));
   }
 
   void onClickSubmit(

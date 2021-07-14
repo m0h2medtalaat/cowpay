@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cowpay/bloc/event/cash_collection_event.dart';
 import 'package:cowpay/bloc/state/cash_collection_state.dart';
+import 'package:cowpay/cowpay.dart';
 import 'package:cowpay/formz_models/num_text_input.dart';
 import 'package:cowpay/formz_models/text_input.dart';
 import 'package:cowpay/models/cash_collection_response_model.dart';
@@ -28,8 +29,8 @@ class CashCollectionBloc
       yield _mapCashCollectionFloorChangeToState(event, state);
     } else if (event is CashCollectionApartmentChange) {
       yield _mapCashCollectionApartmentChangeToState(event, state);
-    } else if (event is CashCollectionCityCodeChange) {
-      yield _mapCashCollectionCityCodeChangeToState(event, state);
+    } else if (event is CashCollectionCityKeyChange) {
+      yield _mapCashCollectionCityKeyChangeToState(event, state);
     } else if (event is ChargeValidation) {
       yield* _validateChangedToState(state, event);
     }
@@ -56,26 +57,6 @@ class CashCollectionBloc
   ) {
     final cashCollectionDistrict =
         TextInput.dirty(event.cashCollectionDistrict);
-    if (state.status.isSubmissionFailure || state.checkValidation) {
-      List<FormzStatus> validationListState = [];
-      validationListState.add(Formz.validate([cashCollectionDistrict]));
-      validationListState.add(Formz.validate([state.cashCollectionAddress]));
-      validationListState.add(Formz.validate([state.cashCollectionFloor]));
-      validationListState.add(Formz.validate([state.cashCollectionApartment]));
-      validationListState.add(Formz.validate([state.cashCollectionCityCode]));
-      return state.copyWith(
-          cashCollectionDistrict: cashCollectionDistrict,
-          status: Formz.validate([
-            cashCollectionDistrict,
-            state.cashCollectionAddress,
-            state.cashCollectionFloor,
-            state.cashCollectionApartment,
-            state.cashCollectionCityCode,
-          ]),
-          notValid: validationListState
-              .where((element) => element == FormzStatus.invalid)
-              .length);
-    }
     return state.copyWith(
       cashCollectionDistrict: cashCollectionDistrict,
     );
@@ -86,26 +67,6 @@ class CashCollectionBloc
     CashCollectionState state,
   ) {
     final cashCollectionAddress = TextInput.dirty(event.cashCollectionAddress);
-    if (state.status.isSubmissionFailure || state.checkValidation) {
-      List<FormzStatus> validationListState = [];
-      validationListState.add(Formz.validate([state.cashCollectionDistrict]));
-      validationListState.add(Formz.validate([cashCollectionAddress]));
-      validationListState.add(Formz.validate([state.cashCollectionFloor]));
-      validationListState.add(Formz.validate([state.cashCollectionApartment]));
-      validationListState.add(Formz.validate([state.cashCollectionCityCode]));
-      return state.copyWith(
-          cashCollectionAddress: cashCollectionAddress,
-          status: Formz.validate([
-            state.cashCollectionDistrict,
-            cashCollectionAddress,
-            state.cashCollectionFloor,
-            state.cashCollectionApartment,
-            state.cashCollectionCityCode,
-          ]),
-          notValid: validationListState
-              .where((element) => element == FormzStatus.invalid)
-              .length);
-    }
     return state.copyWith(
       cashCollectionAddress: cashCollectionAddress,
     );
@@ -116,26 +77,6 @@ class CashCollectionBloc
     CashCollectionState state,
   ) {
     final cashCollectionFloor = NumTextInput.dirty(event.cashCollectionFloor);
-    if (state.status.isSubmissionFailure || state.checkValidation) {
-      List<FormzStatus> validationListState = [];
-      validationListState.add(Formz.validate([state.cashCollectionDistrict]));
-      validationListState.add(Formz.validate([state.cashCollectionAddress]));
-      validationListState.add(Formz.validate([cashCollectionFloor]));
-      validationListState.add(Formz.validate([state.cashCollectionApartment]));
-      validationListState.add(Formz.validate([state.cashCollectionCityCode]));
-      return state.copyWith(
-          cashCollectionFloor: cashCollectionFloor,
-          status: Formz.validate([
-            state.cashCollectionDistrict,
-            state.cashCollectionAddress,
-            cashCollectionFloor,
-            state.cashCollectionApartment,
-            state.cashCollectionCityCode,
-          ]),
-          notValid: validationListState
-              .where((element) => element == FormzStatus.invalid)
-              .length);
-    }
     return state.copyWith(
       cashCollectionFloor: cashCollectionFloor,
     );
@@ -147,58 +88,20 @@ class CashCollectionBloc
   ) {
     final cashCollectionApartment =
         NumTextInput.dirty(event.cashCollectionApartment);
-    if (state.status.isSubmissionFailure || state.checkValidation) {
-      List<FormzStatus> validationListState = [];
-      validationListState.add(Formz.validate([state.cashCollectionDistrict]));
-      validationListState.add(Formz.validate([state.cashCollectionAddress]));
-      validationListState.add(Formz.validate([state.cashCollectionFloor]));
-      validationListState.add(Formz.validate([cashCollectionApartment]));
-      validationListState.add(Formz.validate([state.cashCollectionCityCode]));
-      return state.copyWith(
-          cashCollectionApartment: cashCollectionApartment,
-          status: Formz.validate([
-            state.cashCollectionDistrict,
-            state.cashCollectionAddress,
-            state.cashCollectionFloor,
-            cashCollectionApartment,
-            state.cashCollectionCityCode,
-          ]),
-          notValid: validationListState
-              .where((element) => element == FormzStatus.invalid)
-              .length);
-    }
     return state.copyWith(
       cashCollectionApartment: cashCollectionApartment,
     );
   }
 
-  CashCollectionState _mapCashCollectionCityCodeChangeToState(
-    CashCollectionCityCodeChange event,
+  CashCollectionState _mapCashCollectionCityKeyChangeToState(
+    CashCollectionCityKeyChange event,
     CashCollectionState state,
   ) {
     final cashCollectionCityCode =
-        TextInput.dirty(event.cashCollectionCityCode);
-    if (state.status.isSubmissionFailure || state.checkValidation) {
-      List<FormzStatus> validationListState = [];
-      validationListState.add(Formz.validate([state.cashCollectionDistrict]));
-      validationListState.add(Formz.validate([state.cashCollectionAddress]));
-      validationListState.add(Formz.validate([state.cashCollectionFloor]));
-      validationListState.add(Formz.validate([state.cashCollectionApartment]));
-      validationListState.add(Formz.validate([cashCollectionCityCode]));
-      return state.copyWith(
-          cashCollectionCityCode: cashCollectionCityCode,
-          status: Formz.validate([
-            state.cashCollectionDistrict,
-            state.cashCollectionAddress,
-            state.cashCollectionFloor,
-            state.cashCollectionApartment,
-            cashCollectionCityCode,
-          ]),
-          notValid: validationListState
-              .where((element) => element == FormzStatus.invalid)
-              .length);
-    }
+        TextInput.dirty(testList[event.cashCollectionCityKey]!);
+
     return state.copyWith(
+      cityKey: event.cashCollectionCityKey,
       cashCollectionCityCode: cashCollectionCityCode,
     );
   }
@@ -218,25 +121,18 @@ class CashCollectionBloc
     final cashCollectionCityCode =
         TextInput.dirty(state.cashCollectionCityCode.value);
 
-    List<FormzStatus> validationListState = [];
-    validationListState.add(Formz.validate([cashCollectionDistrict]));
-    validationListState.add(Formz.validate([cashCollectionAddress]));
-    validationListState.add(Formz.validate([cashCollectionFloor]));
-    validationListState.add(Formz.validate([cashCollectionApartment]));
-    validationListState.add(Formz.validate([cashCollectionCityCode]));
+    FormzStatus formzStatus = Formz.validate([
+      cashCollectionDistrict,
+      cashCollectionAddress,
+      cashCollectionFloor,
+      cashCollectionApartment,
+      cashCollectionCityCode,
+    ]);
 
-    if (validationListState.where((element) => element.isInvalid).isEmpty)
+    if (formzStatus.isValid)
       yield* _mapRegisterSubmittedToState(
           state,
-          event.context,
-          cashCollectionDistrict,
-          cashCollectionAddress,
-          cashCollectionFloor,
-          cashCollectionApartment,
-          cashCollectionCityCode,
-          validationListState
-              .where((element) => element == FormzStatus.invalid)
-              .length);
+          event.context,);
     else
       yield state.copyWith(
           cashCollectionDistrict: cashCollectionDistrict,
@@ -245,27 +141,12 @@ class CashCollectionBloc
           cashCollectionApartment: cashCollectionApartment,
           cashCollectionCityCode: cashCollectionCityCode,
           checkValidation: true,
-          status: Formz.validate([
-            cashCollectionDistrict,
-            cashCollectionAddress,
-            cashCollectionFloor,
-            cashCollectionApartment,
-            cashCollectionCityCode,
-          ]),
-          notValid: validationListState
-              .where((element) => element == FormzStatus.invalid)
-              .length);
+          status: FormzStatus.invalid,);
   }
 
   Stream<CashCollectionState> _mapRegisterSubmittedToState(
       CashCollectionState state,
-      BuildContext context,
-      TextInput cashCollectionDistrict,
-      TextInput cashCollectionAddress,
-      NumTextInput cashCollectionFloor,
-      NumTextInput cashCollectionApartment,
-      TextInput cashCollectionCityCode,
-      int length) async* {
+      BuildContext context,) async* {
     yield state.copyWith(status: FormzStatus.submissionInProgress);
     try {
       // var model = await Cowpay.instance.cashCollectionCharge(
@@ -288,21 +169,6 @@ class CashCollectionBloc
           status: FormzStatus.submissionSuccess,
           cashCollectionResponseModel: model);
     } catch (error) {
-      state.copyWith(
-          cashCollectionDistrict: cashCollectionDistrict,
-          cashCollectionAddress: cashCollectionAddress,
-          cashCollectionFloor: cashCollectionFloor,
-          cashCollectionApartment: cashCollectionApartment,
-          cashCollectionCityCode: cashCollectionCityCode,
-          checkValidation: true,
-          status: Formz.validate([
-            cashCollectionDistrict,
-            cashCollectionAddress,
-            cashCollectionFloor,
-            cashCollectionApartment,
-            cashCollectionCityCode
-          ]),
-          notValid: length);
 
       yield state.copyWith(
           status: FormzStatus.submissionFailure, errorModel: error);
