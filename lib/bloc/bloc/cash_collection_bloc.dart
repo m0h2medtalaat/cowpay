@@ -6,6 +6,7 @@ import 'package:cowpay/bloc/state/cash_collection_state.dart';
 import 'package:cowpay/cowpay.dart';
 import 'package:cowpay/formz_models/num_text_input.dart';
 import 'package:cowpay/formz_models/text_input.dart';
+import 'package:cowpay/helpers/localization.dart';
 import 'package:cowpay/models/cash_collection_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
@@ -98,7 +99,7 @@ class CashCollectionBloc
     CashCollectionState state,
   ) {
     final cashCollectionCityCode =
-        TextInput.dirty(testList[event.cashCollectionCityKey]!);
+        TextInput.dirty(Localization().citiesList[event.cashCollectionCityKey]!);
 
     return state.copyWith(
       cityKey: event.cashCollectionCityKey,

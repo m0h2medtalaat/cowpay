@@ -15,6 +15,7 @@ class CashCollectionExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CashCollectionWidget(
+      localizationCode: LocalizationCode.ar,
         amount: amount,
         customerEmail: customerEmail,
         customerMobile: customerMobile,

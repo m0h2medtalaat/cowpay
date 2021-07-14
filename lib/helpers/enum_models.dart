@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 
 enum CowpayEnvironment { production, staging }
 
+enum LocalizationCode { en, ar }
+
 extension CowpayEnvironmenteExtension on CowpayEnvironment {
   String? get baseUrl {
     switch (this) {
@@ -44,8 +46,8 @@ extension DialogTypeExtension on DialogType {
   }
 }
 
- Map<String,String> testList ={
-  "Cairo	Downtown":"EG-01" ,
+ Map<String,String> citiesListEn ={
+  "Cairo":"EG-01" ,
   "Giza & Haram":"EG-01" ,
  "Downtown Alex": "EG-02" ,
   "Sahel":"EG-03" ,
@@ -58,7 +60,7 @@ extension DialogTypeExtension on DialogType {
   "Sharqia":"EG-10" ,
    "Isamilia":"EG-11" ,
    "Suez":"EG-12" ,
-   "Port":"EG-13" ,
+   "Port Said":"EG-13" ,
    "Damietta":"EG-14",
   "Fayoum":"EG-15" ,
    "Bani Suif":"EG-16" ,
@@ -69,3 +71,62 @@ extension DialogTypeExtension on DialogType {
    "Aswan":"EG-21",
    "Luxor":"EG-22",
 };
+
+Map<String,String> citiesListAr ={
+  "القاهرة":"EG-01" ,
+  "الجيزة و الهرم":"EG-01" ,
+  "الاسكندرية": "EG-02" ,
+  "الساحل":"EG-03" ,
+  "البحيرة":"EG-04",
+  "الدقهلية":"EG-05" ,
+  "القليوبية":"EG-06" ,
+  "الغربية":"EG-07" ,
+  "كفر الشيخ":"EG-08" ,
+  "المنوفية":"EG-09",
+  "الشرقية":"EG-10" ,
+  "الاسماعيلية":"EG-11" ,
+  "السويس":"EG-12" ,
+  "بورسعيد":"EG-13" ,
+  "دمياط":"EG-14",
+  "الفيوم":"EG-15" ,
+  "بني سويف":"EG-16" ,
+  "اسيوط":"EG-17",
+  "سوهاج":"EG-18" ,
+  "المنيا":"EG-19"
+  ,"قنا":"EG-20" ,
+  "اسوان":"EG-21",
+  "الاقصر":"EG-22",
+};
+
+Map<String,String> localizationMapEn ={
+  "district":"District" ,
+  "address":"Address" ,
+  "floor":"Floor" ,
+  "apartment":"Apartment",
+  "city":"City" ,
+  "confirm":"CONFIRM",
+  "egp":"EGP"  ,
+  "mm":"MM",
+  "yy":"YY",
+  "cardHolderName":"Card Holder Name",
+  "cardNumber":"Card Number",
+  "cvv":"CVV",
+  "pay":"PAY"
+};
+
+Map<String,String> localizationMapAr ={
+  "district":"الحى" ,
+  "address":"العنوان" ,
+  "floor":"الطابق" ,
+  "apartment":"الشقة",
+  "city":"المحافظة" ,
+  "confirm":"تأكيد",
+  "egp":"جم",
+  "mm":"شهر" ,
+  "yy":"سنة",
+"cardHolderName":"اسم حامل البطاقة",
+  "cardNumber":"رقم البطاقة",
+  "cvv":"رمز الامان (CVV)",
+  "pay":"ادفع"
+};
+

@@ -15,6 +15,7 @@ class CreditCardExample extends StatelessWidget {
   Widget build(BuildContext context) {
     return
       CreditCardWidget(
+        localizationCode: LocalizationCode.ar,
         amount: amount,
         customerEmail: customerEmail,
         customerMobile: customerMobile,
