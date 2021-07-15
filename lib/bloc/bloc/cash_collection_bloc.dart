@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cowpay/bloc/event/cash_collection_event.dart';
 import 'package:cowpay/bloc/state/cash_collection_state.dart';
-import 'package:cowpay/cowpay.dart';
 import 'package:cowpay/formz_models/num_text_input.dart';
 import 'package:cowpay/formz_models/text_input.dart';
 import 'package:cowpay/helpers/localization.dart';
@@ -98,8 +97,8 @@ class CashCollectionBloc
     CashCollectionCityKeyChange event,
     CashCollectionState state,
   ) {
-    final cashCollectionCityCode =
-        TextInput.dirty(Localization().citiesList[event.cashCollectionCityKey]!);
+    final cashCollectionCityCode = TextInput.dirty(
+        Localization().citiesList[event.cashCollectionCityKey]!);
 
     return state.copyWith(
       cityKey: event.cashCollectionCityKey,
@@ -132,24 +131,28 @@ class CashCollectionBloc
 
     if (formzStatus.isValid)
       yield* _mapRegisterSubmittedToState(
-          state,
-          event.context,);
+        state,
+        event.context,
+      );
     else
       yield state.copyWith(
-          cashCollectionDistrict: cashCollectionDistrict,
-          cashCollectionAddress: cashCollectionAddress,
-          cashCollectionFloor: cashCollectionFloor,
-          cashCollectionApartment: cashCollectionApartment,
-          cashCollectionCityCode: cashCollectionCityCode,
-          checkValidation: true,
-          status: FormzStatus.invalid,);
+        cashCollectionDistrict: cashCollectionDistrict,
+        cashCollectionAddress: cashCollectionAddress,
+        cashCollectionFloor: cashCollectionFloor,
+        cashCollectionApartment: cashCollectionApartment,
+        cashCollectionCityCode: cashCollectionCityCode,
+        checkValidation: true,
+        status: FormzStatus.invalid,
+      );
   }
 
   Stream<CashCollectionState> _mapRegisterSubmittedToState(
-      CashCollectionState state,
-      BuildContext context,) async* {
+    CashCollectionState state,
+    BuildContext context,
+  ) async* {
     yield state.copyWith(status: FormzStatus.submissionInProgress);
     try {
+      //TODO active the api call
       // var model = await Cowpay.instance.cashCollectionCharge(
       //     merchantReferenceId: state.merchantReferenceId!,
       //     customerMerchantProfileId: state.customerMerchantProfileId!,
@@ -163,14 +166,19 @@ class CashCollectionBloc
       //     address: state.cashCollectionAddress.value,
       //     amount: state.amount!,
       //     description: state.description!);
-      CashCollectionResponseModel model =
-          CashCollectionResponseModel(result: "Success");
+      CashCollectionResponseModel model = CashCollectionResponseModel(
+          merchantReferenceId: state.merchantReferenceId,
+          cowpayReferenceId: 1231312122,
+          paymentGatewayReferenceId: '1231232',
+          statusCode: 200,
+          statusDescription: 'Cash Collection',
+          success: true,
+          type: 'Cash Collection');
 
       yield state.copyWith(
           status: FormzStatus.submissionSuccess,
           cashCollectionResponseModel: model);
     } catch (error) {
-
       yield state.copyWith(
           status: FormzStatus.submissionFailure, errorModel: error);
     }

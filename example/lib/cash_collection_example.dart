@@ -15,23 +15,23 @@ class CashCollectionExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CashCollectionWidget(
-      localizationCode: LocalizationCode.ar,
-        amount: amount,
-        customerEmail: customerEmail,
-        customerMobile: customerMobile,
-        customerName: customerName,
-        description: description,
-        customerMerchantProfileId: customerMerchantProfileId,
-        merchantReferenceId: getRandString(),
-        activeEnvironment: CowpayEnvironment.staging,
-        onSuccess: (val) {
-          debugPrint(val.result);
-          // Navigator.pop(context);
-        },
-        onError: (val) {
-          debugPrint(val.toString());
-        },
-      );
+      localizationCode: LocalizationCode.en,
+      amount: amount,
+      customerEmail: customerEmail,
+      customerMobile: customerMobile,
+      customerName: customerName,
+      description: description,
+      customerMerchantProfileId: customerMerchantProfileId,
+      merchantReferenceId: getRandString(),
+      activeEnvironment: CowpayEnvironment.staging,
+      onSuccess: (val) {
+        debugPrint(val.statusDescription);
+        // Navigator.pop(context);
+      },
+      onError: (val) {
+        debugPrint(val.toString());
+      },
+    );
   }
 
   String getRandString() {
