@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:cowpay/api_calls/exceptions.dart';
-import 'package:cowpay/cowpay.dart';
+import 'package:cowpay/helpers/cowpay_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -84,7 +84,7 @@ class NetworkUtil {
     headers = {
       "Accept": "application/json",
       "Content-Type": "application/json",
-      "Authorization": "Bearer " + Cowpay.token!
+      "Authorization": "Bearer " + CowpayHelper.token!
     };
 
     debugPrint("header: " + headers.toString());

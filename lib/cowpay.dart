@@ -1,177 +1,231 @@
 library cowpay;
 
-import 'dart:async';
-import 'dart:convert';
+import 'package:cowpay/helpers/cowpay_helper.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:cowpay/models/cash_collection_request_model.dart';
-import 'package:cowpay/models/credit_card_request_model.dart';
-import 'package:cowpay/models/credit_card_response_model.dart';
-import 'package:cowpay/models/fawry_request_model.dart';
-import 'package:cowpay/models/fawry_response_model.dart';
-import 'package:cowpay/src/cash_collection_usercase.dart';
-import 'package:cowpay/src/credit_card_usercase.dart';
-import 'package:cowpay/src/fawry_usecase.dart';
-import 'package:crypto/crypto.dart';
-
-import 'helpers/enum_models.dart';
+import 'bloc/bloc/cowpay_bloc.dart';
+import 'bloc/event/cowpay_event.dart';
+import 'bloc/state/cowpay_state.dart';
+import 'helpers/localization.dart';
+import 'helpers/screen_size.dart';
+import 'models/credit_card_response_model.dart';
 
 export 'package:cowpay/api_calls/exceptions.dart';
 export 'package:cowpay/helpers/enum_models.dart';
-export 'package:cowpay/ui/widgets/cash_collection_widget.dart';
-export 'package:cowpay/ui/widgets/credit_card_widget.dart';
 
-class Cowpay {
-  static final Cowpay _instance = Cowpay._internal();
+class Cowpay extends StatefulWidget {
+  Cowpay({
+    Key? key,
+    required this.description,
+    required this.merchantReferenceId,
+    required this.customerMerchantProfileId,
+    required this.customerEmail,
+    required this.customerMobile,
+    required this.activeEnvironment,
+    required this.amount,
+    required this.customerName,
+    this.height,
+    this.buttonColor,
+    this.buttonTextColor,
+    this.mainColor,
+    this.buttonTextStyle,
+    this.textFieldStyle,
+    this.textFieldInputDecoration,
+    this.localizationCode,
+    required this.onSuccess,
+    required this.onError,
+  }) : super(key: key);
+  // double amount = 150.0;
+  // String customerEmail = "example@mail.com";
+  // String customerMobile = "01068890002";
+  // String description = "description";
+  // String customerMerchantProfileId = "ExmpleId122345682";
 
-  factory Cowpay() {
-    return _instance;
+  final String description, merchantReferenceId, customerMerchantProfileId;
+
+  final String customerEmail, customerName;
+
+  final String customerMobile;
+  final CowpayEnvironment activeEnvironment;
+  final double amount;
+  final double? height;
+  final Color? /*backGroundColor,*/ /*cardColor,*/ buttonColor,
+      buttonTextColor,
+      mainColor;
+  final TextStyle? buttonTextStyle, textFieldStyle;
+  final InputDecoration? textFieldInputDecoration;
+  final LocalizationCode? localizationCode;
+  final Function(CreditCardResponseModel creditCardResponseModel) onSuccess;
+  final Function(dynamic error) onError;
+
+  @override
+  State<Cowpay> createState() => _CowpayState();
+}
+
+class _CowpayState extends State<Cowpay> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _tabController = new TabController(vsync: this, length: 2);
   }
 
-  String? _merchantCode;
-  String? _merchantHash;
-  static CowpayEnvironment? activeEnvironment;
-  static String? token;
+  @override
+  Widget build(BuildContext context) {
+    ScreenSize().height = MediaQuery.of(context).size.height;
+    ScreenSize().width = MediaQuery.of(context).size.width;
 
-  Cowpay._internal();
-
-  void init({
-    required CowpayEnvironment cowpayEnvironment,
-    required String token,
-    required String merchantCode,
-    required String merchantHash,
-  }) {
-    activeEnvironment = cowpayEnvironment;
-    Cowpay.token = token;
-    this._merchantCode = merchantCode;
-    this._merchantHash = merchantHash;
-  }
-
-  Future<FawryResponseModel> createFawryReceipt({
-    required String merchantReferenceId,
-    required String customerMerchantProfileId,
-    String? customerName,
-    String? customerEmail,
-    String? customerMobile,
-    required String amount,
-    required String description,
-  }) async {
-    FawryUseCase _fawryUseCase = FawryUseCase();
-    String signature = generateSignature([
-      this._merchantCode,
-      merchantReferenceId,
-      customerMerchantProfileId,
-      amount,
-      this._merchantHash
-    ]);
-    FawryRequestModel fawryRequestModel = FawryRequestModel(
-        merchantReferenceId: merchantReferenceId,
-        amount: amount,
-        customerEmail: customerEmail,
-        description: description,
-        customerMerchantProfileId: customerMerchantProfileId,
-        customerMobile: customerMobile,
-        customerName: customerName,
-        signature: signature);
-    try {
-      return await _fawryUseCase.createFawryReceipt(fawryRequestModel);
-    } catch (error) {
-      throw (error);
+    if (widget.localizationCode == LocalizationCode.ar) {
+      Localization().localizationMap = localizationMapAr;
+      Localization().localizationCode = LocalizationCode.ar;
     }
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onPanDown: (_) {
+        FocusScope.of(context).unfocus();
+      },
+      child: Directionality(
+        textDirection: widget.localizationCode == LocalizationCode.ar
+            ? TextDirection.rtl
+            : TextDirection.ltr,
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            title: Text(Localization().localizationMap["paymentMethod"]),
+            backgroundColor: Color(0xff66496A),
+          ),
+          body: DefaultTabController(
+            length: 2,
+            child: BlocProvider<CowpayBloc>(
+              create: (context) {
+                return CowpayBloc();
+              },
+              child: Column(
+                children: [
+                  _buildTabBar(),
+                  Expanded(
+                    child: TabBarView(
+                        controller: _tabController,
+                        physics: NeverScrollableScrollPhysics(),
+                        children: [
+                          CreditCardWidget(
+                            localizationCode: LocalizationCode.ar,
+                            amount: widget.amount,
+                            customerEmail: widget.customerEmail,
+                            customerMobile: widget.customerMobile,
+                            description: widget.description,
+                            customerMerchantProfileId:
+                                widget.customerMerchantProfileId,
+                            merchantReferenceId: "11",
+                            activeEnvironment: CowpayEnvironment.staging,
+                            onSuccess: (val) {
+                              debugPrint(val.statusDescription);
+                              // Navigator.pop(context);
+                            },
+                            onError: (val) {
+                              debugPrint(val.toString());
+                            },
+                          ),
+                          CreditCardWidget(
+                            localizationCode: LocalizationCode.ar,
+                            amount: widget.amount,
+                            customerEmail: widget.customerEmail,
+                            customerMobile: widget.customerMobile,
+                            description: widget.description,
+                            customerMerchantProfileId:
+                                widget.customerMerchantProfileId,
+                            merchantReferenceId: "11",
+                            activeEnvironment: CowpayEnvironment.staging,
+                            onSuccess: (val) {
+                              debugPrint(val.statusDescription);
+                              // Navigator.pop(context);
+                            },
+                            onError: (val) {
+                              debugPrint(val.toString());
+                            },
+                          ),
+                        ]),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
-  Future<CreditCardResponseModel> creditCardCharge({
-    required String merchantReferenceId,
-    required String customerMerchantProfileId,
-    required String customerEmail,
-    required String customerName,
-    required String customerMobile,
-    required String cvv,
-    required String cardNumber,
-    required String expiryYear,
-    required String expiryMonth,
-    required String amount,
-    required String description,
-  }) async {
-    CreditCardUseCase _creditCardUseCase = CreditCardUseCase();
+  Widget _buildTabBar() {
+    return BlocBuilder<CowpayBloc, CowpayState>(
+        buildWhen: (previous, current) =>
+            previous.tabCurrentIndex != current.tabCurrentIndex,
+        builder: (context, state) {
+          return Container(
+              width: ScreenSize().width!,
+              height: ScreenSize().height! * 0.2,
+              color: Colors.white,
+              child: Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: (ScreenSize().width! * 0.01),
+                      vertical: (ScreenSize().height! * 0.02)),
+                  child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: List.generate(
+                        2,
+                        (index) => Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: (ScreenSize().width! * 0.01),
+                              vertical: (ScreenSize().height! * 0.01)),
+                          child: GestureDetector(
+                            onTap: () {
+                              if (state.tabCurrentIndex != index) {
+                                context
+                                    .read<CowpayBloc>()
+                                    .add(ChangeTabCurrentIndexEvent(index));
 
-    String signature = generateSignature([
-      this._merchantCode,
-      merchantReferenceId,
-      customerMerchantProfileId,
-      amount,
-      this._merchantHash
-    ]);
-    CreditCardRequestModel creditCardRequestModel = CreditCardRequestModel(
-        cardNumber: cardNumber,
-        cvv: cvv,
-        expiryMonth: expiryMonth,
-        expiryYear: expiryYear,
-        merchantReferenceId: merchantReferenceId,
-        amount: amount,
-        customerEmail: customerEmail,
-        description: description,
-        customerName: customerName,
-        customerMerchantProfileId: customerMerchantProfileId,
-        customerMobile: customerMobile,
-        signature: signature);
-    try {
-      return await _creditCardUseCase
-          .createCreditCardCharge(creditCardRequestModel);
-    } catch (error) {
-      throw error;
-    }
-  }
-    Future<dynamic> cashCollectionCharge({
-    required String merchantReferenceId,
-    required String customerMerchantProfileId,
-    required String customerName,
-    required String customerEmail,
-    required String customerMobile,
-    required String address,
-    required String apartment,
-    required String cityCode,
-    required String district,
-    required String floor,
-    required String amount,
-    required String description,
-  }) async {
-    CashCollectionUseCase _cashCollectionUseCase = CashCollectionUseCase();
-
-    String signature = generateSignature([
-      this._merchantCode,
-      merchantReferenceId,
-      customerMerchantProfileId,
-      amount,
-      this._merchantHash
-    ]);
-    CashCollectionRequestModel cashCollectionRequestModel =
-        CashCollectionRequestModel(
-            address: address,
-            apartment: apartment,
-            cityCode: cityCode,
-            district: district,
-            floor: floor,
-            merchantReferenceId: merchantReferenceId,
-            amount: amount,
-            customerEmail: customerEmail,
-            description: description,
-            customerMerchantProfileId: customerMerchantProfileId,
-            customerMobile: customerMobile,
-            customerName: customerName,
-            signature: signature);
-    try {
-      return await _cashCollectionUseCase
-          .cashCollectionCharge(cashCollectionRequestModel);
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  static Cowpay get instance => _instance;
-
-  String generateSignature(List params) {
-    String concatenated = params.join("");
-    String res = sha256.convert(utf8.encode(concatenated)).toString();
-    return res;
+                                _tabController.animateTo(index);
+                              }
+                            },
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Container(
+                                width: (ScreenSize().width! * 0.2),
+                                decoration: BoxDecoration(
+                                    boxShadow: [
+                                      new BoxShadow(
+                                        color: Colors.black26,
+                                        blurRadius: 5.0,
+                                      ),
+                                    ],
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(15)),
+                                child: Container(
+                                  alignment: AlignmentDirectional.center,
+                                  constraints: BoxConstraints.expand(
+                                      width: ScreenSize().width! * 0.4),
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal:
+                                            ScreenSize().height! * 0.03),
+                                    child: Text(
+                                      index == 0 ? 'Credit' : 'fawry',
+                                      style: TextStyle(
+                                          fontSize: 14.0,
+                                          color: state.tabCurrentIndex == index
+                                              ? Colors.red
+                                              : Colors.deepPurple),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ))));
+        });
   }
 }

@@ -13,23 +13,23 @@ class CreditCardExample extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return
-      CreditCardWidget(
-        localizationCode: LocalizationCode.ar,
-        amount: amount,
-        customerEmail: customerEmail,
-        customerMobile: customerMobile,
-        description: description,
-        customerMerchantProfileId: customerMerchantProfileId,
-        merchantReferenceId: getRandString(),
-        activeEnvironment: CowpayEnvironment.staging,
-        onSuccess: (val) {
-          debugPrint(val.statusDescription);
-          // Navigator.pop(context);
-        },
-        onError: (val) {
-          debugPrint(val.toString());
-        },
+    return Cowpay(
+      localizationCode: LocalizationCode.ar,
+      amount: amount,
+      customerEmail: customerEmail,
+      customerMobile: customerMobile,
+      description: description,
+      customerMerchantProfileId: customerMerchantProfileId,
+      merchantReferenceId: getRandString(),
+      activeEnvironment: CowpayEnvironment.staging,
+      onSuccess: (val) {
+        debugPrint(val.statusDescription);
+        // Navigator.pop(context);
+      },
+      onError: (val) {
+        debugPrint(val.toString());
+      },
+      customerName: 'ccc',
     );
   }
 

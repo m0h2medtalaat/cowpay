@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cowpay/api_calls/exceptions.dart';
-import 'package:cowpay/cowpay.dart';
+import 'package:cowpay/helpers/cowpay_helper.dart';
 import 'package:cowpay/helpers/enum_models.dart';
 import 'package:cowpay/models/fawry_response_model.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -15,7 +15,7 @@ void main() {
       String merchantCode = "Chy9jpiJSONq";
       String merchantHash =
           "\$2y\$10\$2it43S96/fgf4VdiQKeQDeowX0T9RDmA3fRuZe8pRl8UmOYEAwz.6";
-      Cowpay.instance.init(
+      CowpayHelper.instance.init(
         cowpayEnvironment: CowpayEnvironment.staging,
         token: token,
         merchantCode: merchantCode,
@@ -23,7 +23,7 @@ void main() {
       );
 
       FawryResponseModel fawryResponseModel =
-          await Cowpay.instance.createFawryReceipt(
+          await CowpayHelper.instance.createFawryReceipt(
         description: 'description',
         amount: '32',
         customerMerchantProfileId: '2312',
@@ -41,7 +41,7 @@ void main() {
       String merchantCode = "Chy9jpiJSONq";
       String merchantHash =
           "\$2y\$10\$2it43S96/fgf4VdiQKeQDeowX0T9RDmA3fRuZe8pRl8UmOYEAwz.6";
-      Cowpay.instance.init(
+      CowpayHelper.instance.init(
         cowpayEnvironment: CowpayEnvironment.staging,
         token: token,
         merchantCode: merchantCode,
@@ -49,7 +49,7 @@ void main() {
       );
 
       expect(
-          Cowpay.instance.createFawryReceipt(
+          CowpayHelper.instance.createFawryReceipt(
             description: 'description',
             amount: '32',
             customerMerchantProfileId: '2312',
@@ -69,7 +69,7 @@ void main() {
       String merchantCode = "Chy9jpiJSONq";
       String merchantHash =
           "\$2y\$10\$2it43S96/fgf4VdiQKeQDeowX0T9RDmA3fRuZe8pRl8UmOYEAwz.6";
-      Cowpay.instance.init(
+      CowpayHelper.instance.init(
         cowpayEnvironment: CowpayEnvironment.staging,
         token: token,
         merchantCode: merchantCode,
@@ -77,7 +77,7 @@ void main() {
       );
 
       expect(
-          Cowpay.instance.createFawryReceipt(
+          CowpayHelper.instance.createFawryReceipt(
             description: 'description',
             amount: '32',
             customerMerchantProfileId: '2312',
@@ -96,7 +96,7 @@ void main() {
       String merchantCode = "Chy9jpiJSONq";
       String merchantHash =
           "\$2y\$10\$2it43S96/fgf4VdiQKeQDeowX0T9RDmA3fRuZe8pRl8UmOYEAwz.6";
-      Cowpay.instance.init(
+      CowpayHelper.instance.init(
         cowpayEnvironment: CowpayEnvironment.staging,
         token: token,
         merchantCode: merchantCode,
@@ -104,7 +104,7 @@ void main() {
       );
 
       expect(
-          Cowpay.instance.createFawryReceipt(
+          CowpayHelper.instance.createFawryReceipt(
             description: 'description',
             amount: '32',
             customerMerchantProfileId: '2312',
@@ -124,7 +124,7 @@ void main() {
       String merchantCode = "Chy9jpiJSONq";
       String merchantHash =
           "\$2y\$10\$2it43S96/fgf4VdiQKeQDeowX0T9RDmA3fRuZe8pRl8UmOYEAwz.6";
-      Cowpay.instance.init(
+      CowpayHelper.instance.init(
         cowpayEnvironment: CowpayEnvironment.staging,
         token: token,
         merchantCode: merchantCode,
@@ -132,7 +132,7 @@ void main() {
       );
 
       expect(
-          Cowpay.instance.createFawryReceipt(
+          CowpayHelper.instance.createFawryReceipt(
             description: 'description',
             amount: '32',
             customerMerchantProfileId: '2312',
@@ -152,7 +152,7 @@ void main() {
       String merchantCode = "Chy9jpiJSONq";
       String merchantHash =
           "\$2y\$10\$2it43S96/fgf4VdiQKeQDeowX0T9RDmA3fRuZe8pRl8UmOYEAwz.6";
-      Cowpay.instance.init(
+      CowpayHelper.instance.init(
         cowpayEnvironment: CowpayEnvironment.staging,
         token: token,
         merchantCode: merchantCode,
@@ -160,7 +160,7 @@ void main() {
       );
 
       expect(
-          Cowpay.instance.createFawryReceipt(
+          CowpayHelper.instance.createFawryReceipt(
             description: 'description',
             amount: '32',
             customerMerchantProfileId: '2312',
@@ -178,7 +178,7 @@ void main() {
       String merchantCode = "Chy9jpiJSONq";
       String merchantHash =
           "\$2y\$10\$2it43S96/fgf4VdiQKeQDeowX0T9RDmA3fRuZe8pRl8UmOYEAwz.6";
-      Cowpay.instance.init(
+      CowpayHelper.instance.init(
         cowpayEnvironment: CowpayEnvironment.staging,
         token: token,
         merchantCode: merchantCode,
@@ -186,7 +186,7 @@ void main() {
       );
 
       expect(
-          Cowpay.instance.createFawryReceipt(
+          CowpayHelper.instance.createFawryReceipt(
             description: 'description',
             amount: '32',
             customerMerchantProfileId: '2312',

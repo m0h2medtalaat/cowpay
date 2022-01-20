@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cowpay/bloc/event/credit_card_event.dart';
 import 'package:cowpay/bloc/state/credit_card_state.dart';
-import 'package:cowpay/cowpay.dart';
 import 'package:cowpay/formz_models/credit_card_cvv.dart';
 import 'package:cowpay/formz_models/credit_card_expiry_month.dart';
 import 'package:cowpay/formz_models/credit_card_expiry_year.dart';
 import 'package:cowpay/formz_models/credit_card_holder_name.dart';
 import 'package:cowpay/formz_models/credit_card_number.dart';
+import 'package:cowpay/helpers/cowpay_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
 
@@ -89,18 +89,21 @@ class CreditCardBloc extends Bloc<CreditCardEvent, CreditCardState> {
         CreditCardExpiryMonth.dirty(event.creditCardExpiryMonth);
 
     bool isNotValidExpirationDate = true;
-    if (state.creditCardExpiryYear.value != "" && state.creditCardExpiryMonth.value != ""){
-      var expirationDate = DateTime(int.parse("20${state.creditCardExpiryYear.value}"), int.parse(creditCardExpiryMonth.value) +1);
+    if (state.creditCardExpiryYear.value != "" &&
+        state.creditCardExpiryMonth.value != "") {
+      var expirationDate = DateTime(
+          int.parse("20${state.creditCardExpiryYear.value}"),
+          int.parse(creditCardExpiryMonth.value) + 1);
       //add 1 month
-      if( expirationDate.isAfter(DateTime.now())){
+      if (expirationDate.isAfter(DateTime.now())) {
         isNotValidExpirationDate = false;
       }
     }
 
-      return state.copyWith(
-          creditCardExpiryMonth: creditCardExpiryMonth,
-          isNotValidExpirationDate: isNotValidExpirationDate,
-      );
+    return state.copyWith(
+      creditCardExpiryMonth: creditCardExpiryMonth,
+      isNotValidExpirationDate: isNotValidExpirationDate,
+    );
   }
 
   CreditCardState _mapCardExpiryYearChangedToState(
@@ -110,122 +113,124 @@ class CreditCardBloc extends Bloc<CreditCardEvent, CreditCardState> {
     final creditCardExpiryYear =
         CreditCardExpiryYear.dirty(event.creditCardExpiryYear);
 
-      bool isNotValidExpirationDate = true;
-      if (state.creditCardExpiryYear.value != "" && state.creditCardExpiryMonth.value != ""){
-        var expirationDate = DateTime(int.parse("20${creditCardExpiryYear.value}"), int.parse(state.creditCardExpiryMonth.value) +1);
-        //add 1 month
-       if( expirationDate.isAfter(DateTime.now())){
-          isNotValidExpirationDate = false;
-        }
+    bool isNotValidExpirationDate = true;
+    if (state.creditCardExpiryYear.value != "" &&
+        state.creditCardExpiryMonth.value != "") {
+      var expirationDate = DateTime(
+          int.parse("20${creditCardExpiryYear.value}"),
+          int.parse(state.creditCardExpiryMonth.value) + 1);
+      //add 1 month
+      if (expirationDate.isAfter(DateTime.now())) {
+        isNotValidExpirationDate = false;
       }
-
-
-      return state.copyWith(
-        isNotValidExpirationDate: isNotValidExpirationDate,
-        creditCardExpiryYear: creditCardExpiryYear,
-      );
     }
+
+    return state.copyWith(
+      isNotValidExpirationDate: isNotValidExpirationDate,
+      creditCardExpiryYear: creditCardExpiryYear,
+    );
   }
+}
 
-  Stream<CreditCardState> _validateChangedToState(
-    CreditCardState state,
-    ChargeValidation event,
-  ) async* {
-    final creditCardHolderName =
-        CreditCardHolderName.dirty(state.creditCardHolderName.value);
-    final creditCardNumber =
-        CreditCardNumber.dirty(state.creditCardNumber.value);
-    final creditCardCvv = CreditCardCvv.dirty(state.creditCardCvv.value);
-    final creditCardExpiryMonth =
-        CreditCardExpiryMonth.dirty(state.creditCardExpiryMonth.value);
-    final creditCardExpiryYear =
-        CreditCardExpiryYear.dirty(state.creditCardExpiryYear.value);
+Stream<CreditCardState> _validateChangedToState(
+  CreditCardState state,
+  ChargeValidation event,
+) async* {
+  final creditCardHolderName =
+      CreditCardHolderName.dirty(state.creditCardHolderName.value);
+  final creditCardNumber = CreditCardNumber.dirty(state.creditCardNumber.value);
+  final creditCardCvv = CreditCardCvv.dirty(state.creditCardCvv.value);
+  final creditCardExpiryMonth =
+      CreditCardExpiryMonth.dirty(state.creditCardExpiryMonth.value);
+  final creditCardExpiryYear =
+      CreditCardExpiryYear.dirty(state.creditCardExpiryYear.value);
 
-    List<FormzStatus> validationListState = [];
-    validationListState.add(Formz.validate([creditCardHolderName]));
-    validationListState.add(Formz.validate([creditCardNumber]));
-    validationListState.add(Formz.validate([creditCardCvv]));
-    validationListState.add(Formz.validate([creditCardExpiryMonth]));
-    validationListState.add(Formz.validate([creditCardExpiryYear]));
-    if (validationListState.where((element) => element.isInvalid).isEmpty && !state.isNotValidExpirationDate)
-      yield* _mapRegisterSubmittedToState(
-          state,
-          event.context,
+  List<FormzStatus> validationListState = [];
+  validationListState.add(Formz.validate([creditCardHolderName]));
+  validationListState.add(Formz.validate([creditCardNumber]));
+  validationListState.add(Formz.validate([creditCardCvv]));
+  validationListState.add(Formz.validate([creditCardExpiryMonth]));
+  validationListState.add(Formz.validate([creditCardExpiryYear]));
+  if (validationListState.where((element) => element.isInvalid).isEmpty &&
+      !state.isNotValidExpirationDate)
+    yield* _mapRegisterSubmittedToState(
+        state,
+        event.context,
+        creditCardHolderName,
+        creditCardNumber,
+        creditCardCvv,
+        creditCardExpiryMonth,
+        creditCardExpiryYear,
+        validationListState
+            .where((element) => element == FormzStatus.invalid)
+            .length);
+  else
+    yield state.copyWith(
+        isNotValidExpirationDate: false,
+        creditCardHolderName: creditCardHolderName,
+        creditCardNumber: creditCardNumber,
+        creditCardCvv: creditCardCvv,
+        creditCardExpiryMonth: creditCardExpiryMonth,
+        creditCardExpiryYear: creditCardExpiryYear,
+        checkValidation: true,
+        status: Formz.validate([
           creditCardHolderName,
           creditCardNumber,
           creditCardCvv,
           creditCardExpiryMonth,
-          creditCardExpiryYear,
-          validationListState
-              .where((element) => element == FormzStatus.invalid)
-              .length);
-    else
-      yield state.copyWith(
+          creditCardExpiryYear
+        ]),
+        notValid: validationListState
+            .where((element) => element == FormzStatus.invalid)
+            .length);
+}
+
+Stream<CreditCardState> _mapRegisterSubmittedToState(
+    CreditCardState state,
+    BuildContext context,
+    CreditCardHolderName creditCardHolderName,
+    CreditCardNumber creditCardNumber,
+    CreditCardCvv creditCardCvv,
+    CreditCardExpiryMonth creditCardExpiryMonth,
+    CreditCardExpiryYear creditCardExpiryYear,
+    int length) async* {
+  yield state.copyWith(status: FormzStatus.submissionInProgress);
+  try {
+    var model = await CowpayHelper.instance.creditCardCharge(
+        merchantReferenceId: state.merchantReferenceId!,
+        customerMerchantProfileId: state.customerMerchantProfileId!,
+        customerEmail: state.customerEmail!,
+        customerMobile: state.customerMobile!,
+        customerName: state.creditCardHolderName.value,
+        cvv: creditCardCvv.value,
+        cardNumber: creditCardNumber.value,
+        expiryYear: creditCardExpiryYear.value,
+        expiryMonth: creditCardExpiryMonth.value,
+        amount: state.amount!,
+        description: state.description!);
+
+    yield state.copyWith(
         isNotValidExpirationDate: false,
-          creditCardHolderName: creditCardHolderName,
-          creditCardNumber: creditCardNumber,
-          creditCardCvv: creditCardCvv,
-          creditCardExpiryMonth: creditCardExpiryMonth,
-          creditCardExpiryYear: creditCardExpiryYear,
-          checkValidation: true,
-          status: Formz.validate([
-            creditCardHolderName,
-            creditCardNumber,
-            creditCardCvv,
-            creditCardExpiryMonth,
-            creditCardExpiryYear
-          ]),
-          notValid: validationListState
-              .where((element) => element == FormzStatus.invalid)
-              .length);
+        status: FormzStatus.submissionSuccess,
+        creditCardResponseModel: model);
+  } catch (error) {
+    state.copyWith(
+        creditCardHolderName: creditCardHolderName,
+        creditCardNumber: creditCardNumber,
+        creditCardCvv: creditCardCvv,
+        creditCardExpiryMonth: creditCardExpiryMonth,
+        creditCardExpiryYear: creditCardExpiryYear,
+        checkValidation: true,
+        status: Formz.validate([
+          creditCardHolderName,
+          creditCardNumber,
+          creditCardCvv,
+          creditCardExpiryMonth,
+          creditCardExpiryYear
+        ]),
+        notValid: length);
+
+    yield state.copyWith(
+        status: FormzStatus.submissionFailure, errorModel: error);
   }
-
-  Stream<CreditCardState> _mapRegisterSubmittedToState(
-      CreditCardState state,
-      BuildContext context,
-      CreditCardHolderName creditCardHolderName,
-      CreditCardNumber creditCardNumber,
-      CreditCardCvv creditCardCvv,
-      CreditCardExpiryMonth creditCardExpiryMonth,
-      CreditCardExpiryYear creditCardExpiryYear,
-      int length) async* {
-    yield state.copyWith(status: FormzStatus.submissionInProgress);
-    try {
-      var model = await Cowpay.instance.creditCardCharge(
-          merchantReferenceId: state.merchantReferenceId!,
-          customerMerchantProfileId: state.customerMerchantProfileId!,
-          customerEmail: state.customerEmail!,
-          customerMobile: state.customerMobile!,
-          customerName: state.creditCardHolderName.value,
-          cvv: creditCardCvv.value,
-          cardNumber: creditCardNumber.value,
-          expiryYear: creditCardExpiryYear.value,
-          expiryMonth: creditCardExpiryMonth.value,
-          amount: state.amount!,
-          description: state.description!);
-
-      yield state.copyWith(
-        isNotValidExpirationDate: false,
-          status: FormzStatus.submissionSuccess,
-          creditCardResponseModel: model);
-    } catch (error) {
-      state.copyWith(
-          creditCardHolderName: creditCardHolderName,
-          creditCardNumber: creditCardNumber,
-          creditCardCvv: creditCardCvv,
-          creditCardExpiryMonth: creditCardExpiryMonth,
-          creditCardExpiryYear: creditCardExpiryYear,
-          checkValidation: true,
-          status: Formz.validate([
-            creditCardHolderName,
-            creditCardNumber,
-            creditCardCvv,
-            creditCardExpiryMonth,
-            creditCardExpiryYear
-          ]),
-          notValid: length);
-
-      yield state.copyWith(
-          status: FormzStatus.submissionFailure, errorModel: error);
-    }
-  }
+}

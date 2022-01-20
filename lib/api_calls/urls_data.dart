@@ -1,4 +1,4 @@
-import 'package:cowpay/cowpay.dart';
+import 'package:cowpay/helpers/cowpay_helper.dart';
 import 'package:cowpay/helpers/enum_models.dart';
 
 class UrlsData {
@@ -11,19 +11,20 @@ class UrlsData {
 
   //region Fawry
   static final fawryUrl =
-      Cowpay.activeEnvironment!.baseUrl! + basicUrl + 'charge/fawry';
+      CowpayHelper.activeEnvironment!.baseUrl! + basicUrl + 'charge/fawry';
 
   //endregion
 
   //region Credit Card
   static final creditCardUrl =
-      Cowpay.activeEnvironment!.baseUrl! + basicUrl + 'charge/card';
+      CowpayHelper.activeEnvironment!.baseUrl! + basicUrl + 'charge/card';
 
   //endregion
 
   //region Cash Collection
-  static final cashCollectionUrl =
-      Cowpay.activeEnvironment!.baseUrl! + basicUrl + 'charge/cash-collection';
+  static final cashCollectionUrl = CowpayHelper.activeEnvironment!.baseUrl! +
+      basicUrl +
+      'charge/cash-collection';
 //endregion
 
 }

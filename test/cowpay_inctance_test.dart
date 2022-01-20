@@ -1,11 +1,11 @@
-import 'package:cowpay/cowpay.dart';
+import 'package:cowpay/helpers/cowpay_helper.dart';
 import 'package:cowpay/helpers/enum_models.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('Cowpay Cash collection unit test', () {
     test('CowPay.init() test Package initialization', () {
-      Cowpay cowpay = Cowpay();
+      CowpayHelper cowpay = CowpayHelper();
 
       cowpay.init(
           cowpayEnvironment: CowpayEnvironment.staging,
@@ -13,7 +13,7 @@ void main() {
           merchantCode: "merchantCode",
           merchantHash: "merchantHash");
 
-      expect(cowpay, Cowpay.instance);
+      expect(cowpay, CowpayHelper.instance);
     });
   });
 }

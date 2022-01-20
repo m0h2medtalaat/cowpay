@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cowpay/api_calls/exceptions.dart';
 import 'package:cowpay/cowpay.dart';
+import 'package:cowpay/helpers/cowpay_helper.dart';
 import 'package:cowpay/helpers/enum_models.dart';
 import 'package:cowpay/models/credit_card_response_model.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -15,7 +16,7 @@ void main() {
       String merchantCode = "Chy9jpiJSONq";
       String merchantHash =
           "\$2y\$10\$2it43S96/fgf4VdiQKeQDeowX0T9RDmA3fRuZe8pRl8UmOYEAwz.6";
-      Cowpay.instance.init(
+      CowpayHelper.instance.init(
         cowpayEnvironment: CowpayEnvironment.staging,
         token: token,
         merchantCode: merchantCode,
@@ -23,7 +24,7 @@ void main() {
       );
 
       CreditCardResponseModel creditCardResponseModel =
-          await Cowpay.instance.creditCardCharge(
+          await CowpayHelper.instance.creditCardCharge(
         expiryYear: "22",
         expiryMonth: "10",
         cvv: "123",
@@ -45,7 +46,7 @@ void main() {
       String merchantCode = "Chy9jpiJSONq";
       String merchantHash =
           "\$2y\$10\$2it43S96/fgf4VdiQKeQDeowX0T9RDmA3fRuZe8pRl8UmOYEAwz.6";
-      Cowpay.instance.init(
+      CowpayHelper.instance.init(
         cowpayEnvironment: CowpayEnvironment.staging,
         token: token,
         merchantCode: merchantCode,
@@ -53,7 +54,7 @@ void main() {
       );
 
       expect(
-          await Cowpay.instance.creditCardCharge(
+          await CowpayHelper.instance.creditCardCharge(
             expiryYear: "22",
             expiryMonth: "10",
             cvv: "123",
@@ -77,7 +78,7 @@ void main() {
       String merchantCode = "Chy9jpiJSONq";
       String merchantHash =
           "\$2y\$10\$2it43S96/fgf4VdiQKeQDeowX0T9RDmA3fRuZe8pRl8UmOYEAwz.6";
-      Cowpay.instance.init(
+      CowpayHelper.instance.init(
         cowpayEnvironment: CowpayEnvironment.staging,
         token: token,
         merchantCode: merchantCode,
@@ -85,7 +86,7 @@ void main() {
       );
 
       expect(
-          Cowpay.instance.creditCardCharge(
+          CowpayHelper.instance.creditCardCharge(
             expiryYear: "22",
             expiryMonth: "10",
             cvv: "123",
@@ -108,7 +109,7 @@ void main() {
       String merchantCode = "Chy9jpiJSONq";
       String merchantHash =
           "\$2y\$10\$2it43S96/fgf4VdiQKeQDeowX0T9RDmA3fRuZe8pRl8UmOYEAwz.6";
-      Cowpay.instance.init(
+      CowpayHelper.instance.init(
         cowpayEnvironment: CowpayEnvironment.staging,
         token: token,
         merchantCode: merchantCode,
@@ -116,7 +117,7 @@ void main() {
       );
 
       expect(
-          Cowpay.instance.creditCardCharge(
+          CowpayHelper.instance.creditCardCharge(
             expiryYear: "22",
             expiryMonth: "10",
             cvv: "123",
@@ -140,7 +141,7 @@ void main() {
       String merchantCode = "Chy9jpiJSONq";
       String merchantHash =
           "\$2y\$10\$2it43S96/fgf4VdiQKeQDeowX0T9RDmA3fRuZe8pRl8UmOYEAwz.6";
-      Cowpay.instance.init(
+      CowpayHelper.instance.init(
         cowpayEnvironment: CowpayEnvironment.staging,
         token: token,
         merchantCode: merchantCode,
@@ -148,7 +149,7 @@ void main() {
       );
 
       expect(
-          Cowpay.instance.creditCardCharge(
+          CowpayHelper.instance.creditCardCharge(
             expiryYear: "22",
             expiryMonth: "10",
             cvv: "123",
@@ -172,7 +173,7 @@ void main() {
       String merchantCode = "Chy9jpiJSONq";
       String merchantHash =
           "\$2y\$10\$2it43S96/fgf4VdiQKeQDeowX0T9RDmA3fRuZe8pRl8UmOYEAwz.6";
-      Cowpay.instance.init(
+      CowpayHelper.instance.init(
         cowpayEnvironment: CowpayEnvironment.staging,
         token: token,
         merchantCode: merchantCode,
@@ -180,7 +181,7 @@ void main() {
       );
 
       expect(
-          Cowpay.instance.creditCardCharge(
+          CowpayHelper.instance.creditCardCharge(
             expiryYear: "22",
             expiryMonth: "10",
             cvv: "123",
@@ -202,7 +203,7 @@ void main() {
       String merchantCode = "Chy9jpiJSONq";
       String merchantHash =
           "\$2y\$10\$2it43S96/fgf4VdiQKeQDeowX0T9RDmA3fRuZe8pRl8UmOYEAwz.6";
-      Cowpay.instance.init(
+      CowpayHelper.instance.init(
         cowpayEnvironment: CowpayEnvironment.staging,
         token: token,
         merchantCode: merchantCode,
@@ -210,7 +211,7 @@ void main() {
       );
 
       expect(
-          Cowpay.instance.creditCardCharge(
+          CowpayHelper.instance.creditCardCharge(
             expiryYear: "22",
             expiryMonth: "10",
             cvv: "123",

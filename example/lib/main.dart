@@ -15,12 +15,12 @@ void main() {
   String merchantCode = "Chy9jpiJSONq";
   String merchantHash =
       "\$2y\$10\$2it43S96/fgf4VdiQKeQDeowX0T9RDmA3fRuZe8pRl8UmOYEAwz.6";
-  Cowpay.instance.init(
-    cowpayEnvironment: CowpayEnvironment.staging,
-    token: token,
-    merchantCode: merchantCode,
-    merchantHash: merchantHash,
-  );
+  // CowpayHelper.instance.init(
+  //   cowpayEnvironment: CowpayEnvironment.staging,
+  //   token: token,
+  //   merchantCode: merchantCode,
+  //   merchantHash: merchantHash,
+  // );
   runApp(MaterialApp(
     home: MyApp(),
   ));
@@ -79,15 +79,15 @@ class MyApp extends StatelessWidget {
 
   Future<void> _fawryOnCLick() async {
     try {
-      await Cowpay.instance.createFawryReceipt(
-        description: 'description',
-        amount: '32',
-        customerMerchantProfileId: '2312',
-        merchantReferenceId: getRandString(),
-        customerEmail: 'sqeqedqqw@gmail.com',
-        customerMobile: '01234567890',
-        customerName: 'customerName',
-      );
+      // await CowpayHelper.instance.createFawryReceipt(
+      //   description: 'description',
+      //   amount: '32',
+      //   customerMerchantProfileId: '2312',
+      //   merchantReferenceId: getRandString(),
+      //   customerEmail: 'sqeqedqqw@gmail.com',
+      //   customerMobile: '01234567890',
+      //   customerName: 'customerName',
+      // );
     } on TimeoutException catch (error) {
       print(error);
     } on SocketException catch (error) {
