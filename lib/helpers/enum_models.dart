@@ -112,7 +112,9 @@ Map<String, String> localizationMapEn = {
   "cardNumber": "Card Number",
   "cvv": "CVV",
   "pay": "PAY",
-  "paymentMethod": "Payment Method"
+  "paymentMethod": "Payment Method",
+  "fawry": "Fawry",
+  "creditCard": "Credit Card"
 };
 
 Map<String, String> localizationMapAr = {
@@ -127,7 +129,9 @@ Map<String, String> localizationMapAr = {
   "yy": "سنة",
   "cardHolderName": "اسم حامل البطاقة",
   "cardNumber": "رقم البطاقة",
-  "cvv": "رمز الامان (CVV)",
+  "cvv": "رمز التحقق",
   "pay": "ادفع",
-  "paymentMethod": "طريقة الدفع"
+  "paymentMethod": "طريقة الدفع",
+  "fawry": "فوري",
+  "creditCard": "بطاقة ائتمان"
 };

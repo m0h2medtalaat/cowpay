@@ -1,8 +1,10 @@
 library cowpay;
 
 import 'package:cowpay/helpers/cowpay_helper.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'bloc/bloc/cowpay_bloc.dart';
 import 'bloc/event/cowpay_event.dart';
@@ -81,75 +83,70 @@ class _CowpayState extends State<Cowpay> with SingleTickerProviderStateMixin {
       Localization().localizationMap = localizationMapAr;
       Localization().localizationCode = LocalizationCode.ar;
     }
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onPanDown: (_) {
-        FocusScope.of(context).unfocus();
-      },
-      child: Directionality(
-        textDirection: widget.localizationCode == LocalizationCode.ar
-            ? TextDirection.rtl
-            : TextDirection.ltr,
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            title: Text(Localization().localizationMap["paymentMethod"]),
-            backgroundColor: Color(0xff66496A),
-          ),
-          body: DefaultTabController(
-            length: 2,
-            child: BlocProvider<CowpayBloc>(
-              create: (context) {
-                return CowpayBloc();
-              },
-              child: Column(
-                children: [
-                  _buildTabBar(),
-                  Expanded(
-                    child: TabBarView(
-                        controller: _tabController,
-                        physics: NeverScrollableScrollPhysics(),
-                        children: [
-                          CreditCardWidget(
-                            localizationCode: LocalizationCode.ar,
-                            amount: widget.amount,
-                            customerEmail: widget.customerEmail,
-                            customerMobile: widget.customerMobile,
-                            description: widget.description,
-                            customerMerchantProfileId:
-                                widget.customerMerchantProfileId,
-                            merchantReferenceId: "11",
-                            activeEnvironment: CowpayEnvironment.staging,
-                            onSuccess: (val) {
-                              debugPrint(val.statusDescription);
-                              // Navigator.pop(context);
-                            },
-                            onError: (val) {
-                              debugPrint(val.toString());
-                            },
-                          ),
-                          CreditCardWidget(
-                            localizationCode: LocalizationCode.ar,
-                            amount: widget.amount,
-                            customerEmail: widget.customerEmail,
-                            customerMobile: widget.customerMobile,
-                            description: widget.description,
-                            customerMerchantProfileId:
-                                widget.customerMerchantProfileId,
-                            merchantReferenceId: "11",
-                            activeEnvironment: CowpayEnvironment.staging,
-                            onSuccess: (val) {
-                              debugPrint(val.statusDescription);
-                              // Navigator.pop(context);
-                            },
-                            onError: (val) {
-                              debugPrint(val.toString());
-                            },
-                          ),
-                        ]),
-                  ),
-                ],
-              ),
+    return Directionality(
+      textDirection: widget.localizationCode == LocalizationCode.ar
+          ? TextDirection.rtl
+          : TextDirection.ltr,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          title: Text(Localization().localizationMap["paymentMethod"]),
+          backgroundColor: Color(0xff66496A),
+        ),
+        body: DefaultTabController(
+          length: 2,
+          child: BlocProvider<CowpayBloc>(
+            create: (context) {
+              return CowpayBloc();
+            },
+            child: Column(
+              children: [
+                _buildTabBar(),
+                Expanded(
+                  child: TabBarView(
+                      controller: _tabController,
+                      physics: NeverScrollableScrollPhysics(),
+                      children: [
+                        CreditCardWidget(
+                          localizationCode: LocalizationCode.en,
+                          amount: widget.amount,
+                          customerEmail: widget.customerEmail,
+                          customerMobile: widget.customerMobile,
+                          description: widget.description,
+                          customerMerchantProfileId:
+                              widget.customerMerchantProfileId,
+                          merchantReferenceId: "11",
+                          activeEnvironment: CowpayEnvironment.staging,
+                          onSuccess: (val) {
+                            debugPrint(val.statusDescription);
+                            // Navigator.pop(context);
+                          },
+                          onError: (val) {
+                            debugPrint(val.toString());
+                          },
+                        ),
+                        CreditCardWidget(
+                          localizationCode: LocalizationCode.en,
+                          amount: widget.amount,
+                          customerEmail: widget.customerEmail,
+                          customerMobile: widget.customerMobile,
+                          description: widget.description,
+                          customerMerchantProfileId:
+                              widget.customerMerchantProfileId,
+                          merchantReferenceId: "11",
+                          activeEnvironment: CowpayEnvironment.staging,
+                          onSuccess: (val) {
+                            debugPrint(val.statusDescription);
+                            // Navigator.pop(context);
+                          },
+                          onError: (val) {
+                            debugPrint(val.toString());
+                          },
+                        ),
+                      ]),
+                ),
+              ],
             ),
           ),
         ),
@@ -174,58 +171,85 @@ class _CowpayState extends State<Cowpay> with SingleTickerProviderStateMixin {
                       scrollDirection: Axis.horizontal,
                       children: List.generate(
                         2,
-                        (index) => Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: (ScreenSize().width! * 0.01),
-                              vertical: (ScreenSize().height! * 0.01)),
-                          child: GestureDetector(
-                            onTap: () {
-                              if (state.tabCurrentIndex != index) {
-                                context
-                                    .read<CowpayBloc>()
-                                    .add(ChangeTabCurrentIndexEvent(index));
-
-                                _tabController.animateTo(index);
-                              }
-                            },
-                            child: Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: Container(
-                                width: (ScreenSize().width! * 0.2),
-                                decoration: BoxDecoration(
-                                    boxShadow: [
-                                      new BoxShadow(
-                                        color: Colors.black26,
-                                        blurRadius: 5.0,
-                                      ),
-                                    ],
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(15)),
-                                child: Container(
-                                  alignment: AlignmentDirectional.center,
-                                  constraints: BoxConstraints.expand(
-                                      width: ScreenSize().width! * 0.4),
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal:
-                                            ScreenSize().height! * 0.03),
-                                    child: Text(
-                                      index == 0 ? 'Credit' : 'fawry',
-                                      style: TextStyle(
-                                          fontSize: 14.0,
-                                          color: state.tabCurrentIndex == index
-                                              ? Colors.red
-                                              : Colors.deepPurple),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
+                        (index) => _buildTabCard(
+                            state.tabCurrentIndex, index, context),
                       ))));
         });
+  }
+
+  Widget _buildTabCard(int currentIndex, int index, BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+          horizontal: (ScreenSize().width! * 0.01),
+          vertical: (ScreenSize().height! * 0.01)),
+      child: GestureDetector(
+        onTap: () {
+          if (currentIndex != index) {
+            context.read<CowpayBloc>().add(ChangeTabCurrentIndexEvent(index));
+
+            _tabController.animateTo(index);
+          }
+        },
+        child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Container(
+            width: (ScreenSize().width! * 0.22),
+            decoration: BoxDecoration(
+                border: Border.all(
+                    width: currentIndex == index ? 2 : 1,
+                    color: currentIndex == index
+                        ? Colors.deepPurple
+                        : Colors.grey),
+                boxShadow: [
+                  new BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 5.0,
+                  ),
+                ],
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(15)),
+            child: Container(
+              alignment: AlignmentDirectional.center,
+              padding: EdgeInsets.all(5),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                    height: 25,
+                    width: 25,
+                    child: SvgPicture.asset(
+                      index == 0
+                          ? "assets/credit-card-svgrepo-com.svg"
+                          : "assets/combined-shape.svg",
+                      package: 'cowpay',
+                      fit: BoxFit.fill,
+                      color: currentIndex == index
+                          ? Colors.deepPurple
+                          : Colors.black,
+                    ),
+                  ),
+                  Text(
+                    index == 0
+                        ? Localization().localizationMap["creditCard"]
+                        : Localization().localizationMap["fawry"],
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      height: 1,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold,
+                      color: currentIndex == index
+                          ? Colors.deepPurple
+                          : Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

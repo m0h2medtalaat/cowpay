@@ -17,7 +17,7 @@ class CreditCardState extends Equatable {
       this.creditCardHolderName = const CreditCardHolderName.pure(),
       this.notValid = 0,
       this.checkValidation = false,
-        this.isNotValidExpirationDate = true,
+      this.isNotValidExpirationDate = true,
       this.merchantReferenceId,
       this.customerMerchantProfileId,
       this.customerEmail,
@@ -25,7 +25,8 @@ class CreditCardState extends Equatable {
       this.amount,
       this.creditCardResponseModel,
       this.errorModel,
-      this.description});
+      this.description,
+      this.yearsList});
 
   final FormzStatus status;
   final CreditCardExpiryMonth creditCardExpiryMonth;
@@ -44,6 +45,8 @@ class CreditCardState extends Equatable {
   final int notValid;
   final bool checkValidation;
   final bool isNotValidExpirationDate;
+
+  final List<String>? yearsList;
 
   final CreditCardResponseModel? creditCardResponseModel;
   final dynamic? errorModel;
@@ -66,9 +69,11 @@ class CreditCardState extends Equatable {
       String? amount,
       String? description,
       CreditCardResponseModel? creditCardResponseModel,
-      dynamic? errorModel}) {
+      dynamic? errorModel,
+      List<String>? yearsList}) {
     return CreditCardState(
       status: status ?? this.status,
+      yearsList: yearsList ?? this.yearsList,
       creditCardExpiryMonth:
           creditCardExpiryMonth ?? this.creditCardExpiryMonth,
       creditCardExpiryYear: creditCardExpiryYear ?? this.creditCardExpiryYear,
@@ -77,7 +82,8 @@ class CreditCardState extends Equatable {
       creditCardHolderName: creditCardHolderName ?? this.creditCardHolderName,
       notValid: notValid ?? this.notValid,
       checkValidation: checkValidation ?? this.checkValidation,
-      isNotValidExpirationDate: isNotValidExpirationDate ?? this.isNotValidExpirationDate,
+      isNotValidExpirationDate:
+          isNotValidExpirationDate ?? this.isNotValidExpirationDate,
       merchantReferenceId: merchantReferenceId ?? this.merchantReferenceId,
       customerMerchantProfileId:
           customerMerchantProfileId ?? this.customerMerchantProfileId,
@@ -92,7 +98,7 @@ class CreditCardState extends Equatable {
   }
 
   @override
-  List<Object> get props => [
+  List get props => [
         status,
         creditCardExpiryMonth,
         creditCardExpiryYear,
@@ -100,6 +106,7 @@ class CreditCardState extends Equatable {
         creditCardNumber,
         creditCardCvv,
         checkValidation,
-    isNotValidExpirationDate
+        isNotValidExpirationDate,
+        yearsList
       ];
 }
