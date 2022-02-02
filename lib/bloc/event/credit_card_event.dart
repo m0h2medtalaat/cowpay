@@ -51,14 +51,14 @@ class CreditCardCvvChange extends CreditCardEvent {
   final String creditCardCvv;
 }
 
-class ChargeValidation extends CreditCardEvent {
-  const ChargeValidation(this.context);
-
-  final BuildContext context;
-
-  @override
-  List<Object> get props => [];
-}
+// class ChargeValidation extends CreditCardEvent {
+//   const ChargeValidation(this.context);
+//
+//   final BuildContext context;
+//
+//   @override
+//   List<Object> get props => [];
+// }
 
 class ChargeSubmitted extends CreditCardEvent {
   const ChargeSubmitted();

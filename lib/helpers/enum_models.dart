@@ -114,7 +114,19 @@ Map<String, String> localizationMapEn = {
   "pay": "PAY",
   "paymentMethod": "Payment Method",
   "fawry": "Fawry",
-  "creditCard": "Credit Card"
+  "creditCard": "Credit Card",
+  "fawryPayPlaceholderMessage":
+      "Please click Confirm Payment button to generate Reference Number",
+  "confirmPayment": "Confirm Payment",
+  "copyCode": "Copy Code",
+  "paymentSteps":"Payment Steps:",
+  "FawrySteps1":"• Go to any Fawry retail store",
+  "FawrySteps2":"• Choose Fawry Pay | from the main menu",
+  "FawrySteps3":"• Enter the reference number",
+  "FawrySteps4":"• Make sure your data is correct",
+  "FawrySteps5":"• Pay and keep the receipt",
+  "cowpayPaymentOptionsText":"Create & Manage Payment Links For Your Business Seamlessly"
+
 };
 
 Map<String, String> localizationMapAr = {
@@ -133,5 +145,8 @@ Map<String, String> localizationMapAr = {
   "pay": "ادفع",
   "paymentMethod": "طريقة الدفع",
   "fawry": "فوري",
-  "creditCard": "بطاقة ائتمان"
+  "creditCard": "بطاقة ائتمان",
+  "fawryPayPlaceholderMessage": "برجاء الضغط على زر الدفع لاستخراج الرقم",
+  "confirmPayment": "ادفع",
+  "confirmPayment": "ادفع"
 };

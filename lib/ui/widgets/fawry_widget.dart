@@ -1,6 +1,8 @@
 library cowpay;
 
+import 'package:cowpay/bloc/bloc/cowpay_bloc.dart';
 import 'package:cowpay/bloc/bloc/credit_card_bloc.dart';
+import 'package:cowpay/bloc/event/cash_collection_event.dart';
 import 'package:cowpay/bloc/event/credit_card_event.dart';
 import 'package:cowpay/bloc/state/credit_card_state.dart';
 import 'package:cowpay/formz_models/credit_card_cvv.dart';
@@ -22,7 +24,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
 
-class CreditCardWidget extends StatelessWidget {
+class FawryWidget extends StatelessWidget {
   final String description, merchantReferenceId, customerMerchantProfileId;
 
   final String customerEmail;
@@ -40,7 +42,7 @@ class CreditCardWidget extends StatelessWidget {
   final Function(CreditCardResponseModel creditCardResponseModel) onSuccess;
   final Function(dynamic error) onError;
 
-  CreditCardWidget(
+  FawryWidget(
       {required this.amount,
       required this.activeEnvironment,
       required this.customerEmail,
@@ -71,99 +73,30 @@ class CreditCardWidget extends StatelessWidget {
       Localization().localizationCode = LocalizationCode.ar;
     }
 
-    return BlocProvider<CreditCardBloc>(
-      create: (context) {
-        return CreditCardBloc()
-          ..add(CreditCardChargeStarted(
-              merchantReferenceId: merchantReferenceId,
-              customerMerchantProfileId: customerMerchantProfileId,
-              amount: amount.toString(),
-              customerEmail: customerEmail,
-              customerMobile: customerMobile,
-              description: description));
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onPanDown: (_) {
+        FocusScope.of(context).unfocus();
       },
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onPanDown: (_) {
-          FocusScope.of(context).unfocus();
-        },
-        child: ScrollConfiguration(
-          behavior: _ScrollBehavior(),
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: EdgeInsets.all(ScreenSize().width! * 0.05),
-              child: Container(
-                height: ScreenSize().height! * 0.63,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(
-                        MediaQuery.of(context).size.width * 0.05)),
-                child: Padding(
-                  padding: EdgeInsets.all(ScreenSize().width! * 0.05),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        children: [
-                          _buildCardHolderName(),
-                          SizedBox(
-                            height: ScreenSize().height! * 0.025,
-                          ),
-                          _buildCardNumberTextField(),
-                          SizedBox(
-                            height: ScreenSize().height! * 0.025,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                flex: 4,
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          flex: 4,
-                                          child: Container(
-                                            // width: ScreenSize().width! * 0.365,
-                                            child: _buildDropDownExpiryMonth(),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          width: ScreenSize().width! * 0.012,
-                                        ),
-                                        Expanded(
-                                          flex: 5,
-                                          child: Container(
-                                            // width: ScreenSize().width! * 0.365,
-                                            child: _buildDropDownExpiryYear(),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    buildExpiryError()
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                width: ScreenSize().width! * 0.025,
-                              ),
-                              Expanded(
-                                flex: 3,
-                                child: _buildCvvTextField(),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                Localization().localizationMap["fawryPayPlaceholderMessage"],
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  height: 1,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
                 ),
               ),
-            ),
+            ],
           ),
-        ),
+        ],
       ),
     );
   }
@@ -347,6 +280,77 @@ Widget buildExpiryError() {
               )
             : SizedBox();
       });
+}
+
+class _ChargeButton extends StatelessWidget {
+  final Color? buttonColor, buttonTextColor;
+  final TextStyle? buttonTextStyle;
+  final Function(CreditCardResponseModel creditCardResponseModel) onSuccess;
+  final Function(dynamic error) onError;
+  final double amount;
+
+  _ChargeButton(
+      {this.buttonTextStyle,
+      this.buttonColor,
+      this.buttonTextColor,
+      required this.onSuccess,
+      required this.onError,
+      required this.amount});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CreditCardBloc, CreditCardState>(
+      buildWhen: (previous, current) => previous.status != current.status,
+      builder: (context, state) {
+        SchedulerBinding.instance!.addPostFrameCallback((_) {
+          if (state.status.isSubmissionSuccess)
+            onSuccess(state.creditCardResponseModel!);
+          else if (state.status.isSubmissionFailure) onError(state.errorModel);
+        });
+        return state.status.isSubmissionInProgress
+            ? ButtonLoadingView()
+            : ButtonView(
+                fontWeight: FontWeight.w300,
+                // title: 'PAY  $amount EGP',
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: ScreenSize().width! * 0.04),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(Localization().localizationMap["pay"],
+                          style: buttonTextStyle ??
+                              TextStyle(
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 0.025 * ScreenSize().height!,
+                                  color: Colors.white),
+                          textScaleFactor: 1),
+                      Text("$amount ${Localization().localizationMap["egp"]}",
+                          style: buttonTextStyle ??
+                              TextStyle(
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 0.025 * ScreenSize().height!,
+                                  color: Colors.white),
+                          textScaleFactor: 1)
+                    ],
+                  ),
+                ),
+                textColor: buttonTextColor ?? Colors.white,
+                fontSize: 0.025,
+                backgroundColor: buttonColor ?? Theme.of(context).primaryColor,
+                mainContext: context,
+                buttonTextStyle: buttonTextStyle,
+                onClickFunction: onClickSubmit,
+              );
+      },
+    );
+  }
+
+  void onClickSubmit(
+    BuildContext context,
+  ) {
+    // context.read<CowpayBloc>().add(ChargeValidation(context));
+  }
 }
 
 class _ScrollBehavior extends ScrollBehavior {
