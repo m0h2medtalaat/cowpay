@@ -34,10 +34,10 @@ class CreditCardExpiryYear
   @override
   CreditCardExpiryYearError? validator(String value) {
     if (value.trim().isEmpty) return CreditCardExpiryYearError.empty;
-    if (value.length < 2) return CreditCardExpiryYearError.lengthMin;
-    if (value.length > 2) return CreditCardExpiryYearError.lengthMax;
+    if (value.length < 4) return CreditCardExpiryYearError.lengthMin;
+    if (value.length > 4) return CreditCardExpiryYearError.lengthMax;
     if (value.contains(" ")) return CreditCardExpiryYearError.whiteSpace;
-    if (!RegExp(r'^([2-9]\d|\d{2,})$$').hasMatch(value))
+    if (!RegExp(r'^([2-9]\d|\d{4,})$$').hasMatch(value))
       return CreditCardExpiryYearError.format;
     return null;
   }

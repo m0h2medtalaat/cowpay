@@ -37,6 +37,9 @@ class Cowpay extends StatefulWidget {
     required this.activeEnvironment,
     required this.amount,
     required this.customerName,
+    required this.token,
+    required this.merchantCode,
+    required this.merchantHash,
     this.height,
     this.buttonColor,
     this.buttonTextColor,
@@ -59,6 +62,9 @@ class Cowpay extends StatefulWidget {
 
   final String customerEmail, customerName;
 
+  final String merchantCode;
+  final String merchantHash;
+  final String token;
   final String customerMobile;
   final CowpayEnvironment activeEnvironment;
   final double amount;
@@ -81,8 +87,13 @@ class _CowpayState extends State<Cowpay> with SingleTickerProviderStateMixin {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    CowpayHelper.instance.init(
+      cowpayEnvironment: widget.activeEnvironment,
+      token: widget.token,
+      merchantCode: widget.merchantCode,
+      merchantHash: widget.merchantHash,
+    );
     _tabController = new TabController(vsync: this, length: 2);
   }
 
@@ -113,20 +124,29 @@ class _CowpayState extends State<Cowpay> with SingleTickerProviderStateMixin {
             providers: [
               BlocProvider<CowpayBloc>(
                 create: (context) {
-                  return CowpayBloc();
+                  return CowpayBloc()
+                    ..add(CowpayStarted(
+                        merchantReferenceId: widget.merchantReferenceId,
+                        customerMerchantProfileId:
+                            widget.customerMerchantProfileId,
+                        amount: widget.amount.toString(),
+                        customerEmail: widget.customerEmail,
+                        customerMobile: widget.customerMobile,
+                        customerName: widget.customerName,
+                        description: widget.description));
                 },
               ),
-              BlocProvider<CreditCardBloc>(create: (context) {
-                return CreditCardBloc()
-                  ..add(CreditCardChargeStarted(
-                      merchantReferenceId: widget.merchantReferenceId,
-                      customerMerchantProfileId:
-                          widget.customerMerchantProfileId,
-                      amount: widget.amount.toString(),
-                      customerEmail: widget.customerEmail,
-                      customerMobile: widget.customerMobile,
-                      description: widget.description));
-              }),
+              // BlocProvider<CreditCardBloc>(create: (context) {
+              //   return CreditCardBloc()
+              //     ..add(CreditCardChargeStarted(
+              //         merchantReferenceId: widget.merchantReferenceId,
+              //         customerMerchantProfileId:
+              //             widget.customerMerchantProfileId,
+              //         amount: widget.amount.toString(),
+              //         customerEmail: widget.customerEmail,
+              //         customerMobile: widget.customerMobile,
+              //         description: widget.description));
+              // }),
             ],
             child: Column(
               children: [
@@ -182,7 +202,9 @@ class _CowpayState extends State<Cowpay> with SingleTickerProviderStateMixin {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       CowpayPaymentOptionsCard(),
-                      SizedBox(height: 13,),
+                      SizedBox(
+                        height: 13,
+                      ),
                       Container(
                         height: ScreenSize().height! * 0.07,
                         child: _ChargeButton(
@@ -193,7 +215,9 @@ class _CowpayState extends State<Cowpay> with SingleTickerProviderStateMixin {
                           onError: (error) => widget.onError(error),
                         ),
                       ),
-                      SizedBox(height: 13,),
+                      SizedBox(
+                        height: 13,
+                      ),
                     ],
                   ),
                 )
@@ -327,16 +351,24 @@ class _ChargeButton extends StatelessWidget {
     return BlocBuilder<CowpayBloc, CowpayState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
-        SchedulerBinding.instance!.addPostFrameCallback((_) {
-          int currentIndex = context.read<CowpayBloc>().state.tabCurrentIndex;
+        int currentIndex = context.read<CowpayBloc>().state.tabCurrentIndex;
+        if (state.status.isSubmissionSuccess) {
           if (currentIndex == 0) {
-            if (state.status.isSubmissionSuccess)
-              onSuccess(state.creditCardResponseModel!);
-            else if (state.status.isSubmissionFailure) onError(state.errorModel);
+            onSuccess(state.creditCardResponseModel!);
           } else {
-            context.read<CowpayBloc>().add(ChargeFawry(context));
+            context.read<CowpayBloc>().add(ClearStatus());
+            SchedulerBinding.instance!.addPostFrameCallback((_) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FawryScreen(
+                    responseModel: state.fawryResponseModel!,
+                  ),
+                ),
+              );
+            });
           }
-        });
+        } else if (state.status.isSubmissionFailure) onError(state.errorModel);
         return state.status.isSubmissionInProgress
             ? ButtonLoadingView()
             : ButtonView(
@@ -372,12 +404,12 @@ class _ChargeButton extends StatelessWidget {
     if (currentIndex == 0) {
       context.read<CowpayBloc>().add(ChargeCreditCardValidation(context));
     } else {
-      // context.read<CowpayBloc>().add(ChargeFawry(context));
+      context.read<CowpayBloc>().add(ChargeFawry(context));
 
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => FawryScreen(localizationCode: LocalizationCode.en)));
+      // Navigator.push(
+      //     context,
+      //     MaterialPageRoute(
+      //         builder: (context) => FawryScreen(localizationCode: LocalizationCode.en)));
     }
   }
 }

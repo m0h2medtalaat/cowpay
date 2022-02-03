@@ -17,15 +17,83 @@ class CowpayBloc extends Bloc<CowpayEvent, CowpayState> {
   Stream<CowpayState> mapEventToState(CowpayEvent event) async* {
     if (event is ChangeTabCurrentIndexEvent) {
       yield _changeTabCurrentIndexToState(event);
+    } else if (event is CowpayStarted) {
+      yield _mapCardStartToState(event, state);
     } else if (event is ChargeCreditCardValidation) {
       yield* _validateChangedToState(state, event);
     } else if (event is ChargeFawry) {
       yield* _mapChargeFawryToState(state, event.context);
+    } else if (event is CreditCardNameChange) {
+      yield _mapCardHolderNameChangedToState(event, state);
+    } else if (event is CreditCardNumberChange) {
+      yield _mapCardNumberChangedToState(event, state);
+    } else if (event is CreditCardCvvChange) {
+      yield _mapCardCvvChangedToState(event, state);
+    } else if (event is CreditCardExpiryYearChange) {
+      yield _mapCardExpiryYearChangedToState(event, state);
+    } else if (event is CreditCardExpiryMonthChange) {
+      yield _mapCardExpiryMonthChangedToState(event, state);
+    } else if (event is ClearStatus) {
+      yield _mapClearStatusToState();
     }
   }
 
   CowpayState _changeTabCurrentIndexToState(ChangeTabCurrentIndexEvent event) {
     return state.copyWith(tabCurrentIndex: event.index);
+  }
+
+  CowpayState _mapClearStatusToState() {
+    return state.copyWith(status: FormzStatus.pure);
+  }
+
+//region Fawry
+  Stream<CowpayState> _mapChargeFawryToState(
+    CowpayState state,
+    BuildContext context,
+  ) async* {
+    yield state.copyWith(status: FormzStatus.submissionInProgress);
+    try {
+      var model = await CowpayHelper.instance.createFawryReceipt(
+          merchantReferenceId: state.merchantReferenceId!,
+          customerMerchantProfileId: state.customerMerchantProfileId!,
+          customerEmail: state.customerEmail!,
+          customerMobile: state.customerMobile!,
+          //TODO Change customer Name
+          customerName: 'Bahi Elfeky',
+          amount: state.amount!,
+          description: state.description!);
+
+      yield state.copyWith(
+          status: FormzStatus.submissionSuccess, fawryResponseModel: model);
+    } catch (error) {
+      yield state.copyWith(
+          status: FormzStatus.submissionFailure, errorModel: error);
+    }
+  }
+
+  //endregion
+
+  //region Credit Card
+
+  CowpayState _mapCardStartToState(
+    CowpayStarted event,
+    CowpayState state,
+  ) {
+    int currentYear = DateTime.now().year;
+    List<String> yearsList = [];
+    for (int i = 0; i < 10; i++) {
+      yearsList.add(currentYear.toString());
+      currentYear += 1;
+    }
+
+    return state.copyWith(
+        merchantReferenceId: event.merchantReferenceId,
+        customerMerchantProfileId: event.customerMerchantProfileId,
+        customerEmail: event.customerEmail,
+        customerMobile: event.customerMobile,
+        amount: event.amount,
+        description: event.description,
+        yearsList: yearsList);
   }
 
   Stream<CowpayState> _validateChangedToState(
@@ -132,26 +200,82 @@ class CowpayBloc extends Bloc<CowpayEvent, CowpayState> {
     }
   }
 
-  Stream<CowpayState> _mapChargeFawryToState(
+  CowpayState _mapCardHolderNameChangedToState(
+    CreditCardNameChange event,
     CowpayState state,
-    BuildContext context,
-  ) async* {
-    yield state.copyWith(status: FormzStatus.submissionInProgress);
-    try {
-      var model = await CowpayHelper.instance.createFawryReceipt(
-          merchantReferenceId: state.merchantReferenceId!,
-          customerMerchantProfileId: state.customerMerchantProfileId!,
-          customerEmail: state.customerEmail!,
-          customerMobile: state.customerMobile!,
-          customerName: state.creditCardHolderName.value,
-          amount: state.amount!,
-          description: state.description!);
-
-      yield state.copyWith(
-          status: FormzStatus.submissionSuccess, fawryResponseModel: model);
-    } catch (error) {
-      yield state.copyWith(
-          status: FormzStatus.submissionFailure, errorModel: error);
-    }
+  ) {
+    final name = CreditCardHolderName.dirty(event.creditCardHolderName);
+    return state.copyWith(
+      creditCardHolderName: name,
+    );
   }
+
+  CowpayState _mapCardNumberChangedToState(
+    CreditCardNumberChange event,
+    CowpayState state,
+  ) {
+    final creditCardNumber = CreditCardNumber.dirty(event.creditCardNumber);
+    return state.copyWith(
+      creditCardNumber: creditCardNumber,
+    );
+  }
+
+  CowpayState _mapCardCvvChangedToState(
+    CreditCardCvvChange event,
+    CowpayState state,
+  ) {
+    final creditCardCvv = CreditCardCvv.dirty(event.creditCardCvv);
+    return state.copyWith(
+      creditCardCvv: creditCardCvv,
+    );
+  }
+
+  CowpayState _mapCardExpiryMonthChangedToState(
+    CreditCardExpiryMonthChange event,
+    CowpayState state,
+  ) {
+    final creditCardExpiryMonth =
+        CreditCardExpiryMonth.dirty(event.creditCardExpiryMonth);
+
+    bool isNotValidExpirationDate = true;
+    if (state.creditCardExpiryYear.value != "" &&
+        state.creditCardExpiryMonth.value != "") {
+      var expirationDate = DateTime(int.parse(state.creditCardExpiryYear.value),
+          int.parse(creditCardExpiryMonth.value) + 1);
+      //add 1 month
+      if (expirationDate.isAfter(DateTime.now())) {
+        isNotValidExpirationDate = false;
+      }
+    }
+
+    return state.copyWith(
+      creditCardExpiryMonth: creditCardExpiryMonth,
+      isNotValidExpirationDate: isNotValidExpirationDate,
+    );
+  }
+
+  CowpayState _mapCardExpiryYearChangedToState(
+    CreditCardExpiryYearChange event,
+    CowpayState state,
+  ) {
+    final creditCardExpiryYear =
+        CreditCardExpiryYear.dirty(event.creditCardExpiryYear);
+
+    bool isNotValidExpirationDate = true;
+    if (state.creditCardExpiryYear.value != "" &&
+        state.creditCardExpiryMonth.value != "") {
+      var expirationDate = DateTime(int.parse(creditCardExpiryYear.value),
+          int.parse(state.creditCardExpiryMonth.value) + 1);
+      //add 1 month
+      if (expirationDate.isAfter(DateTime.now())) {
+        isNotValidExpirationDate = false;
+      }
+    }
+
+    return state.copyWith(
+      isNotValidExpirationDate: isNotValidExpirationDate,
+      creditCardExpiryYear: creditCardExpiryYear,
+    );
+  }
+//endregion
 }

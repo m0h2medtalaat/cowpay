@@ -10,8 +10,7 @@ import 'package:formz/formz.dart';
 
 class CowpayState extends Equatable {
   const CowpayState(
-      {
-        this.status = FormzStatus.pure,
+      {this.status = FormzStatus.pure,
       this.creditCardNumber = const CreditCardNumber.pure(),
       this.creditCardExpiryMonth = const CreditCardExpiryMonth.pure(),
       this.creditCardExpiryYear = const CreditCardExpiryYear.pure(),
@@ -30,6 +29,7 @@ class CowpayState extends Equatable {
       this.errorModel,
       this.description,
       this.yearsList,
+      this.customerName,
       this.tabCurrentIndex = 0});
 
   final FormzStatus status;
@@ -45,6 +45,7 @@ class CowpayState extends Equatable {
   final String? customerMobile;
   final String? amount;
   final String? description;
+  final String? customerName;
 
   final int notValid;
   final bool checkValidation;
@@ -103,6 +104,7 @@ class CowpayState extends Equatable {
             creditCardResponseModel ?? this.creditCardResponseModel,
         fawryResponseModel: fawryResponseModel ?? this.fawryResponseModel,
         errorModel: errorModel ?? this.errorModel,
+        customerName: customerName ?? this.customerName,
         tabCurrentIndex: tabCurrentIndex ?? this.tabCurrentIndex);
   }
 
@@ -118,7 +120,7 @@ class CowpayState extends Equatable {
         isNotValidExpirationDate,
         yearsList,
         tabCurrentIndex,
-        fawryResponseModel
+        fawryResponseModel,
       ];
 /*const CowpayState({this.tabCurrentIndex = 0});
 

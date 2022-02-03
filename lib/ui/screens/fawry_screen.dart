@@ -30,30 +30,15 @@ export 'package:cowpay/api_calls/exceptions.dart';
 export 'package:cowpay/helpers/enum_models.dart';
 
 class FawryScreen extends StatelessWidget {
-  final LocalizationCode? localizationCode;
-  final FawryResponseModel responseModel = FawryResponseModel.fromJson({
-    "success": true,
-    "status_code": 200,
-    "status_description": "Operation done successfully",
-    "type": "Pay at Fawry Charge Request",
-    "payment_gateway_reference_id": "971453632",
-    "merchant_reference_id": "12545",
-    "cowpay_reference_id": 1000251,
-    "amount": "10.00",
-    "fees_amount": "0.30",
-    "vat_amount": "0.04"
-  });
+  final FawryResponseModel responseModel;
 
-  FawryScreen({required this.localizationCode});
+
+  FawryScreen({required this.responseModel});
 
   @override
   Widget build(BuildContext context) {
-    if (localizationCode == LocalizationCode.ar) {
-      Localization().localizationMap = localizationMapAr;
-      Localization().localizationCode = LocalizationCode.ar;
-    }
     return Directionality(
-      textDirection: localizationCode == LocalizationCode.ar
+      textDirection: Localization().localizationCode == LocalizationCode.ar
           ? TextDirection.rtl
           : TextDirection.ltr,
       child: Scaffold(

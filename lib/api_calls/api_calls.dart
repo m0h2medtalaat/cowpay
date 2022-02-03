@@ -24,6 +24,8 @@ class ApiCallsClass {
   //region Fawry
   Future<dynamic> fawryChargeCall(FawryRequestModel fawryRequestModel) async {
     try {
+      // print(fawryRequestModel.toJson());
+
       var res = await _netUtil.post(UrlsData.fawryUrl,
           body: fawryRequestModel.toJson());
       FawryResponseModel fawryResponseModel =

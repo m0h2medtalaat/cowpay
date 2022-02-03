@@ -19,9 +19,9 @@ class CreditCardBloc extends Bloc<CreditCardEvent, CreditCardState> {
   Stream<CreditCardState> mapEventToState(
     CreditCardEvent event,
   ) async* {
-    if (event is CreditCardChargeStarted) {
-      yield _mapCardStartToState(event, state);
-    }
+    // if (event is CreditCardChargeStarted) {
+    //   yield _mapCardStartToState(event, state);
+    // }
     if (event is CreditCardNameChange) {
       yield _mapCardHolderNameChangedToState(event, state);
     } else if (event is CreditCardNumberChange) {
@@ -47,26 +47,26 @@ class CreditCardBloc extends Bloc<CreditCardEvent, CreditCardState> {
     );
   }
 
-  CreditCardState _mapCardStartToState(
-    CreditCardChargeStarted event,
-    CreditCardState state,
-  ) {
-    int currentYear = DateTime.now().year;
-    List<String> yearsList = [];
-    for (int i = 0; i < 10; i++) {
-      yearsList.add(currentYear.toString());
-      currentYear += 1;
-    }
-
-    return state.copyWith(
-        merchantReferenceId: event.merchantReferenceId,
-        customerMerchantProfileId: event.customerMerchantProfileId,
-        customerEmail: event.customerEmail,
-        customerMobile: event.customerMobile,
-        amount: event.amount,
-        description: event.description,
-        yearsList: yearsList);
-  }
+  // CreditCardState _mapCardStartToState(
+  //   CreditCardChargeStarted event,
+  //   CreditCardState state,
+  // ) {
+  //   int currentYear = DateTime.now().year;
+  //   List<String> yearsList = [];
+  //   for (int i = 0; i < 10; i++) {
+  //     yearsList.add(currentYear.toString());
+  //     currentYear += 1;
+  //   }
+  //
+  //   return state.copyWith(
+  //       merchantReferenceId: event.merchantReferenceId,
+  //       customerMerchantProfileId: event.customerMerchantProfileId,
+  //       customerEmail: event.customerEmail,
+  //       customerMobile: event.customerMobile,
+  //       amount: event.amount,
+  //       description: event.description,
+  //       yearsList: yearsList);
+  // }
 
   CreditCardState _mapCardNumberChangedToState(
     CreditCardNumberChange event,
