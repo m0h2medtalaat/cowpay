@@ -1,8 +1,5 @@
 library cowpay;
 
-import 'package:cowpay/bloc/bloc/credit_card_bloc.dart';
-import 'package:cowpay/bloc/event/credit_card_event.dart';
-import 'package:cowpay/bloc/state/credit_card_state.dart';
 import 'package:cowpay/helpers/cowpay_helper.dart';
 import 'package:cowpay/ui/generic_views/button_loading_view.dart';
 import 'package:cowpay/ui/generic_views/button_view.dart';
@@ -22,6 +19,7 @@ import 'bloc/state/cowpay_state.dart';
 import 'helpers/localization.dart';
 import 'helpers/screen_size.dart';
 import 'models/credit_card_response_model.dart';
+import 'ui/screens/web_view_screen.dart';
 
 export 'package:cowpay/api_calls/exceptions.dart';
 export 'package:cowpay/helpers/enum_models.dart';
@@ -354,7 +352,18 @@ class _ChargeButton extends StatelessWidget {
         int currentIndex = context.read<CowpayBloc>().state.tabCurrentIndex;
         if (state.status.isSubmissionSuccess) {
           if (currentIndex == 0) {
-            onSuccess(state.creditCardResponseModel!);
+            context.read<CowpayBloc>().add(ClearStatus());
+            SchedulerBinding.instance!.addPostFrameCallback((_) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => WebViewScreen(
+                    responseModel: state.creditCardResponseModel!,
+                  ),
+                ),
+              );
+            });
+            // onSuccess(state.creditCardResponseModel!);
           } else {
             context.read<CowpayBloc>().add(ClearStatus());
             SchedulerBinding.instance!.addPostFrameCallback((_) {

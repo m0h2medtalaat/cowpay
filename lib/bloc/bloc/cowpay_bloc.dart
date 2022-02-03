@@ -6,6 +6,7 @@ import 'package:cowpay/formz_models/credit_card_expiry_year.dart';
 import 'package:cowpay/formz_models/credit_card_holder_name.dart';
 import 'package:cowpay/formz_models/credit_card_number.dart';
 import 'package:cowpay/helpers/cowpay_helper.dart';
+import 'package:cowpay/models/credit_card_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -161,18 +162,19 @@ class CowpayBloc extends Bloc<CowpayEvent, CowpayState> {
       int length) async* {
     yield state.copyWith(status: FormzStatus.submissionInProgress);
     try {
-      var model = await CowpayHelper.instance.creditCardCharge(
-          merchantReferenceId: state.merchantReferenceId!,
-          customerMerchantProfileId: state.customerMerchantProfileId!,
-          customerEmail: state.customerEmail!,
-          customerMobile: state.customerMobile!,
-          customerName: state.creditCardHolderName.value,
-          cvv: creditCardCvv.value,
-          cardNumber: creditCardNumber.value,
-          expiryYear: creditCardExpiryYear.value,
-          expiryMonth: creditCardExpiryMonth.value,
-          amount: state.amount!,
-          description: state.description!);
+      CreditCardResponseModel model = await CowpayHelper.instance
+          .creditCardCharge(
+              merchantReferenceId: state.merchantReferenceId!,
+              customerMerchantProfileId: state.customerMerchantProfileId!,
+              customerEmail: state.customerEmail!,
+              customerMobile: state.customerMobile!,
+              customerName: state.creditCardHolderName.value,
+              cvv: creditCardCvv.value,
+              cardNumber: creditCardNumber.value,
+              expiryYear: creditCardExpiryYear.value,
+              expiryMonth: creditCardExpiryMonth.value,
+              amount: state.amount!,
+              description: state.description!);
 
       yield state.copyWith(
           isNotValidExpirationDate: false,

@@ -11,7 +11,7 @@ class UrlsData {
 
   //region Fawry
   static final fawryUrl =
-      'https://staging.cowpay.me' + basicUrl + 'charge/fawry';
+      CowpayHelper.activeEnvironment!.baseUrl! + basicUrl + 'charge/fawry';
 
   //endregion
 
