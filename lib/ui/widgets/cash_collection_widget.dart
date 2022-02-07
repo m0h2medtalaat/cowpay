@@ -10,7 +10,7 @@ import 'package:cowpay/formz_models/text_input.dart';
 import 'package:cowpay/helpers/enum_models.dart';
 import 'package:cowpay/helpers/localization.dart';
 import 'package:cowpay/helpers/screen_size.dart';
-import 'package:cowpay/models/cash_collection_response_model.dart';
+import 'package:cowpay/features/data/models/cash_collection_response_model.dart';
 import 'package:cowpay/ui/generic_views/button_loading_view.dart';
 import 'package:cowpay/ui/generic_views/button_view.dart';
 import 'package:cowpay/ui/generic_views/text_input_error_view.dart';

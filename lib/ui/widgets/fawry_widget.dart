@@ -2,9 +2,9 @@ library cowpay;
 
 import 'package:cowpay/bloc/bloc/cowpay_bloc.dart';
 import 'package:cowpay/bloc/bloc/credit_card_bloc.dart';
-import 'package:cowpay/bloc/event/cowpay_event.dart';
-import 'package:cowpay/bloc/state/cowpay_state.dart';
-import 'package:cowpay/cowpay.dart';
+import 'package:cowpay/bloc/event/cash_collection_event.dart';
+import 'package:cowpay/bloc/event/credit_card_event.dart';
+import 'package:cowpay/bloc/state/credit_card_state.dart';
 import 'package:cowpay/formz_models/credit_card_cvv.dart';
 import 'package:cowpay/formz_models/credit_card_holder_name.dart';
 import 'package:cowpay/formz_models/credit_card_number.dart';
@@ -24,7 +24,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
 
-class CreditCardWidget extends StatelessWidget {
+class FawryWidget extends StatelessWidget {
   final String description, merchantReferenceId, customerMerchantProfileId;
 
   final String customerEmail;
@@ -42,7 +42,7 @@ class CreditCardWidget extends StatelessWidget {
   final Function(CreditCardResponseModel creditCardResponseModel) onSuccess;
   final Function(dynamic error) onError;
 
-  CreditCardWidget(
+  FawryWidget(
       {required this.amount,
       required this.activeEnvironment,
       required this.customerEmail,
@@ -78,88 +78,31 @@ class CreditCardWidget extends StatelessWidget {
       onPanDown: (_) {
         FocusScope.of(context).unfocus();
       },
-      child: ScrollConfiguration(
-        behavior: _ScrollBehavior(),
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.all(ScreenSize().width! * 0.05),
-            child: Container(
-              height: ScreenSize().height! * 0.63,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(
-                      MediaQuery.of(context).size.width * 0.05)),
-              child: Padding(
-                padding: EdgeInsets.all(ScreenSize().width! * 0.05),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      children: [
-                        _buildCardHolderName(),
-                        SizedBox(
-                          height: ScreenSize().height! * 0.025,
-                        ),
-                        _buildCardNumberTextField(),
-                        SizedBox(
-                          height: ScreenSize().height! * 0.025,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              flex: 4,
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 4,
-                                        child: Container(
-                                          // width: ScreenSize().width! * 0.365,
-                                          child: _buildDropDownExpiryMonth(),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: ScreenSize().width! * 0.012,
-                                      ),
-                                      Expanded(
-                                        flex: 5,
-                                        child: Container(
-                                          // width: ScreenSize().width! * 0.365,
-                                          child: _buildDropDownExpiryYear(),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  buildExpiryError()
-                                ],
-                              ),
-                            ),
-                            SizedBox(
-                              width: ScreenSize().width! * 0.025,
-                            ),
-                            Expanded(
-                              flex: 3,
-                              child: _buildCvvTextField(),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                Localization().localizationMap["fawryPayPlaceholderMessage"],
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  height: 1,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
                 ),
               ),
-            ),
+            ],
           ),
-        ),
+        ],
       ),
     );
   }
 
   Widget _buildCardHolderName() {
-    return BlocBuilder<CowpayBloc, CowpayState>(
+    return BlocBuilder<CreditCardBloc, CreditCardState>(
       buildWhen: (previous, current) =>
           previous.creditCardHolderName != current.creditCardHolderName ||
           previous.status != current.status,
@@ -185,11 +128,11 @@ class CreditCardWidget extends StatelessWidget {
   }
 
   void onChangeCreditCardHolderName(BuildContext context, String value) {
-    context.read<CowpayBloc>().add(CreditCardNameChange(value));
+    context.read<CreditCardBloc>().add(CreditCardNameChange(value));
   }
 
   Widget _buildCardNumberTextField() {
-    return BlocBuilder<CowpayBloc, CowpayState>(
+    return BlocBuilder<CreditCardBloc, CreditCardState>(
       buildWhen: (previous, current) =>
           previous.creditCardNumber != current.creditCardNumber ||
           previous.status != current.status,
@@ -214,11 +157,11 @@ class CreditCardWidget extends StatelessWidget {
   }
 
   void onChangeCreditCardNumber(BuildContext context, String value) {
-    context.read<CowpayBloc>().add(CreditCardNumberChange(value));
+    context.read<CreditCardBloc>().add(CreditCardNumberChange(value));
   }
 
   Widget _buildCvvTextField() {
-    return BlocBuilder<CowpayBloc, CowpayState>(
+    return BlocBuilder<CreditCardBloc, CreditCardState>(
       buildWhen: (previous, current) =>
           previous.creditCardCvv != current.creditCardCvv ||
           previous.status != current.status,
@@ -247,17 +190,17 @@ class CreditCardWidget extends StatelessWidget {
   }
 
   void onChangeCreditCardCvv(BuildContext context, String value) {
-    context.read<CowpayBloc>().add(CreditCardCvvChange(value));
+    context.read<CreditCardBloc>().add(CreditCardCvvChange(value));
   }
 
   void onClickSubmit(
     BuildContext context,
   ) {
-    // context.read<CowpayBloc>().add(ChargeValidation(context));
+    // context.read<CreditCardBloc>().add(ChargeValidation(context));
   }
 
   _buildDropDownExpiryMonth() {
-    return BlocBuilder<CowpayBloc, CowpayState>(
+    return BlocBuilder<CreditCardBloc, CreditCardState>(
         buildWhen: (previous, current) =>
             previous.creditCardExpiryMonth != current.creditCardExpiryMonth ||
             previous.status != current.status,
@@ -289,12 +232,12 @@ class CreditCardWidget extends StatelessWidget {
 
   void onChangeCreditCardExpiryMonth(BuildContext context, String? value) {
     if (value != null) {
-      context.read<CowpayBloc>().add(CreditCardExpiryMonthChange(value));
+      context.read<CreditCardBloc>().add(CreditCardExpiryMonthChange(value));
     }
   }
 
   _buildDropDownExpiryYear() {
-    return BlocBuilder<CowpayBloc, CowpayState>(
+    return BlocBuilder<CreditCardBloc, CreditCardState>(
         buildWhen: (previous, current) =>
             previous.creditCardExpiryYear != current.creditCardExpiryYear ||
             previous.yearsList != current.yearsList ||
@@ -314,13 +257,13 @@ class CreditCardWidget extends StatelessWidget {
 
   void onChangeCreditCardExpiryYear(BuildContext context, String? value) {
     if (value != null) {
-      context.read<CowpayBloc>().add(CreditCardExpiryYearChange(value));
+      context.read<CreditCardBloc>().add(CreditCardExpiryYearChange(value));
     }
   }
 }
 
 Widget buildExpiryError() {
-  return BlocBuilder<CowpayBloc, CowpayState>(
+  return BlocBuilder<CreditCardBloc, CreditCardState>(
       buildWhen: (previous, current) =>
           previous.creditCardExpiryMonth != current.creditCardExpiryMonth ||
           previous.status != current.status ||
@@ -337,6 +280,77 @@ Widget buildExpiryError() {
               )
             : SizedBox();
       });
+}
+
+class _ChargeButton extends StatelessWidget {
+  final Color? buttonColor, buttonTextColor;
+  final TextStyle? buttonTextStyle;
+  final Function(CreditCardResponseModel creditCardResponseModel) onSuccess;
+  final Function(dynamic error) onError;
+  final double amount;
+
+  _ChargeButton(
+      {this.buttonTextStyle,
+      this.buttonColor,
+      this.buttonTextColor,
+      required this.onSuccess,
+      required this.onError,
+      required this.amount});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CreditCardBloc, CreditCardState>(
+      buildWhen: (previous, current) => previous.status != current.status,
+      builder: (context, state) {
+        SchedulerBinding.instance!.addPostFrameCallback((_) {
+          if (state.status.isSubmissionSuccess)
+            onSuccess(state.creditCardResponseModel!);
+          else if (state.status.isSubmissionFailure) onError(state.errorModel);
+        });
+        return state.status.isSubmissionInProgress
+            ? ButtonLoadingView()
+            : ButtonView(
+                fontWeight: FontWeight.w300,
+                // title: 'PAY  $amount EGP',
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: ScreenSize().width! * 0.04),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(Localization().localizationMap["pay"],
+                          style: buttonTextStyle ??
+                              TextStyle(
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 0.025 * ScreenSize().height!,
+                                  color: Colors.white),
+                          textScaleFactor: 1),
+                      Text("$amount ${Localization().localizationMap["egp"]}",
+                          style: buttonTextStyle ??
+                              TextStyle(
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 0.025 * ScreenSize().height!,
+                                  color: Colors.white),
+                          textScaleFactor: 1)
+                    ],
+                  ),
+                ),
+                textColor: buttonTextColor ?? Colors.white,
+                fontSize: 0.025,
+                backgroundColor: buttonColor ?? Theme.of(context).primaryColor,
+                mainContext: context,
+                buttonTextStyle: buttonTextStyle,
+                onClickFunction: onClickSubmit,
+              );
+      },
+    );
+  }
+
+  void onClickSubmit(
+    BuildContext context,
+  ) {
+    // context.read<CowpayBloc>().add(ChargeValidation(context));
+  }
 }
 
 class _ScrollBehavior extends ScrollBehavior {

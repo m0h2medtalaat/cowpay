@@ -3,6 +3,7 @@ import 'package:cowpay/ui/generic_views/text_input_error_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class TextInputView extends StatelessWidget {
   final void Function(BuildContext, String)? onChange;
@@ -18,7 +19,7 @@ class TextInputView extends StatelessWidget {
   final FocusNode? currentFocus;
   final FocusNode? nextFocus;
   final String? initialValue;
-  final Widget? suffixIcon;
+  final String? suffixIcon;
   final TextEditingController? controller;
   final Function(BuildContext)? onFieldSubmitted;
   final double? width;
@@ -100,12 +101,7 @@ class TextInputView extends StatelessWidget {
       obscureText: obscureText!,
       focusNode: currentFocus,
       onFieldSubmitted: (_) {
-        if (nextFocus != null) {
-          FocusScope.of(context).unfocus();
-          FocusScope.of(context).requestFocus(nextFocus);
-        } else {
-          onFieldSubmitted!(mainContext!);
-        }
+        onFieldSubmitted!(mainContext!);
       },
       style: style ?? TextStyle(color: mainColor ?? Colors.black, fontSize: 14),
       decoration: inputDecoration ??
@@ -133,22 +129,27 @@ class TextInputView extends StatelessWidget {
                     ],
                   )
                 : null,
-            // suffixIcon: showHelpIcon!
-            //     ? InkWell(
-            //         onTap: () => onHelpChange!(mainContext!),
-            //         child: Container(
-            //           width: 15.ssp,
-            //           height: 15.ssp,
-            //           padding: EdgeInsets.all(10.ssp),
-            //           child: Image.asset(
-            //             'resources/images/information.png',
-            //             height: 0.0.sh,
-            //           ),
-            //         ),
-            //       )
-            //     : suffixIcon == null
-            //         ? SizedBox()
-            //         : suffixIcon,
+            suffixIcon: suffixIcon != null
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        width: 0.1 * ScreenSize().width!,
+                        height: 0.1 * ScreenSize().width!,
+                        child: SvgPicture.asset(
+                          "assets/$suffixIcon.svg",
+                          package: 'cowpay',
+                          color: enabled!
+                              ? isNotValid!
+                                  ? Colors.red
+                                  : mainColor
+                              : Colors.grey,
+                        ),
+                      ),
+                    ],
+                  )
+                : null,
             hintText: hintText!,
             labelText: hintText!,
             isDense: inputDecoration?.isDense ?? false,
@@ -165,16 +166,17 @@ class TextInputView extends StatelessWidget {
                   borderSide: BorderSide(
                       color: isNotValid!
                           ? Colors.red
-                          : mainColor ?? Color(0xff66496A) , width: 2.0),
+                          : mainColor ?? Color(0xff66496A),
+                      width: 2.0),
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                 ),
             enabledBorder: inputDecoration?.enabledBorder ??
                 OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   borderSide: BorderSide(
-                      color:isNotValid!
+                      color: isNotValid!
                           ? Colors.red
-                          :  mainColor?.withOpacity(0.3) ?? Color(0x3066496A),
+                          : mainColor?.withOpacity(0.3) ?? Color(0x3066496A),
                       width: 1.0),
                 ),
             disabledBorder: inputDecoration?.disabledBorder ?? buildBorder(),
