@@ -5,14 +5,11 @@ import 'dart:convert';
 
 import 'package:cowpay/features/data/models/cash_collection_request_model.dart';
 import 'package:cowpay/features/data/models/credit_card_request_model.dart';
+import 'package:cowpay/features/data/models/credit_card_response_model.dart';
 import 'package:cowpay/features/data/models/fawry_response_model.dart';
 import 'package:cowpay/features/domain/usecases/creditcard_usecase.dart';
-import 'package:cowpay/models/credit_card_response_model.dart';
+import 'package:cowpay/features/domain/usecases/fawry_usecase.dart';
 import 'package:cowpay/features/data/models/fawry_request_model.dart';
-import 'package:cowpay/models/fawry_response_model.dart';
-import 'package:cowpay/src/cash_collection_usercase.dart';
-import 'package:cowpay/src/credit_card_usercase.dart';
-import 'package:cowpay/src/fawry_usecase.dart';
 import 'package:crypto/crypto.dart';
 
 import 'enum_models.dart';

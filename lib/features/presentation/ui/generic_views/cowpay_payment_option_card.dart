@@ -1,7 +1,6 @@
 import 'package:cowpay/helpers/localization.dart';
 import 'package:cowpay/helpers/screen_size.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 
 class CowpayPaymentOptionsCard extends StatelessWidget {
 
