@@ -3,16 +3,15 @@ library cowpay;
 import 'dart:async';
 import 'dart:io';
 
-import 'package:cowpay/helpers/cowpay_helper.dart';
-import 'package:cowpay/helpers/localization.dart';
-import 'package:cowpay/models/credit_card_response_model.dart';
-import 'package:cowpay/ui/generic_views/dialog_view.dart';
+import 'package:cowpay/core/helpers/cowpay_helper.dart';
+import 'package:cowpay/core/helpers/localization.dart';
+import 'package:cowpay/features/data/models/credit_card_response_model.dart';
+import 'package:cowpay/features/presentation/ui/generic_views/dialog_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-export 'package:cowpay/api_calls/exceptions.dart';
-export 'package:cowpay/helpers/enum_models.dart';
+export 'package:cowpay/core/helpers/enum_models.dart';
 
 class WebViewScreen extends StatefulWidget {
   final CreditCardResponseModel responseModel;
@@ -114,7 +113,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
               Navigator.of(context).pop();
             },
             mainContext: _context,
-            title: 'Success',
+            // title: 'Success',
           );
         });
   }
@@ -127,7 +126,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
         barrierDismissible: false,
         builder: (BuildContext context) {
           return DialogView(
-            title: "Error",
+            // title: "Error",
             dialogType: DialogType.DIALOG_ERROR,
             actionText: "done",
             content: "Something went wrong  please try again later",

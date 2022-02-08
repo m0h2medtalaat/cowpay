@@ -1,4 +1,4 @@
-import 'package:cowpay/helpers/screen_size.dart';
+import 'package:cowpay/core/helpers/screen_size.dart';
 import 'package:flutter/material.dart';
 
 class ButtonView extends StatelessWidget {
@@ -16,14 +16,16 @@ class ButtonView extends StatelessWidget {
       {/*Key key,*/
       required this.backgroundColor,
       this.borderColor,
-      this.textColor, this.title,
+      this.textColor,
+      this.title,
       this.onClickFunction,
       this.width,
       this.mainContext,
       this.buttonTextStyle,
       this.fontWeight,
       this.height = 0.06,
-      this.fontSize = 12.8, this.child})
+      this.fontSize = 12.8,
+      this.child})
       : super(/*key: key*/);
 
   @override
@@ -38,13 +40,14 @@ class ButtonView extends StatelessWidget {
               color: backgroundColor,
               border: Border.all(color: borderColor ?? backgroundColor!),
               borderRadius: BorderRadius.all(Radius.circular(10))),
-          child: child ?? Text(title ?? "",
-              style: buttonTextStyle ??
-                  TextStyle(
-                      fontWeight: fontWeight ?? FontWeight.w500,
-                      fontSize: fontSize * ScreenSize().height!,
-                      color: textColor ?? Colors.white),
-              textScaleFactor: 1)),
+          child: child ??
+              Text(title ?? "",
+                  style: buttonTextStyle ??
+                      TextStyle(
+                          fontWeight: fontWeight ?? FontWeight.w500,
+                          fontSize: fontSize * ScreenSize().height!,
+                          color: textColor ?? Colors.white),
+                  textScaleFactor: 1)),
     );
   }
 }

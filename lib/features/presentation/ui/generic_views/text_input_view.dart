@@ -1,5 +1,5 @@
-import 'package:cowpay/helpers/screen_size.dart';
-import 'package:cowpay/ui/generic_views/text_input_error_view.dart';
+import 'package:cowpay/core/helpers/screen_size.dart';
+import 'package:cowpay/features/presentation/ui/generic_views/text_input_error_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

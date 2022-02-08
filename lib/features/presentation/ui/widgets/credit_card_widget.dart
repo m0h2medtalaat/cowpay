@@ -1,78 +1,29 @@
 library cowpay;
 
-import 'package:cowpay/bloc/bloc/cowpay_bloc.dart';
-import 'package:cowpay/bloc/bloc/credit_card_bloc.dart';
-import 'package:cowpay/bloc/event/cowpay_event.dart';
-import 'package:cowpay/bloc/state/cowpay_state.dart';
-import 'package:cowpay/cowpay.dart';
-import 'package:cowpay/formz_models/credit_card_cvv.dart';
-import 'package:cowpay/formz_models/credit_card_holder_name.dart';
-import 'package:cowpay/formz_models/credit_card_number.dart';
-import 'package:cowpay/helpers/enum_models.dart';
-import 'package:cowpay/helpers/localization.dart';
-import 'package:cowpay/helpers/screen_size.dart';
-import 'package:cowpay/models/credit_card_response_model.dart';
-import 'package:cowpay/ui/generic_views/button_loading_view.dart';
-import 'package:cowpay/ui/generic_views/button_view.dart';
-import 'package:cowpay/ui/generic_views/drop_down_view.dart';
-import 'package:cowpay/ui/generic_views/text_input_error_view.dart';
-import 'package:cowpay/ui/generic_views/text_input_view.dart';
+import 'package:cowpay/core/formz_models/credit_card_cvv.dart';
+import 'package:cowpay/core/formz_models/credit_card_holder_name.dart';
+import 'package:cowpay/core/formz_models/credit_card_number.dart';
+import 'package:cowpay/core/helpers/localization.dart';
+import 'package:cowpay/core/helpers/screen_size.dart';
+import 'package:cowpay/features/presentation/bloc/cowpay_bloc.dart';
+import 'package:cowpay/features/presentation/ui/generic_views/drop_down_view.dart';
+import 'package:cowpay/features/presentation/ui/generic_views/text_input_error_view.dart';
+import 'package:cowpay/features/presentation/ui/generic_views/text_input_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:formz/formz.dart';
 
 class CreditCardWidget extends StatelessWidget {
-  final String description, merchantReferenceId, customerMerchantProfileId;
-
-  final String customerEmail;
-
-  final String customerMobile;
-  final CowpayEnvironment activeEnvironment;
-  final double amount;
-  final double? height;
-  final Color? /*backGroundColor,*/ /*cardColor,*/ buttonColor,
-      buttonTextColor,
-      mainColor;
-  final TextStyle? buttonTextStyle, textFieldStyle;
+  final TextStyle? textFieldStyle;
   final InputDecoration? textFieldInputDecoration;
-  final LocalizationCode? localizationCode;
-  final Function(CreditCardResponseModel creditCardResponseModel) onSuccess;
-  final Function(dynamic error) onError;
 
-  CreditCardWidget(
-      {required this.amount,
-      required this.activeEnvironment,
-      required this.customerEmail,
-      required this.customerMobile,
-      required this.description,
-      required this.customerMerchantProfileId,
-      required this.merchantReferenceId,
-      this.localizationCode,
-      this.height,
-      this.buttonTextColor,
-//      this.cardColor,
-//      this.backGroundColor,
-      this.buttonColor,
-      this.buttonTextStyle,
-      this.textFieldStyle,
-      this.textFieldInputDecoration,
-      this.mainColor,
-      required this.onSuccess,
-      required this.onError});
-
+  CreditCardWidget({
+    this.textFieldStyle,
+    this.textFieldInputDecoration,
+  });
   @override
   Widget build(BuildContext context) {
-    ScreenSize().height = MediaQuery.of(context).size.height;
-    ScreenSize().width = MediaQuery.of(context).size.width;
-
-    if (localizationCode == LocalizationCode.ar) {
-      Localization().localizationMap = localizationMapAr;
-      Localization().localizationCode = LocalizationCode.ar;
-    }
-
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onPanDown: (_) {

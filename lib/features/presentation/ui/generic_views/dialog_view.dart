@@ -1,7 +1,6 @@
-import 'package:cowpay/helpers/screen_size.dart';
+import 'package:cowpay/core/helpers/enum_models.dart';
+import 'package:cowpay/core/helpers/screen_size.dart';
 import 'package:flutter/material.dart';
-
-import '../../cowpay.dart';
 
 class DialogView extends StatelessWidget {
   final String content;
@@ -11,7 +10,7 @@ class DialogView extends StatelessWidget {
   final BuildContext mainContext;
   final DialogType dialogType;
   final String? image;
-  final String title;
+  final String? title;
   const DialogView(
       {Key? key,
       required this.content,
@@ -21,7 +20,7 @@ class DialogView extends StatelessWidget {
       required this.mainContext,
       required this.dialogType,
       this.extraOnCancel,
-      required this.title,
+      this.title,
       this.cancelText})
       : super(key: key);
 
@@ -59,7 +58,7 @@ class DialogView extends StatelessWidget {
             height: ScreenSize().height ?? 0 * 0.015,
           ),
           Text(
-            title,
+            title ?? 'Title',
             textAlign: dialogType == DialogType.DIALOG_WARNING
                 ? TextAlign.start
                 : TextAlign.center,

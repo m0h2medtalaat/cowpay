@@ -22,6 +22,7 @@ class CowpayState extends Equatable {
       this.description,
       this.yearsList,
       this.customerName,
+      this.failure,
       this.tabCurrentIndex = 0});
 
   final FormzStatus status;
@@ -47,6 +48,7 @@ class CowpayState extends Equatable {
 
   final CreditCardResponseModel? creditCardResponseModel;
   final FawryResponseModel? fawryResponseModel;
+  final Failure? failure;
   final dynamic? errorModel;
   final int tabCurrentIndex;
 
@@ -65,6 +67,7 @@ class CowpayState extends Equatable {
       String? customerName,
       String? customerEmail,
       String? customerMobile,
+      Failure? failure,
       String? amount,
       String? description,
       CreditCardResponseModel? creditCardResponseModel,
@@ -97,6 +100,7 @@ class CowpayState extends Equatable {
         fawryResponseModel: fawryResponseModel ?? this.fawryResponseModel,
         errorModel: errorModel ?? this.errorModel,
         customerName: customerName ?? this.customerName,
+        failure: failure ?? this.failure,
         tabCurrentIndex: tabCurrentIndex ?? this.tabCurrentIndex);
   }
 
@@ -113,6 +117,7 @@ class CowpayState extends Equatable {
         yearsList,
         tabCurrentIndex,
         fawryResponseModel,
+        failure,
       ];
 /*const CowpayState({this.tabCurrentIndex = 0});
 

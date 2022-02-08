@@ -1,5 +1,5 @@
-import 'package:cowpay/helpers/cowpay_helper.dart';
-import 'package:cowpay/helpers/enum_models.dart';
+import 'package:cowpay/core/helpers/cowpay_helper.dart';
+import 'package:cowpay/core/helpers/enum_models.dart';
 
 class UrlsData {
   CowpayEnvironment cowpayEnvironment = CowpayEnvironment.staging;

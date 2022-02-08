@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cowpay/api_calls/exceptions.dart';
+import 'package:cowpay/core/helpers/enum_models.dart';
 import 'package:cowpay/cowpay.dart';
-import 'package:cowpay/helpers/enum_models.dart';
 import 'package:cowpay/models/fawry_response_model.dart';
 import 'package:flutter_test/flutter_test.dart';
 

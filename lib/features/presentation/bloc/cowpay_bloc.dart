@@ -1,27 +1,32 @@
+import 'package:cowpay/core/error/failure.dart';
+import 'package:cowpay/core/formz_models/credit_card_cvv.dart';
+import 'package:cowpay/core/formz_models/credit_card_expiry_month.dart';
+import 'package:cowpay/core/formz_models/credit_card_expiry_year.dart';
+import 'package:cowpay/core/formz_models/credit_card_holder_name.dart';
+import 'package:cowpay/core/formz_models/credit_card_number.dart';
+import 'package:cowpay/core/helpers/cowpay_helper.dart';
+import 'package:cowpay/features/data/models/credit_card_request_model.dart';
 import 'package:cowpay/features/data/models/credit_card_response_model.dart';
+import 'package:cowpay/features/data/models/fawry_request_model.dart';
 import 'package:cowpay/features/data/models/fawry_response_model.dart';
 import 'package:cowpay/features/domain/usecases/cash_collection_usecase.dart';
 import 'package:cowpay/features/domain/usecases/creditcard_usecase.dart';
 import 'package:cowpay/features/domain/usecases/fawry_usecase.dart';
-import 'package:cowpay/formz_models/credit_card_cvv.dart';
-import 'package:cowpay/formz_models/credit_card_expiry_month.dart';
-import 'package:cowpay/formz_models/credit_card_expiry_year.dart';
-import 'package:cowpay/formz_models/credit_card_holder_name.dart';
-import 'package:cowpay/formz_models/credit_card_number.dart';
-import 'package:cowpay/helpers/cowpay_helper.dart';
+import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
-part 'cowpay_state.dart';
 part 'cowpay_event.dart';
+part 'cowpay_state.dart';
 
 class CowpayBloc extends Bloc<CowpayEvent, CowpayState> {
   CowpayBloc(
       {required this.fawryUseCase,
-        required  this.creditCardUseCase,
-        required this.cashCollectionUseCase}) : super(CowpayState());
+      required this.creditCardUseCase,
+      required this.cashCollectionUseCase})
+      : super(CowpayState());
   final FawryUseCase fawryUseCase;
   final CreditCardUseCase creditCardUseCase;
   final CashCollectionUseCase cashCollectionUseCase;
@@ -66,22 +71,48 @@ class CowpayBloc extends Bloc<CowpayEvent, CowpayState> {
   ) async* {
     yield state.copyWith(status: FormzStatus.submissionInProgress);
     try {
-      var model = await CowpayHelper.instance.createFawryReceipt(
-          merchantReferenceId: state.merchantReferenceId!,
-          customerMerchantProfileId: state.customerMerchantProfileId!,
-          customerEmail: state.customerEmail!,
-          customerMobile: state.customerMobile!,
-          //TODO Change customer Name
-          customerName: 'Bahi Elfeky',
-          amount: state.amount!,
-          description: state.description!);
+      String signature = CowpayHelper().generateSignature(
+        state.merchantReferenceId ?? '',
+        state.customerMerchantProfileId ?? '',
+        state.amount ?? '',
+      );
+      FawryRequestModel fawryRequestModel = FawryRequestModel(
+          merchantReferenceId: state.merchantReferenceId ?? '',
+          amount: state.amount ?? '',
+          customerEmail: state.customerEmail,
+          description: state.description ?? '',
+          customerMerchantProfileId: state.customerMerchantProfileId ?? '',
+          customerMobile: state.customerMobile,
+          customerName: state.customerName,
+          signature: signature);
 
-      yield state.copyWith(
-          status: FormzStatus.submissionSuccess, fawryResponseModel: model);
+      Either<Failure, FawryResponseModel> responseOrFailure =
+          await fawryUseCase.call(fawryRequestModel);
+
+      yield* _eitherStateOrErrorState(responseOrFailure, state);
     } catch (error) {
       yield state.copyWith(
           status: FormzStatus.submissionFailure, errorModel: error);
     }
+  }
+
+  Stream<CowpayState> _eitherStateOrErrorState(
+    Either<Failure, FawryResponseModel> failureOrResponse,
+    CowpayState state,
+  ) async* {
+    yield failureOrResponse.fold(
+      (failure) {
+        return state.copyWith(
+          status: FormzStatus.submissionFailure,
+          failure: failure,
+        );
+      },
+      (response) {
+        return state.copyWith(
+            status: FormzStatus.submissionSuccess,
+            fawryResponseModel: response);
+      },
+    );
   }
 
   //endregion
@@ -174,24 +205,34 @@ class CowpayBloc extends Bloc<CowpayEvent, CowpayState> {
       int length) async* {
     yield state.copyWith(status: FormzStatus.submissionInProgress);
     try {
-      CreditCardResponseModel model = await CowpayHelper.instance
-          .creditCardCharge(
-              merchantReferenceId: state.merchantReferenceId!,
-              customerMerchantProfileId: state.customerMerchantProfileId!,
-              customerEmail: state.customerEmail!,
-              customerMobile: state.customerMobile!,
-              customerName: state.creditCardHolderName.value,
-              cvv: creditCardCvv.value,
-              cardNumber: creditCardNumber.value,
-              expiryYear: creditCardExpiryYear.value,
-              expiryMonth: creditCardExpiryMonth.value,
-              amount: state.amount!,
-              description: state.description!);
+      String signature = CowpayHelper().generateSignature(
+        state.merchantReferenceId ?? '',
+        state.customerMerchantProfileId ?? '',
+        state.amount ?? '',
+      );
+      CreditCardRequestModel creditCardRequestModel = CreditCardRequestModel(
+          merchantReferenceId: state.merchantReferenceId ?? '',
+          customerMerchantProfileId: state.customerMerchantProfileId ?? '',
+          customerEmail: state.customerEmail ?? '',
+          customerMobile: state.customerMobile ?? '',
+          customerName: state.creditCardHolderName.value,
+          cvv: creditCardCvv.value,
+          cardNumber: creditCardNumber.value,
+          expiryYear: creditCardExpiryYear.value,
+          expiryMonth: creditCardExpiryMonth.value,
+          amount: state.amount ?? '',
+          description: state.description ?? '',
+          signature: signature);
+
+      var responseOrFailure =
+          await creditCardUseCase.call(creditCardRequestModel);
+      CreditCardResponseModel? creditCardRes;
+      responseOrFailure.fold((l) => null, (r) => creditCardRes = r);
 
       yield state.copyWith(
           isNotValidExpirationDate: false,
           status: FormzStatus.submissionSuccess,
-          creditCardResponseModel: model);
+          creditCardResponseModel: creditCardRes);
     } catch (error) {
       state.copyWith(
           creditCardHolderName: creditCardHolderName,

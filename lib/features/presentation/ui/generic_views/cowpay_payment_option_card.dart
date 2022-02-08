@@ -1,18 +1,16 @@
-import 'package:cowpay/helpers/localization.dart';
-import 'package:cowpay/helpers/screen_size.dart';
+import 'package:cowpay/core/helpers/localization.dart';
+import 'package:cowpay/core/helpers/screen_size.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class CowpayPaymentOptionsCard extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(10.0),
-      margin: EdgeInsets.symmetric(
-          horizontal: ScreenSize().width! * 0.01),
+      margin: EdgeInsets.symmetric(horizontal: ScreenSize().width! * 0.01),
       decoration: BoxDecoration(
-          borderRadius:
-          const BorderRadius.all(Radius.circular(10.0)),
+          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
           border: Border.all(
             color: Colors.grey.withOpacity(0.4),
             width: 1,
@@ -38,10 +36,15 @@ class CowpayPaymentOptionsCard extends StatelessWidget {
                         color: Colors.white,
                       ),
                     ),
-                    SizedBox(width: 7,),
+                    SizedBox(
+                      width: 7,
+                    ),
                     Text(
                       'Cowpay',
-                      style: TextStyle(color: Colors.black, fontSize: 18, fontWeight: FontWeight.bold ),
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -71,7 +74,9 @@ class CowpayPaymentOptionsCard extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           Text(
             Localization().localizationMap["cowpayPaymentOptionsText"],
             style: TextStyle(color: Color(0xff9B9B9C), fontSize: 15),

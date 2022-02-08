@@ -1,5 +1,5 @@
+import 'package:cowpay/core/helpers/enum_models.dart';
 import 'package:cowpay/cowpay.dart';
-import 'package:cowpay/helpers/enum_models.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

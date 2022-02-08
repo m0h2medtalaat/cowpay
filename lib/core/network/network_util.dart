@@ -1,14 +1,32 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:cowpay/core/error/exceptions.dart';
-import 'package:cowpay/helpers/constants.dart';
+import 'package:cowpay/core/helpers/constants.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+abstract class NetworkUtil {
+  Future<dynamic> getList(
+    String url,
+  );
 
-class NetworkUtil {
+  Future<dynamic> postWithRaw(String url, {Map? body});
+
+  Future<dynamic> postLogout(String url, {Map? body});
+
+  Future<dynamic> put(String url, {Map? body});
+
+  Future<dynamic> delete(String url, {Map? body});
+
+  Future<dynamic> postUrlEncoded(String url, {Map? body, encoding});
+
+  Future<dynamic> putGetToken(String url, {Map? body, encoding});
+
+  Future<dynamic> get(String url);
+}
+
+class NetworkUtilImpl implements NetworkUtil {
   // next three lines makes this class a Singleton
 
   Future<dynamic> getList(
@@ -28,8 +46,7 @@ class NetworkUtil {
     }
   }
 
-  Future<dynamic> postWithRaw( String url,
-      {Map? body}) async {
+  Future<dynamic> postWithRaw(String url, {Map? body}) async {
     debugPrint('ApiCallUrl: ' + url);
     debugPrint('ApiCallBody: ' + body.toString());
 
@@ -48,14 +65,13 @@ class NetworkUtil {
           )
           .timeout(Duration(seconds: 15));
       return _handleResponse(response);
-    }catch (error) {
+    } catch (error) {
       print(error);
       throw error;
     }
   }
 
-  Future<dynamic> postLogout(String url,
-      {Map? body}) async {
+  Future<dynamic> postLogout(String url, {Map? body}) async {
     debugPrint('ApiCallUrl: ' + url);
     debugPrint('ApiCallBody: ' + body.toString());
 
@@ -71,41 +87,6 @@ class NetworkUtil {
             encoding: encoding,
           )
           .timeout(Duration(seconds: 15));
-      return _handleResponse(response);
-    }catch (error) {
-      print(error);
-      throw error;
-    }
-  }
-
-  Future<dynamic> postOCR( String url,
-      {required Map body}) async {
-    try {
-      debugPrint('ApiCallUrl: ' + url);
-      debugPrint('ApiCallBody: ' + body.toString());
-
-      Map<String, String> headers;
-      headers = {
-        "key": "Content-Type",
-        "name": "Content-Type",
-        "type": "text",
-        "value": "application/json",
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-      };
-
-      String jsonBody = json.encode(body);
-      final encoding = Encoding.getByName('utf-8');
-
-      final response = await http
-          .post(
-            Uri.parse(url),
-            headers: headers,
-            body: jsonBody,
-            encoding: encoding,
-          )
-          .timeout(Duration(seconds: 20));
-
       return _handleResponse(response);
     } catch (error) {
       print(error);
@@ -137,7 +118,7 @@ class NetworkUtil {
     }
   }
 
-  Future<dynamic> delete( String url, {Map? body}) async {
+  Future<dynamic> delete(String url, {Map? body}) async {
     debugPrint('ApiCallUrl: ' + url);
     debugPrint('ApiCallBody: ' + body.toString());
     Map<String, String> headers = _handleHeaders();
@@ -151,14 +132,13 @@ class NetworkUtil {
           )
           .timeout(Duration(seconds: 15));
       return _handleResponse(response);
-    }catch (error) {
+    } catch (error) {
       print(error);
       throw error;
     }
   }
 
-  Future<dynamic> postUrlEncoded( String url,
-      {Map? body, encoding}) async {
+  Future<dynamic> postUrlEncoded(String url, {Map? body, encoding}) async {
     debugPrint('ApiCallUrl: ' + url);
     debugPrint('ApiCallBody: ' + body.toString());
     Map<String, String> headers = _handleHeaders(isUrlEncoded: true);
@@ -178,8 +158,7 @@ class NetworkUtil {
     }
   }
 
-  Future<dynamic> putGetToken( String url,
-      {Map? body, encoding}) async {
+  Future<dynamic> putGetToken(String url, {Map? body, encoding}) async {
     debugPrint('ApiCallUrl: ' + url);
     debugPrint('ApiCallBody: ' + body.toString());
     Map<String, String> headers = _handleHeaders();
@@ -216,8 +195,7 @@ class NetworkUtil {
     }
   }
 
-  Object _handleResponse(http.Response response,
-      {bool isList = false}) {
+  Object _handleResponse(http.Response response, {bool isList = false}) {
     final int statusCode = response.statusCode;
     var parsed;
     final String res = response.body;
@@ -230,21 +208,16 @@ class NetworkUtil {
         parsed = jsonDecode(res).cast<String, dynamic>();
       }
     } on FormatException {
-      // _ackAlert(context, 'somethingWentWrong'.tr());
       throw FormatException();
     }
 
     switch (statusCode) {
- /*     case 401:
-        // Navigator.pushNamedAndRemoveUntil(context, "/auth", (r) => false);
-        // _ackAlert(context, 'برجاء تسجيل الدخول');
+      /*     case 401:
         throw AuthException();
       case 400:
-        // _ackAlert(context, 'badRequest'.tr());
         throw BadRequestException();
 
       case 500:
-        // _ackAlert(context, 'internalServerError'.tr());
         throw InternalServerException();
 */
       case 200:
@@ -260,13 +233,11 @@ class NetworkUtil {
           message = parsed['message'];
         if (parsed.containsKey("Message") && parsed['Message'] != null)
           message = parsed['Message'];
-        // _ackAlert(context, message);
         throw UnExpectedException(message: message);
     }
   }
 
-  Map<String, String> _handleHeaders(
-      {bool isUrlEncoded = false}) {
+  Map<String, String> _handleHeaders({bool isUrlEncoded = false}) {
     Map<String, String> headers;
     headers = {"Accept-Language": 'en'};
 
@@ -284,4 +255,3 @@ class NetworkUtil {
     return headers;
   }
 }
-

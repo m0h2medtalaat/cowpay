@@ -1,4 +1,4 @@
-import 'package:cowpay/helpers/screen_size.dart';
+import 'package:cowpay/core/helpers/screen_size.dart';
 import 'package:flutter/material.dart';
 
 class TextInputErrorView extends StatelessWidget {
