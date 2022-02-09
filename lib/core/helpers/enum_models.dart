@@ -32,16 +32,16 @@ extension DialogTypeExtension on DialogType {
     }
   }
 
-  Image get image {
+  String? get image {
     switch (this) {
       case DialogType.DIALOG_INFO:
-        return Image.asset('resources/images/info_icon.png');
+        return 'resources/images/info_icon.svg';
       case DialogType.DIALOG_WARNING:
-        return Image.asset('resources/images/warring.png');
+        return 'assets/logos-visa.svg';
       case DialogType.DIALOG_ERROR:
-        return Image.asset('resources/images/error.png');
+        return 'assets/warning.svg';
       default:
-        return Image.asset('resources/images/info_icon.png');
+        return 'resources/images/info_icon.svg';
     }
   }
 }
@@ -119,14 +119,14 @@ Map<String, String> localizationMapEn = {
       "Please click Confirm Payment button to generate Reference Number",
   "confirmPayment": "Confirm Payment",
   "copyCode": "Copy Code",
-  "paymentSteps":"Payment Steps:",
-  "FawrySteps1":"• Go to any Fawry retail store",
-  "FawrySteps2":"• Choose Fawry Pay | from the main menu",
-  "FawrySteps3":"• Enter the reference number",
-  "FawrySteps4":"• Make sure your data is correct",
-  "FawrySteps5":"• Pay and keep the receipt",
-  "cowpayPaymentOptionsText":"Create & Manage Payment Links For Your Business Seamlessly"
-
+  "paymentSteps": "Payment Steps:",
+  "FawrySteps1": "• Go to any Fawry retail store",
+  "FawrySteps2": "• Choose Fawry Pay | from the main menu",
+  "FawrySteps3": "• Enter the reference number",
+  "FawrySteps4": "• Make sure your data is correct",
+  "FawrySteps5": "• Pay and keep the receipt",
+  "cowpayPaymentOptionsText":
+      "Create & Manage Payment Links For Your Business Seamlessly"
 };
 
 Map<String, String> localizationMapAr = {

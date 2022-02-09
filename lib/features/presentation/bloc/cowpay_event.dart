@@ -21,26 +21,19 @@ class CowpayStarted extends CowpayEvent {
 
   const CowpayStarted(
       {required this.merchantReferenceId,
-        required this.customerMerchantProfileId,
-        required this.customerEmail,
-        required this.customerMobile,
-        required this.amount,
-        required this.customerName,
-        required this.description});
+      required this.customerMerchantProfileId,
+      required this.customerEmail,
+      required this.customerMobile,
+      required this.amount,
+      required this.customerName,
+      required this.description});
 }
 
-
-class ClearStatus extends CowpayEvent {
-}
+class ClearStatus extends CowpayEvent {}
 
 //region Fawry
 
-
 class ChargeFawry extends CowpayEvent {
-  const ChargeFawry(this.context);
-
-  final BuildContext context;
-
   @override
   List<Object> get props => [];
 }
@@ -50,10 +43,6 @@ class ChargeFawry extends CowpayEvent {
 //region Credit Card
 
 class ChargeCreditCardValidation extends CowpayEvent {
-  const ChargeCreditCardValidation(this.context);
-
-  final BuildContext context;
-
   @override
   List<Object> get props => [];
 }
@@ -87,6 +76,5 @@ class CreditCardCvvChange extends CowpayEvent {
 
   final String creditCardCvv;
 }
-
 
 //endregion

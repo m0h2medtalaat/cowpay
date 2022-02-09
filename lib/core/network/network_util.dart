@@ -2,14 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:cowpay/core/error/exceptions.dart';
-import 'package:cowpay/core/helpers/constants.dart';
+import 'package:cowpay/core/helpers/cowpay_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 abstract class NetworkUtil {
-  Future<dynamic> getList(
-    String url,
-  );
+  Future<dynamic> getList(String url);
 
   Future<dynamic> postWithRaw(String url, {Map? body});
 
@@ -27,8 +25,6 @@ abstract class NetworkUtil {
 }
 
 class NetworkUtilImpl implements NetworkUtil {
-  // next three lines makes this class a Singleton
-
   Future<dynamic> getList(
     String url,
   ) async {
@@ -209,9 +205,13 @@ class NetworkUtilImpl implements NetworkUtil {
       }
     } on FormatException {
       throw FormatException();
+    } catch (e) {
+      //TODO check parsing exception position
+      throw ParsingException();
     }
 
     switch (statusCode) {
+      //TODO add error exception handling here
       /*     case 401:
         throw AuthException();
       case 400:
@@ -246,9 +246,9 @@ class NetworkUtilImpl implements NetworkUtil {
     else
       headers.addAll({"Content-Type": "application/json"});
 
-    if (ConstantsData().accessToken != null) {
+    if (CowpayHelper.token != null) {
       headers.addAll({
-        "Authorization": "Bearer " + ConstantsData().accessToken!,
+        "Authorization": "Bearer " + CowpayHelper.token!,
       });
     }
     debugPrint("header: " + headers.toString());

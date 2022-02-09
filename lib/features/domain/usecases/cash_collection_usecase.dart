@@ -1,11 +1,12 @@
-import 'package:cowpay/features/data/models/cash_collection_response_model.dart';
-import 'package:cowpay/features/domain/repositories/repository.dart';
-import 'package:dartz/dartz.dart';
 import 'package:cowpay/core/error/failure.dart';
 import 'package:cowpay/core/usecase/usecase.dart';
+import 'package:cowpay/features/data/models/cash_collection_response_model.dart';
+import 'package:cowpay/features/domain/repositories/cowpay_repository.dart';
+import 'package:dartz/dartz.dart';
 
-class CashCollectionUseCase implements UseCase<CashCollectionResponseModel, dynamic> {
-  final Repository repository;
+class CashCollectionUseCase
+    implements UseCase<CashCollectionResponseModel, dynamic> {
+  final CowpayRepository repository;
 
   CashCollectionUseCase({required this.repository});
 

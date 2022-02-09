@@ -109,7 +109,6 @@ class _CowpayState extends State<Cowpay> with SingleTickerProviderStateMixin {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: Text(Localization().localizationMap["paymentMethod"]),
-          // backgroundColor: Color(0xff66496A),
           backgroundColor: Color(0xff3D1A54),
         ),
         body: DefaultTabController(
@@ -130,17 +129,6 @@ class _CowpayState extends State<Cowpay> with SingleTickerProviderStateMixin {
                         description: widget.description));
                 },
               ),
-              // BlocProvider<CreditCardBloc>(create: (context) {
-              //   return CreditCardBloc()
-              //     ..add(CreditCardChargeStarted(
-              //         merchantReferenceId: widget.merchantReferenceId,
-              //         customerMerchantProfileId:
-              //             widget.customerMerchantProfileId,
-              //         amount: widget.amount.toString(),
-              //         customerEmail: widget.customerEmail,
-              //         customerMobile: widget.customerMobile,
-              //         description: widget.description));
-              // }),
             ],
             child: BlocListener<CowpayBloc, CowpayState>(
               listenWhen: (prev, state) {
@@ -149,7 +137,9 @@ class _CowpayState extends State<Cowpay> with SingleTickerProviderStateMixin {
               listener: (context, state) {
                 if (state.failure != null) {
                   ErrorAlertView alertView = ErrorAlertView(
-                      context: context, content: state.failure?.message ?? "");
+                      context: context,
+                      content: state.failure?.message ?? "",
+                      dialogType: DialogType.DIALOG_WARNING);
                   alertView.ackAlert();
                 }
               },
@@ -349,7 +339,7 @@ class _ChargeButton extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => FawryScreen(
-                    responseModel: state.fawryResponseModel!,
+                    fawryEntity: state.fawryEntity!,
                   ),
                 ),
               );
@@ -389,9 +379,9 @@ class _ChargeButton extends StatelessWidget {
   ) {
     int currentIndex = context.read<CowpayBloc>().state.tabCurrentIndex;
     if (currentIndex == 0) {
-      context.read<CowpayBloc>().add(ChargeCreditCardValidation(context));
+      context.read<CowpayBloc>().add(ChargeCreditCardValidation());
     } else {
-      context.read<CowpayBloc>().add(ChargeFawry(context));
+      context.read<CowpayBloc>().add(ChargeFawry());
     }
   }
 }

@@ -6,18 +6,27 @@ import 'dialog_view.dart';
 class ErrorAlertView {
   final BuildContext context;
   final String content;
+  final DialogType dialogType;
 
-  ErrorAlertView({required this.context, required this.content});
+  ErrorAlertView(
+      {required this.context, required this.content, required this.dialogType});
 
   Future<void> ackAlert() {
-    debugPrint('Error Message:  $content');
+    // debugPrint('Error Message:  $content');
     return showDialog(
         context: context,
         builder: (BuildContext context) {
           return DialogView(
-            dialogType: DialogType.DIALOG_ERROR,
-            content: content,
+            dialogType: dialogType,
+            actionText: "ok",
+            title: content,
+            // content: content,
+            onCLick: (_) {
+              //TODO: do onSuccess
+              // Navigator.of(context).pop();
+            },
             mainContext: context,
+            // title: 'Success',
           );
         });
   }

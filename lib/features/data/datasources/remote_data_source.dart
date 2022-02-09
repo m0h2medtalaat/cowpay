@@ -8,13 +8,16 @@ import 'package:cowpay/features/data/models/credit_card_request_model.dart';
 import 'package:cowpay/features/data/models/credit_card_response_model.dart';
 import 'package:cowpay/features/data/models/fawry_request_model.dart';
 import 'package:cowpay/features/data/models/fawry_response_model.dart';
+import 'package:cowpay/features/domain/entities/user_entity.dart';
 import 'package:flutter/foundation.dart';
 
 abstract class RemoteDataSource {
-  Future<FawryResponseModel> fawryCharge(
+  Future<FawryEntity> fawryCharge(
       {required FawryRequestModel fawryRequestModel});
+
   Future<CreditCardResponseModel> creditCardCharge(
       {required CreditCardRequestModel creditCardRequestModel});
+
   Future<CashCollectionResponseModel> cashCollectionCharge(
       {required CashCollectionRequestModel cashCollectionRequestModel});
 }
@@ -46,10 +49,10 @@ class RemoteDataSourceImpl implements RemoteDataSource {
   Future<FawryResponseModel> _fawryChargeCall(
       FawryRequestModel fawryRequestModel) async {
     try {
-      // print(fawryRequestModel.toJson());
-
-      var res = await networkUtil.postWithRaw(UrlsData.fawryUrl,
-          body: fawryRequestModel.toJson());
+      var res = await networkUtil.postWithRaw(
+        UrlsData.fawryUrl,
+        body: fawryRequestModel.toJson(),
+      );
       FawryResponseModel fawryResponseModel =
           FawryResponseModel.fromJson(json.decode(json.encode(res)));
       debugPrint('Success ${fawryResponseModel.statusCode.toString()}');

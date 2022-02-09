@@ -8,13 +8,12 @@ import 'package:cowpay/core/helpers/cowpay_helper.dart';
 import 'package:cowpay/features/data/models/credit_card_request_model.dart';
 import 'package:cowpay/features/data/models/credit_card_response_model.dart';
 import 'package:cowpay/features/data/models/fawry_request_model.dart';
-import 'package:cowpay/features/data/models/fawry_response_model.dart';
+import 'package:cowpay/features/domain/entities/user_entity.dart';
 import 'package:cowpay/features/domain/usecases/cash_collection_usecase.dart';
 import 'package:cowpay/features/domain/usecases/creditcard_usecase.dart';
 import 'package:cowpay/features/domain/usecases/fawry_usecase.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
@@ -40,7 +39,9 @@ class CowpayBloc extends Bloc<CowpayEvent, CowpayState> {
     } else if (event is ChargeCreditCardValidation) {
       yield* _validateChangedToState(state, event);
     } else if (event is ChargeFawry) {
-      yield* _mapChargeFawryToState(state, event.context);
+      yield* _mapChargeFawryToState(
+        state,
+      );
     } else if (event is CreditCardNameChange) {
       yield _mapCardHolderNameChangedToState(event, state);
     } else if (event is CreditCardNumberChange) {
@@ -67,7 +68,6 @@ class CowpayBloc extends Bloc<CowpayEvent, CowpayState> {
 //region Fawry
   Stream<CowpayState> _mapChargeFawryToState(
     CowpayState state,
-    BuildContext context,
   ) async* {
     yield state.copyWith(status: FormzStatus.submissionInProgress);
     try {
@@ -86,33 +86,14 @@ class CowpayBloc extends Bloc<CowpayEvent, CowpayState> {
           customerName: state.customerName,
           signature: signature);
 
-      Either<Failure, FawryResponseModel> responseOrFailure =
+      Either<Failure, FawryEntity> responseOrFailure =
           await fawryUseCase.call(fawryRequestModel);
 
-      yield* _eitherStateOrErrorState(responseOrFailure, state);
+      yield* _eitherStateOrErrorState<FawryEntity>(responseOrFailure, state);
     } catch (error) {
       yield state.copyWith(
           status: FormzStatus.submissionFailure, errorModel: error);
     }
-  }
-
-  Stream<CowpayState> _eitherStateOrErrorState(
-    Either<Failure, FawryResponseModel> failureOrResponse,
-    CowpayState state,
-  ) async* {
-    yield failureOrResponse.fold(
-      (failure) {
-        return state.copyWith(
-          status: FormzStatus.submissionFailure,
-          failure: failure,
-        );
-      },
-      (response) {
-        return state.copyWith(
-            status: FormzStatus.submissionSuccess,
-            fawryResponseModel: response);
-      },
-    );
   }
 
   //endregion
@@ -136,6 +117,7 @@ class CowpayBloc extends Bloc<CowpayEvent, CowpayState> {
         customerEmail: event.customerEmail,
         customerMobile: event.customerMobile,
         amount: event.amount,
+        customerName: event.customerName,
         description: event.description,
         yearsList: yearsList);
   }
@@ -164,7 +146,6 @@ class CowpayBloc extends Bloc<CowpayEvent, CowpayState> {
         !state.isNotValidExpirationDate)
       yield* _mapRegisterSubmittedToState(
           state,
-          event.context,
           creditCardHolderName,
           creditCardNumber,
           creditCardCvv,
@@ -196,7 +177,6 @@ class CowpayBloc extends Bloc<CowpayEvent, CowpayState> {
 
   Stream<CowpayState> _mapRegisterSubmittedToState(
       CowpayState state,
-      BuildContext context,
       CreditCardHolderName creditCardHolderName,
       CreditCardNumber creditCardNumber,
       CreditCardCvv creditCardCvv,
@@ -224,15 +204,11 @@ class CowpayBloc extends Bloc<CowpayEvent, CowpayState> {
           description: state.description ?? '',
           signature: signature);
 
-      var responseOrFailure =
+      Either<Failure, CreditCardResponseModel> responseOrFailure =
           await creditCardUseCase.call(creditCardRequestModel);
-      CreditCardResponseModel? creditCardRes;
-      responseOrFailure.fold((l) => null, (r) => creditCardRes = r);
 
-      yield state.copyWith(
-          isNotValidExpirationDate: false,
-          status: FormzStatus.submissionSuccess,
-          creditCardResponseModel: creditCardRes);
+      yield* _eitherStateOrErrorState<CreditCardResponseModel>(
+          responseOrFailure, state);
     } catch (error) {
       state.copyWith(
           creditCardHolderName: creditCardHolderName,
@@ -332,5 +308,34 @@ class CowpayBloc extends Bloc<CowpayEvent, CowpayState> {
       creditCardExpiryYear: creditCardExpiryYear,
     );
   }
+
 //endregion
+
+  Stream<CowpayState> _eitherStateOrErrorState<T>(
+    Either<Failure, T> failureOrResponse,
+    CowpayState state,
+  ) async* {
+    yield failureOrResponse.fold(
+      (failure) {
+        return state.copyWith(
+          status: FormzStatus.submissionFailure,
+          failure: failure,
+        );
+      },
+      (response) {
+        if (response is FawryEntity) {
+          return state.copyWith(
+              status: FormzStatus.submissionSuccess,
+              fawryResponseModel: response);
+        } else if (response is CreditCardResponseModel) {
+          return state.copyWith(
+              status: FormzStatus.submissionSuccess,
+              creditCardResponseModel: response);
+        }
+        return state.copyWith(
+          status: FormzStatus.submissionSuccess,
+        );
+      },
+    );
+  }
 }

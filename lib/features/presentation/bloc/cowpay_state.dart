@@ -17,7 +17,7 @@ class CowpayState extends Equatable {
       this.customerMobile,
       this.amount,
       this.creditCardResponseModel,
-      this.fawryResponseModel,
+      this.fawryEntity,
       this.errorModel,
       this.description,
       this.yearsList,
@@ -47,7 +47,7 @@ class CowpayState extends Equatable {
   final List<String>? yearsList;
 
   final CreditCardResponseModel? creditCardResponseModel;
-  final FawryResponseModel? fawryResponseModel;
+  final FawryEntity? fawryEntity;
   final Failure? failure;
   final dynamic? errorModel;
   final int tabCurrentIndex;
@@ -71,7 +71,7 @@ class CowpayState extends Equatable {
       String? amount,
       String? description,
       CreditCardResponseModel? creditCardResponseModel,
-      FawryResponseModel? fawryResponseModel,
+      FawryEntity? fawryResponseModel,
       dynamic? errorModel,
       List<String>? yearsList,
       int? tabCurrentIndex}) {
@@ -97,7 +97,7 @@ class CowpayState extends Equatable {
         description: description ?? this.description,
         creditCardResponseModel:
             creditCardResponseModel ?? this.creditCardResponseModel,
-        fawryResponseModel: fawryResponseModel ?? this.fawryResponseModel,
+        fawryEntity: fawryResponseModel ?? this.fawryEntity,
         errorModel: errorModel ?? this.errorModel,
         customerName: customerName ?? this.customerName,
         failure: failure ?? this.failure,
@@ -116,7 +116,7 @@ class CowpayState extends Equatable {
         isNotValidExpirationDate,
         yearsList,
         tabCurrentIndex,
-        fawryResponseModel,
+        fawryEntity,
         failure,
       ];
 /*const CowpayState({this.tabCurrentIndex = 0});

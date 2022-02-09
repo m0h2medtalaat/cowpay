@@ -1,5 +1,5 @@
 import 'package:cowpay/core/network/network_util.dart';
-import 'package:cowpay/features/data/repositories/repository_Impl.dart';
+import 'package:cowpay/features/data/repositories/cowpay_repository_Impl.dart';
 import 'package:cowpay/features/domain/usecases/cash_collection_usecase.dart';
 import 'package:cowpay/features/domain/usecases/creditcard_usecase.dart';
 import 'package:cowpay/features/domain/usecases/fawry_usecase.dart';
@@ -7,7 +7,7 @@ import 'package:cowpay/features/presentation/bloc/cowpay_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 import 'features/data/datasources/remote_data_source.dart';
-import 'features/domain/repositories/repository.dart';
+import 'features/domain/repositories/cowpay_repository.dart';
 
 final sl = GetIt.instance;
 
@@ -38,8 +38,8 @@ void init() {
       repository: sl(),
     ),
   );
-  sl.registerLazySingleton<Repository>(
-    () => RepositoryImpl(remoteDataSource: sl()),
+  sl.registerLazySingleton<CowpayRepository>(
+    () => CowpayRepositoryImpl(remoteDataSource: sl()),
   );
 
   sl.registerLazySingleton<RemoteDataSource>(

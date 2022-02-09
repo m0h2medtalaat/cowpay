@@ -1,9 +1,11 @@
 import 'package:cowpay/core/helpers/enum_models.dart';
 import 'package:cowpay/core/helpers/screen_size.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+//TODO check localizations
 
 class DialogView extends StatelessWidget {
-  final String content;
+  final String? content;
   final String? actionText;
   final String? cancelText;
   final void Function(BuildContext)? onCLick, extraOnCancel;
@@ -11,9 +13,10 @@ class DialogView extends StatelessWidget {
   final DialogType dialogType;
   final String? image;
   final String? title;
+
   const DialogView(
       {Key? key,
-      required this.content,
+      this.content,
       this.actionText,
       this.image,
       this.onCLick,
@@ -28,34 +31,45 @@ class DialogView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.white,
       child: buildContent(context),
     );
   }
 
   Widget buildContent(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: ScreenSize().height ?? 0 * 0.04),
+      margin: EdgeInsets.only(top: (ScreenSize().height ?? 0) * 0.04),
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(20.0)),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20.0),
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           image != null
               ? Container(
-                  height: ScreenSize().height ?? 0 * 0.1,
-                  width: ScreenSize().height ?? 0 * 0.1,
+                  height: (ScreenSize().height ?? 0) * 0.1,
+                  width: (ScreenSize().height ?? 0) * 0.1,
                   child: Image.asset("resources/images/$image.png"))
               : dialogType.image != null
                   ? Container(
-                      height: ScreenSize().height ?? 0 * 0.1,
-                      width: ScreenSize().height ?? 0 * 0.1,
-                      child: dialogType.image)
-                  : SizedBox(),
+                      height: (ScreenSize().height ?? 0) * 0.1,
+                      width: (ScreenSize().height ?? 0) * 0.1,
+                      child: SvgPicture.asset(
+                        dialogType.image ?? '',
+                        package: 'cowpay',
+                        width: 40,
+                        height: 40,
+                      ),
+                    )
+                  : Container(
+                      height: (ScreenSize().height ?? 0) * 0.1,
+                      width: (ScreenSize().height ?? 0) * 0.1,
+                    ),
           SizedBox(
-            height: ScreenSize().height ?? 0 * 0.015,
+            height: (ScreenSize().height ?? 0) * 0.015,
           ),
           Text(
             title ?? 'Title',
@@ -63,29 +77,34 @@ class DialogView extends StatelessWidget {
                 ? TextAlign.start
                 : TextAlign.center,
             style: TextStyle(
-                color: Colors.black,
+                color: Color(0xff808080),
                 height: 1.4,
-                fontWeight: FontWeight.bold,
-                fontSize: 19),
+                // fontWeight: FontWeight.bold,
+                fontSize: 22),
             textScaleFactor: 0.8,
           ),
           SizedBox(
-            height: ScreenSize().height ?? 0 * 0.015,
+            height: (ScreenSize().height ?? 0) * 0.02,
           ),
-          Text(
-            content,
-            textAlign: dialogType == DialogType.DIALOG_WARNING
-                ? TextAlign.start
-                : TextAlign.center,
-            style: TextStyle(
-              color: Colors.black,
-              height: 1.2,
+          if (content != null)
+            Column(
+              children: [
+                Text(
+                  content ?? '',
+                  textAlign: dialogType == DialogType.DIALOG_WARNING
+                      ? TextAlign.start
+                      : TextAlign.center,
+                  style: TextStyle(
+                    color: Color(0xff808080),
+                    height: 1.2,
+                  ),
+                  textScaleFactor: 0.8,
+                ),
+                SizedBox(
+                  height: (ScreenSize().height ?? 0) * 0.015,
+                ),
+              ],
             ),
-            textScaleFactor: 0.8,
-          ),
-          SizedBox(
-            height: ScreenSize().height ?? 0 * 0.015,
-          ),
           if (actionText != null)
             Column(
               children: [
@@ -112,17 +131,18 @@ class DialogView extends StatelessWidget {
     return InkWell(
       onTap: () => callCallaBack(context),
       child: Container(
-        width: cancelText != null ? null : ScreenSize().width ?? 0 * 0.6,
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        height: (ScreenSize().height ?? 0) * 0.05,
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 65),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10)),
-            border: Border.all(color: dialogType.color, width: 1.5)),
-        child: Text(
-          actionText!,
-          textAlign: TextAlign.center,
-          style:
-              TextStyle(fontWeight: FontWeight.bold, color: dialogType.color),
-          textScaleFactor: 0.7,
+            color: Color(0xff3D1A54).withOpacity(0.8)),
+        child: Center(
+          child: Text(
+            actionText!,
+            textAlign: TextAlign.center,
+            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+            textScaleFactor: 1.2,
+          ),
         ),
       ),
     );
@@ -134,8 +154,8 @@ class DialogView extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 7, horizontal: 10),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            color: Colors.red),
         child: Text(
           'cancel',
           style: TextStyle(color: dialogType.color),

@@ -1,40 +1,32 @@
-class FawryResponseModel {
-  bool? success;
-  int? statusCode;
-  String? statusDescription;
-  String? type;
-  String? paymentGatewayReferenceId;
-  String? merchantReferenceId;
-  int? cowpayReferenceId;
+import 'package:cowpay/features/domain/entities/user_entity.dart';
 
+class FawryResponseModel extends FawryEntity {
   FawryResponseModel(
-      {this.success,
-      this.statusCode,
-      this.statusDescription,
-      this.type,
-      this.paymentGatewayReferenceId,
-      this.merchantReferenceId,
-      this.cowpayReferenceId});
+      {success,
+      statusCode,
+      statusDescription,
+      type,
+      paymentGatewayReferenceId,
+      merchantReferenceId,
+      cowpayReferenceId})
+      : super(
+          cowpayReferenceId: cowpayReferenceId,
+          merchantReferenceId: merchantReferenceId,
+          paymentGatewayReferenceId: paymentGatewayReferenceId,
+          statusCode: statusCode,
+          statusDescription: statusDescription,
+          success: success,
+          type: type,
+        );
 
-  FawryResponseModel.fromJson(Map<String, dynamic> json) {
-    success = json['success'];
-    statusCode = json['status_code'];
-    statusDescription = json['status_description'];
-    type = json['type'];
-    paymentGatewayReferenceId = json['payment_gateway_reference_id'];
-    merchantReferenceId = json['merchant_reference_id'];
-    cowpayReferenceId = json['cowpay_reference_id'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['success'] = this.success;
-    data['status_code'] = this.statusCode;
-    data['status_description'] = this.statusDescription;
-    data['type'] = this.type;
-    data['payment_gateway_reference_id'] = this.paymentGatewayReferenceId;
-    data['merchant_reference_id'] = this.merchantReferenceId;
-    data['cowpay_reference_id'] = this.cowpayReferenceId;
-    return data;
+  factory FawryResponseModel.fromJson(Map<String, dynamic> json) {
+    return FawryResponseModel(
+        cowpayReferenceId: json['cowpay_reference_id'],
+        merchantReferenceId: json['merchant_reference_id'],
+        paymentGatewayReferenceId: json['payment_gateway_reference_id'],
+        statusCode: json['status_code'],
+        statusDescription: json['status_description'],
+        success: json['success'],
+        type: json['type']);
   }
 }

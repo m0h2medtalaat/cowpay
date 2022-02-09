@@ -1,12 +1,12 @@
 class FawryRequestModel {
-  late String merchantReferenceId;
-  late String customerMerchantProfileId;
-  late String? customerName;
-  late String? customerEmail;
-  late String? customerMobile;
-  late String amount;
-  late String signature;
-  late String description;
+  String? merchantReferenceId;
+  String? customerMerchantProfileId;
+  String? customerName;
+  String? customerEmail;
+  String? customerMobile;
+  String? amount;
+  String? signature;
+  String? description;
 
   FawryRequestModel(
       {required this.merchantReferenceId,
@@ -17,17 +17,6 @@ class FawryRequestModel {
       required this.amount,
       required this.signature,
       required this.description});
-
-  FawryRequestModel.fromJson(Map<String, dynamic> json) {
-    merchantReferenceId = json['merchant_reference_id'];
-    customerMerchantProfileId = json['customer_merchant_profile_id'];
-    customerName = json['customer_name'];
-    customerEmail = json['customer_email'];
-    customerMobile = json['customer_mobile'];
-    amount = json['amount'];
-    signature = json['signature'];
-    description = json['description'];
-  }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
