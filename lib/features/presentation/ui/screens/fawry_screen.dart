@@ -3,7 +3,7 @@ library cowpay;
 import 'package:cowpay/core/helpers/cowpay_helper.dart';
 import 'package:cowpay/core/helpers/localization.dart';
 import 'package:cowpay/core/helpers/screen_size.dart';
-import 'package:cowpay/features/domain/entities/user_entity.dart';
+import 'package:cowpay/features/domain/entities/fawry_entity.dart';
 import 'package:cowpay/features/presentation/ui/generic_views/button_view.dart';
 import 'package:cowpay/features/presentation/ui/generic_views/cowpay_payment_option_card.dart';
 import 'package:flutter/cupertino.dart';
@@ -35,7 +35,7 @@ class FawryScreen extends StatelessWidget {
               child: Column(
                 children: [
                   SizedBox(
-                    height: ScreenSize().height! * 0.25,
+                    height: 0.25.sh,
                   ),
                   Text(
                     'Fawry Code',
@@ -55,15 +55,14 @@ class FawryScreen extends StatelessWidget {
                     height: 20,
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: ScreenSize().width! * 0.25),
+                    padding: EdgeInsets.symmetric(horizontal: 0.25.sw),
                     child: ButtonView(
                       fontWeight: FontWeight.w300,
                       // title: 'PAY  $amount EGP',
                       child: Text(Localization().localizationMap["copyCode"],
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
-                              fontSize: 0.025 * ScreenSize().height!,
+                              fontSize: 0.025.sh,
                               color: Colors.white),
                           textScaleFactor: 1),
                       textColor: Colors.white,
@@ -85,8 +84,7 @@ class FawryScreen extends StatelessWidget {
                     height: 30,
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: ScreenSize().width! * 0.03),
+                    padding: EdgeInsets.symmetric(horizontal: 0.03.sw),
                     child: Row(
                       children: [
                         Column(
@@ -141,8 +139,7 @@ class FawryScreen extends StatelessWidget {
             Column(
               children: [
                 Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: ScreenSize().width! * 0.03),
+                  padding: EdgeInsets.symmetric(horizontal: 0.03.sh),
                   child: CowpayPaymentOptionsCard(),
                 ),
                 SizedBox(

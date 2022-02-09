@@ -93,13 +93,14 @@ class _CowpayState extends State<Cowpay> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    ScreenSize().height = MediaQuery.of(context).size.height;
-    ScreenSize().width = MediaQuery.of(context).size.width;
+    ScreenUtil().height = MediaQuery.of(context).size.height;
+    ScreenUtil().width = MediaQuery.of(context).size.width;
 
     if (widget.localizationCode == LocalizationCode.ar) {
       Localization().localizationMap = localizationMapAr;
       Localization().localizationCode = LocalizationCode.ar;
     }
+
     return Directionality(
       textDirection: widget.localizationCode == LocalizationCode.ar
           ? TextDirection.rtl
@@ -108,6 +109,7 @@ class _CowpayState extends State<Cowpay> with SingleTickerProviderStateMixin {
         backgroundColor: Colors.white,
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
+          toolbarHeight: 0.1.sh,
           title: Text(Localization().localizationMap["paymentMethod"]),
           backgroundColor: Color(0xff3D1A54),
         ),
@@ -130,19 +132,37 @@ class _CowpayState extends State<Cowpay> with SingleTickerProviderStateMixin {
                 },
               ),
             ],
-            child: BlocListener<CowpayBloc, CowpayState>(
-              listenWhen: (prev, state) {
-                return prev.failure != state.failure;
-              },
-              listener: (context, state) {
-                if (state.failure != null) {
-                  ErrorAlertView alertView = ErrorAlertView(
-                      context: context,
-                      content: state.failure?.message ?? "",
-                      dialogType: DialogType.DIALOG_WARNING);
-                  alertView.ackAlert();
-                }
-              },
+            child: MultiBlocListener(
+              listeners: [
+                BlocListener<CowpayBloc, CowpayState>(
+                  listenWhen: (prev, state) {
+                    return prev.failure != state.failure;
+                  },
+                  listener: (context, state) {
+                    if (state.failure != null) {
+                      ErrorAlertView alertView = ErrorAlertView(
+                          context: context,
+                          content: state.failure?.message ?? "",
+                          dialogType: DialogType.DIALOG_WARNING);
+                      alertView.ackAlert();
+                    }
+                  },
+                ),
+                BlocListener<CowpayBloc, CowpayState>(
+                  listenWhen: (prev, state) {
+                    return prev.failure != state.failure;
+                  },
+                  listener: (context, state) {
+                    if (state.failure != null) {
+                      ErrorAlertView alertView = ErrorAlertView(
+                          context: context,
+                          content: state.failure?.message ?? "",
+                          dialogType: DialogType.DIALOG_WARNING);
+                      alertView.ackAlert();
+                    }
+                  },
+                ),
+              ],
               child: Column(
                 children: [
                   _buildTabBar(),
@@ -160,28 +180,22 @@ class _CowpayState extends State<Cowpay> with SingleTickerProviderStateMixin {
                         ]),
                   ),
                   Container(
-                    height: ScreenSize().height! * 0.24,
-                    padding: EdgeInsets.symmetric(
-                        horizontal: ScreenSize().width! * 0.04),
+                    height: 0.26.sh,
+                    padding: EdgeInsets.symmetric(horizontal: 0.04.sw),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         CowpayPaymentOptionsCard(),
-                        SizedBox(
-                          height: 13,
-                        ),
                         Container(
-                          height: ScreenSize().height! * 0.07,
+                          height: 0.07.sh,
+                          margin: EdgeInsets.symmetric(vertical: 0.01.sh),
                           child: _ChargeButton(
-                            buttonColor: Color(0xff66496A),
+                            buttonColor: Color(0xff3D1A54),
                             buttonTextColor: widget.buttonTextColor,
                             buttonTextStyle: widget.buttonTextStyle,
                             onSuccess: (val) => widget.onSuccess(val),
                             onError: (error) => widget.onError(error),
                           ),
-                        ),
-                        SizedBox(
-                          height: 13,
                         ),
                       ],
                     ),
@@ -201,13 +215,12 @@ class _CowpayState extends State<Cowpay> with SingleTickerProviderStateMixin {
             previous.tabCurrentIndex != current.tabCurrentIndex,
         builder: (context, state) {
           return Container(
-              width: ScreenSize().width!,
-              height: ScreenSize().height! * 0.2,
-              color: Colors.white,
+              width: 1.sw,
+              height: 0.15.sh,
               child: Padding(
                   padding: EdgeInsets.symmetric(
-                      horizontal: (ScreenSize().width! * 0.01),
-                      vertical: (ScreenSize().height! * 0.02)),
+                    horizontal: (0.01.sw),
+                  ),
                   child: ListView(
                       scrollDirection: Axis.horizontal,
                       children: List.generate(
@@ -220,9 +233,7 @@ class _CowpayState extends State<Cowpay> with SingleTickerProviderStateMixin {
 
   Widget _buildTabCard(int currentIndex, int index, BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(
-          horizontal: (ScreenSize().width! * 0.01),
-          vertical: (ScreenSize().height! * 0.01)),
+      padding: EdgeInsets.all(5.sp),
       child: GestureDetector(
         onTap: () {
           if (currentIndex != index) {
@@ -233,15 +244,15 @@ class _CowpayState extends State<Cowpay> with SingleTickerProviderStateMixin {
         },
         child: Card(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(15.sp),
           ),
           child: Container(
-            width: (ScreenSize().width! * 0.22),
+            width: (0.22.sw),
             decoration: BoxDecoration(
                 border: Border.all(
                     width: currentIndex == index ? 2 : 1,
                     color: currentIndex == index
-                        ? Colors.deepPurple
+                        ? Color(0xff3D1A54)
                         : Colors.grey),
                 boxShadow: [
                   new BoxShadow(
@@ -250,16 +261,16 @@ class _CowpayState extends State<Cowpay> with SingleTickerProviderStateMixin {
                   ),
                 ],
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(15)),
+                borderRadius: BorderRadius.circular(15.sp)),
             child: Container(
               alignment: AlignmentDirectional.center,
-              padding: EdgeInsets.all(5),
+              padding: EdgeInsets.all(5.sp),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Container(
-                    height: 25,
-                    width: 25,
+                    height: 25.sp,
+                    width: 25.sp,
                     child: SvgPicture.asset(
                       index == 0
                           ? "assets/credit-card-svgrepo-com.svg"
@@ -267,7 +278,7 @@ class _CowpayState extends State<Cowpay> with SingleTickerProviderStateMixin {
                       package: 'cowpay',
                       fit: BoxFit.fill,
                       color: currentIndex == index
-                          ? Colors.deepPurple
+                          ? Color(0xff3D1A54)
                           : Colors.black,
                     ),
                   ),
@@ -278,10 +289,10 @@ class _CowpayState extends State<Cowpay> with SingleTickerProviderStateMixin {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       height: 1,
-                      fontSize: 16.0,
+                      fontSize: 16.0.sp,
                       fontWeight: FontWeight.bold,
                       color: currentIndex == index
-                          ? Colors.deepPurple
+                          ? Color(0xff3D1A54)
                           : Colors.black,
                     ),
                   ),
@@ -326,7 +337,7 @@ class _ChargeButton extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => WebViewScreen(
-                    responseModel: state.creditCardResponseModel!,
+                    creditCardEntity: state.creditCardEntity!,
                   ),
                 ),
               );
@@ -358,7 +369,7 @@ class _ChargeButton extends StatelessWidget {
                         style: buttonTextStyle ??
                             TextStyle(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 0.025 * ScreenSize().height!,
+                                fontSize: 15.sp,
                                 color: Colors.white),
                         textScaleFactor: 1),
                   ],

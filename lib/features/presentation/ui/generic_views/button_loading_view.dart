@@ -8,7 +8,11 @@ class ButtonLoadingView extends StatelessWidget {
     return Container(
       width: deviceSize.width * 0.14,
       height: deviceSize.width * 0.14,
-      child: Image.asset('resources/animations/loading.gif'),
+      child: Center(
+        child: CircularProgressIndicator(
+          color: Color(0xff3D1A54),
+        ),
+      ),
     );
   }
 }

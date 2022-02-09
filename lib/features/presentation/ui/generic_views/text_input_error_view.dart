@@ -10,13 +10,12 @@ class TextInputErrorView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: EdgeInsets.only(top: 0.007 * ScreenSize().height!),
-        padding: EdgeInsets.symmetric(
-            horizontal: (0.02 * ScreenSize().width!),
-            vertical: 0.007 * ScreenSize().height!),
-        width: ScreenSize().width,
+        margin: EdgeInsets.only(top: 0.007.sh),
+        padding:
+            EdgeInsets.symmetric(horizontal: (0.02.sw), vertical: 0.007.sh),
+        width: 1.sw,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(7)),
+            borderRadius: BorderRadius.all(Radius.circular(7.sp)),
             color: Colors.red),
         child: Row(
           children: [
@@ -24,14 +23,16 @@ class TextInputErrorView extends StatelessWidget {
                 decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(color: Colors.white)),
-                margin: EdgeInsetsDirectional.only(
-                    end: (0.02 * ScreenSize().width!)),
+                margin: EdgeInsetsDirectional.only(end: (0.02.sw)),
                 child: Icon(
                   Icons.close_rounded,
                   color: Colors.white,
-                  size: (0.04 * ScreenSize().width!),
+                  size: (10.sp),
                 )),
-            FittedBox(fit: BoxFit.fitWidth, child: Text(errorMessage ?? "")),
+            FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Text(errorMessage ?? "",
+                    style: TextStyle(color: Colors.black, fontSize: 13.sp))),
           ],
         ));
   }

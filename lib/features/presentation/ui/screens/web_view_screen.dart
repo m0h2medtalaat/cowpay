@@ -5,7 +5,7 @@ import 'dart:io';
 
 import 'package:cowpay/core/helpers/cowpay_helper.dart';
 import 'package:cowpay/core/helpers/localization.dart';
-import 'package:cowpay/features/data/models/credit_card_response_model.dart';
+import 'package:cowpay/features/domain/entities/credit_card_entity.dart';
 import 'package:cowpay/features/presentation/ui/generic_views/dialog_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,9 +14,9 @@ import 'package:webview_flutter/webview_flutter.dart';
 export 'package:cowpay/core/helpers/enum_models.dart';
 
 class WebViewScreen extends StatefulWidget {
-  final CreditCardResponseModel responseModel;
+  final CreditCardEntity creditCardEntity;
 
-  WebViewScreen({required this.responseModel});
+  WebViewScreen({required this.creditCardEntity});
 
   @override
   State<WebViewScreen> createState() => _WebViewScreenState();
@@ -50,7 +50,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
             Expanded(
               child: WebView(
                 initialUrl:
-                    '${CowpayHelper.activeEnvironment!.baseUrl}/v2/card/form/${widget.responseModel.cowpayReferenceId}',
+                    '${CowpayHelper.activeEnvironment!.baseUrl}/v2/card/form/${widget.creditCardEntity.cowpayReferenceId}',
                 javascriptMode: JavascriptMode.unrestricted,
                 onWebViewCreated: (WebViewController webViewController) {
                   _controller.complete(webViewController);

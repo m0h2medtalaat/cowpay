@@ -29,79 +29,72 @@ class CreditCardWidget extends StatelessWidget {
       onPanDown: (_) {
         FocusScope.of(context).unfocus();
       },
-      child: ScrollConfiguration(
-        behavior: _ScrollBehavior(),
-        child: SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.all(10.sp),
+        child: Container(
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(
+                  MediaQuery.of(context).size.width * 0.05)),
           child: Padding(
-            padding: EdgeInsets.all(ScreenSize().width! * 0.05),
-            child: Container(
-              height: ScreenSize().height! * 0.63,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(
-                      MediaQuery.of(context).size.width * 0.05)),
-              child: Padding(
-                padding: EdgeInsets.all(ScreenSize().width! * 0.05),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            padding: EdgeInsets.all(10.sp),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
                   children: [
-                    Column(
+                    _buildCardHolderName(),
+                    SizedBox(
+                      height: 0.025.sh,
+                    ),
+                    _buildCardNumberTextField(),
+                    SizedBox(
+                      height: 0.025.sh,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildCardHolderName(),
-                        SizedBox(
-                          height: ScreenSize().height! * 0.025,
-                        ),
-                        _buildCardNumberTextField(),
-                        SizedBox(
-                          height: ScreenSize().height! * 0.025,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              flex: 4,
-                              child: Column(
+                        Expanded(
+                          flex: 4,
+                          child: Column(
+                            children: [
+                              Row(
                                 children: [
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        flex: 4,
-                                        child: Container(
-                                          // width: ScreenSize().width! * 0.365,
-                                          child: _buildDropDownExpiryMonth(),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        width: ScreenSize().width! * 0.012,
-                                      ),
-                                      Expanded(
-                                        flex: 5,
-                                        child: Container(
-                                          // width: ScreenSize().width! * 0.365,
-                                          child: _buildDropDownExpiryYear(),
-                                        ),
-                                      ),
-                                    ],
+                                  Expanded(
+                                    flex: 4,
+                                    child: Container(
+                                      // width: ScreenSize().width! * 0.365,
+                                      child: _buildDropDownExpiryMonth(),
+                                    ),
                                   ),
-                                  buildExpiryError()
+                                  SizedBox(
+                                    width: 0.012.sw,
+                                  ),
+                                  Expanded(
+                                    flex: 5,
+                                    child: Container(
+                                      // width: ScreenSize().width! * 0.365,
+                                      child: _buildDropDownExpiryYear(),
+                                    ),
+                                  ),
                                 ],
                               ),
-                            ),
-                            SizedBox(
-                              width: ScreenSize().width! * 0.025,
-                            ),
-                            Expanded(
-                              flex: 3,
-                              child: _buildCvvTextField(),
-                            ),
-                          ],
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          width: 0.025.sw,
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: _buildCvvTextField(),
                         ),
                       ],
                     ),
                   ],
                 ),
-              ),
+              ],
             ),
           ),
         ),
@@ -184,7 +177,7 @@ class CreditCardWidget extends StatelessWidget {
           onFieldSubmitted: (_) {
             onClickSubmit(context);
           },
-          width: (ScreenSize().width! * 0.4),
+          width: 0.4.sw,
           obscureText: false,
           textInputAction: TextInputAction.next,
           textInputType: TextInputType.number,

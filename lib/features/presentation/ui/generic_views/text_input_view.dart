@@ -22,7 +22,7 @@ class TextInputView extends StatelessWidget {
   final String? suffixIcon;
   final TextEditingController? controller;
   final Function(BuildContext)? onFieldSubmitted;
-  final double? width;
+  final double? width, height;
   final InputDecoration? inputDecoration;
   final TextStyle? style;
   final Color? mainColor;
@@ -33,6 +33,7 @@ class TextInputView extends StatelessWidget {
       this.onFieldSubmitted,
       this.onHelpChange,
       this.mainContext,
+      this.height,
       this.obscureText = false,
       this.image,
       this.hintText,
@@ -71,13 +72,13 @@ class TextInputView extends StatelessWidget {
 
   Container buildHelpText() {
     return Container(
-      margin: EdgeInsetsDirectional.only(top: (0.007 * ScreenSize().height!)),
-      padding: EdgeInsets.symmetric(
-          horizontal: (0.02 * ScreenSize().width!),
-          vertical: (0.007 * ScreenSize().height!)),
-      width: width ?? ScreenSize().width!,
+      margin: EdgeInsetsDirectional.only(top: (0.007.sh)),
+      padding:
+          EdgeInsets.symmetric(horizontal: (0.02.sw), vertical: (0.007.sh)),
+      width: width ?? 1.sw,
+      height: height ?? 45.sp,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(7)),
+          borderRadius: BorderRadius.all(Radius.circular(7.sp)),
           color: Colors.black),
       child: Text(
         helpText!,
@@ -86,103 +87,107 @@ class TextInputView extends StatelessWidget {
     );
   }
 
-  TextFormField buildTextFormField(BuildContext context) {
-    return TextFormField(
-      key: key,
-      initialValue: initialValue ?? null,
-      onChanged: (value) => onChange!(mainContext!, value),
-      maxLength: maxLength,
-      maxLengthEnforced: true,
-      controller: controller,
-      enabled: enabled,
-      inputFormatters: [
-        LengthLimitingTextInputFormatter(maxLength),
-      ],
-      obscureText: obscureText!,
-      focusNode: currentFocus,
-      onFieldSubmitted: (_) {
-        onFieldSubmitted!(mainContext!);
-      },
-      style: style ?? TextStyle(color: mainColor ?? Colors.black, fontSize: 14),
-      decoration: inputDecoration ??
-          InputDecoration(
-            contentPadding: inputDecoration?.contentPadding ??
-                EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-            counterText: '',
-            prefixIcon: image != null
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 0.1 * ScreenSize().width!,
-                        height: 0.1 * ScreenSize().width!,
-                        child: Image(
-                          image: AssetImage('resources/images/$image.png'),
-                          color: enabled!
-                              ? isNotValid!
-                                  ? Colors.red
-                                  : Colors.white
-                              : Colors.black,
+  Widget buildTextFormField(BuildContext context) {
+    return Container(
+      height: height ?? 45.sp,
+      child: TextFormField(
+        key: key,
+        initialValue: initialValue ?? null,
+        onChanged: (value) => onChange!(mainContext!, value),
+        maxLength: maxLength,
+        maxLengthEnforced: true,
+        controller: controller,
+        enabled: enabled,
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(maxLength),
+        ],
+        obscureText: obscureText!,
+        focusNode: currentFocus,
+        onFieldSubmitted: (_) {
+          onFieldSubmitted!(mainContext!);
+        },
+        style: style ??
+            TextStyle(color: mainColor ?? Colors.black, fontSize: 14.sp),
+        decoration: inputDecoration ??
+            InputDecoration(
+              contentPadding: inputDecoration?.contentPadding ??
+                  EdgeInsets.symmetric(horizontal: 15.sp, vertical: 15.sp),
+              counterText: '',
+              prefixIcon: image != null
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 45.sp,
+                          height: 45.sp,
+                          child: Image(
+                            image: AssetImage('resources/images/$image.png'),
+                            color: enabled!
+                                ? isNotValid!
+                                    ? Colors.red
+                                    : Colors.white
+                                : Colors.black,
+                          ),
                         ),
-                      ),
-                    ],
-                  )
-                : null,
-            suffixIcon: suffixIcon != null
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: 0.1 * ScreenSize().width!,
-                        height: 0.1 * ScreenSize().width!,
-                        child: SvgPicture.asset(
-                          "assets/$suffixIcon.svg",
-                          package: 'cowpay',
-                          color: enabled!
-                              ? isNotValid!
-                                  ? Colors.red
-                                  : mainColor
-                              : Colors.grey,
+                      ],
+                    )
+                  : null,
+              suffixIcon: suffixIcon != null
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 45.sp,
+                          height: 45.sp,
+                          child: SvgPicture.asset(
+                            "assets/$suffixIcon.svg",
+                            package: 'cowpay',
+                            color: enabled!
+                                ? isNotValid!
+                                    ? Colors.red
+                                    : mainColor
+                                : Colors.grey,
+                          ),
                         ),
-                      ),
-                    ],
-                  )
-                : null,
-            hintText: hintText!,
-            labelText: hintText!,
-            isDense: inputDecoration?.isDense ?? false,
-            hintStyle: inputDecoration?.hintStyle ??
-                TextStyle(
-                    color: mainColor?.withOpacity(0.4) ?? Color(0x9066496A),
-                    fontSize: 14),
-            labelStyle: inputDecoration?.labelStyle ??
-                TextStyle(
-                    color: mainColor?.withOpacity(0.4) ?? Color(0x9066496A),
-                    fontSize: 14),
-            focusedBorder: inputDecoration?.focusedBorder ??
-                OutlineInputBorder(
-                  borderSide: BorderSide(
-                      color: isNotValid!
-                          ? Colors.red
-                          : mainColor ?? Color(0xff66496A),
-                      width: 2.0),
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
-            enabledBorder: inputDecoration?.enabledBorder ??
-                OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  borderSide: BorderSide(
-                      color: isNotValid!
-                          ? Colors.red
-                          : mainColor?.withOpacity(0.3) ?? Color(0x3066496A),
-                      width: 1.0),
-                ),
-            disabledBorder: inputDecoration?.disabledBorder ?? buildBorder(),
-          ),
-      keyboardType: textInputType,
-      textInputAction: textInputAction,
+                      ],
+                    )
+                  : null,
+              hintText: hintText!,
+              labelText: hintText!,
+              isDense: inputDecoration?.isDense ?? false,
+              hintStyle: inputDecoration?.hintStyle ??
+                  TextStyle(
+                      color: mainColor?.withOpacity(0.4) ?? Color(0x9066496A),
+                      fontSize: 14.sp),
+              labelStyle: inputDecoration?.labelStyle ??
+                  TextStyle(
+                      color: mainColor?.withOpacity(0.4) ?? Color(0x9066496A),
+                      fontSize: 14.sp),
+              focusedBorder: inputDecoration?.focusedBorder ??
+                  OutlineInputBorder(
+                    borderSide: BorderSide(
+                        color: isNotValid!
+                            ? Colors.red
+                            : mainColor ?? Color(0xff3D1A54),
+                        width: 2.0),
+                    borderRadius: BorderRadius.all(Radius.circular(10.sp)),
+                  ),
+              enabledBorder: inputDecoration?.enabledBorder ??
+                  OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    borderSide: BorderSide(
+                        color: isNotValid!
+                            ? Colors.red
+                            : mainColor?.withOpacity(0.3) ?? Color(0x3066496A),
+                        width: 1.0),
+                  ),
+              disabledBorder: inputDecoration?.disabledBorder ?? buildBorder(),
+            ),
+        keyboardType: textInputType,
+        textInputAction: textInputAction,
+      ),
     );
   }
 
@@ -191,6 +196,6 @@ class TextInputView extends StatelessWidget {
         borderSide: BorderSide(
           color: isNotValid! ? Colors.red : Colors.grey,
         ),
-        borderRadius: BorderRadius.all(Radius.circular(10)));
+        borderRadius: BorderRadius.all(Radius.circular(10.sp)));
   }
 }

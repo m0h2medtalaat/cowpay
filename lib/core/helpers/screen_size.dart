@@ -1,12 +1,29 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
-class ScreenSize {
+class ScreenUtil {
   BuildContext? materialContext;
-  static ScreenSize _instance = new ScreenSize.internal();
+  static ScreenUtil _instance = new ScreenUtil.internal();
 
-  ScreenSize.internal();
+  ScreenUtil.internal();
 
-  factory ScreenSize() => _instance;
+  factory ScreenUtil() => _instance;
 
-  double? height = 690, width = 360;
+  double height = 690, width = 360;
+  final _divisor = 400.0;
+
+  double get factorVertical => width / _divisor;
+
+  double get factorHorizontal => height / _divisor;
+
+  double get scalingFactor => min(factorVertical, factorHorizontal);
+}
+
+extension ScreenSize on num {
+  double get sh => this * ScreenUtil().height;
+
+  double get sw => this * ScreenUtil().width;
+
+  double get sp => this * ScreenUtil().scalingFactor;
 }
