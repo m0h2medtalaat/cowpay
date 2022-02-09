@@ -28,12 +28,12 @@ class DropDownView extends StatelessWidget {
     return Column(
       children: [
         Container(
-          height: 48,
+          height: 45.sp,
           padding: const EdgeInsets.only(left: 10.0, right: 10.0),
           decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(10.0)),
               border: Border.all(
-                color: isNotValid ? Colors.red : mainColor ?? Color(0xff66496A),
+                color: isNotValid ? Colors.red : mainColor ?? Color(0xff3D1A54),
                 width: 1,
               ),
               color: Colors.white),
@@ -41,17 +41,16 @@ class DropDownView extends StatelessWidget {
             children: [
               if (icon != null)
                 Container(
-                  width: 25,
-                  height: 25,
-                  margin: EdgeInsetsDirectional.only(
-                      end: ScreenSize().width! * 0.02),
+                  width: 25.sp,
+                  height: 25.sp,
+                  margin: EdgeInsetsDirectional.only(end: 0.02.sw),
                   child: SvgPicture.asset(
                     "assets/$icon.svg",
                     package: 'cowpay',
                     fit: BoxFit.fill,
                     color: isNotValid
                         ? Colors.red
-                        : mainColor ?? Color(0xff66496A),
+                        : mainColor ?? Color(0xff3D1A54),
                   ),
                 ),
               Expanded(
@@ -62,20 +61,24 @@ class DropDownView extends StatelessWidget {
                     style: TextStyle(color: Colors.black),
                     hint: Text(
                       hintText,
-                      style: TextStyle(color: Colors.grey, fontSize: 14),
+                      style: TextStyle(color: Colors.grey, fontSize: 14.sp),
                     ),
                     items: List.generate(
                         list.length,
                         (index) => DropdownMenuItem<String>(
                               value: list[index],
-                              child: new Text(list[index]),
+                              child: new Text(
+                                list[index],
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 14.sp),
+                              ),
                             )),
                     onChanged: (String? val) {
                       onChange(context, val);
                     },
                     iconEnabledColor: isNotValid
                         ? Colors.red
-                        : mainColor ?? Color(0xff66496A),
+                        : mainColor ?? Color(0xff3D1A54),
                     value: value != '' ? value : null,
                   ),
                 ),
@@ -85,7 +88,7 @@ class DropDownView extends StatelessWidget {
         ),
         if (isNotValid)
           TextInputErrorView(
-            errorMessage: 'categoryRequired',
+            errorMessage: 'Required',
           )
       ],
     );

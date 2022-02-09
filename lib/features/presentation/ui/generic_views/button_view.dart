@@ -33,8 +33,8 @@ class ButtonView extends StatelessWidget {
     return InkWell(
       onTap: () => onClickFunction!(mainContext!),
       child: Container(
-          width: width ?? ScreenSize().width,
-          height: ScreenSize().height! * height,
+          width: width ?? 1.sw,
+          height: height.sh,
           alignment: Alignment.center,
           decoration: BoxDecoration(
               color: backgroundColor,
@@ -45,7 +45,7 @@ class ButtonView extends StatelessWidget {
                   style: buttonTextStyle ??
                       TextStyle(
                           fontWeight: fontWeight ?? FontWeight.w500,
-                          fontSize: fontSize * ScreenSize().height!,
+                          fontSize: fontSize,
                           color: textColor ?? Colors.white),
                   textScaleFactor: 1)),
     );

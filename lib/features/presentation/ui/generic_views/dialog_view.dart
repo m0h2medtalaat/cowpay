@@ -38,7 +38,7 @@ class DialogView extends StatelessWidget {
 
   Widget buildContent(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: (ScreenSize().height ?? 0) * 0.04),
+      margin: EdgeInsets.only(top: 0.04.sh),
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -50,13 +50,13 @@ class DialogView extends StatelessWidget {
         children: [
           image != null
               ? Container(
-                  height: (ScreenSize().height ?? 0) * 0.1,
-                  width: (ScreenSize().height ?? 0) * 0.1,
+                  height: 0.1.sh,
+                  width: 0.1.sw,
                   child: Image.asset("resources/images/$image.png"))
               : dialogType.image != null
                   ? Container(
-                      height: (ScreenSize().height ?? 0) * 0.1,
-                      width: (ScreenSize().height ?? 0) * 0.1,
+                      height: 0.1.sh,
+                      width: 0.1.sw,
                       child: SvgPicture.asset(
                         dialogType.image ?? '',
                         package: 'cowpay',
@@ -64,12 +64,9 @@ class DialogView extends StatelessWidget {
                         height: 40,
                       ),
                     )
-                  : Container(
-                      height: (ScreenSize().height ?? 0) * 0.1,
-                      width: (ScreenSize().height ?? 0) * 0.1,
-                    ),
+                  : Container(height: 0.1.sh, width: 0.1.sw),
           SizedBox(
-            height: (ScreenSize().height ?? 0) * 0.015,
+            height: 0.015.sh,
           ),
           Text(
             title ?? 'Title',
@@ -84,7 +81,7 @@ class DialogView extends StatelessWidget {
             textScaleFactor: 0.8,
           ),
           SizedBox(
-            height: (ScreenSize().height ?? 0) * 0.02,
+            height: 0.02.sh,
           ),
           if (content != null)
             Column(
@@ -101,7 +98,7 @@ class DialogView extends StatelessWidget {
                   textScaleFactor: 0.8,
                 ),
                 SizedBox(
-                  height: (ScreenSize().height ?? 0) * 0.015,
+                  height: 0.015.sh,
                 ),
               ],
             ),
@@ -131,7 +128,7 @@ class DialogView extends StatelessWidget {
     return InkWell(
       onTap: () => callCallaBack(context),
       child: Container(
-        height: (ScreenSize().height ?? 0) * 0.05,
+        height: 0.05.sh,
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 65),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10)),

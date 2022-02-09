@@ -70,7 +70,7 @@ class CowpayState extends Equatable {
       Failure? failure,
       String? amount,
       String? description,
-        CreditCardEntity? creditCardEntity,
+      CreditCardEntity? creditCardEntity,
       FawryEntity? fawryResponseModel,
       dynamic? errorModel,
       List<String>? yearsList,
@@ -95,8 +95,7 @@ class CowpayState extends Equatable {
         customerMobile: customerMobile ?? this.customerMobile,
         amount: amount ?? this.amount,
         description: description ?? this.description,
-        creditCardEntity:
-        creditCardEntity ?? this.creditCardEntity,
+        creditCardEntity: creditCardEntity ?? this.creditCardEntity,
         fawryEntity: fawryResponseModel ?? this.fawryEntity,
         errorModel: errorModel ?? this.errorModel,
         customerName: customerName ?? this.customerName,
@@ -117,18 +116,7 @@ class CowpayState extends Equatable {
         yearsList,
         tabCurrentIndex,
         fawryEntity,
-    creditCardEntity,
+        creditCardEntity,
         failure,
       ];
-/*const CowpayState({this.tabCurrentIndex = 0});
-
-  final int tabCurrentIndex;
-
-  CowpayState copyWith({int? tabCurrentIndex}) {
-    return CowpayState(
-        tabCurrentIndex: tabCurrentIndex ?? this.tabCurrentIndex);
-  }
-
-  @override
-  List get props => [tabCurrentIndex];*/
 }

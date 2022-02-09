@@ -7,10 +7,11 @@ class CowpayPaymentOptionsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(10.0),
-      margin: EdgeInsets.symmetric(horizontal: ScreenSize().width! * 0.01),
+      padding: EdgeInsets.all(10.0.sp),
+      height: 0.16.sh,
+      margin: EdgeInsets.symmetric(horizontal: 0.01.sw),
       decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+          borderRadius: BorderRadius.circular(10.0.sp),
           border: Border.all(
             color: Colors.grey.withOpacity(0.4),
             width: 1,
@@ -25,11 +26,11 @@ class CowpayPaymentOptionsCard extends StatelessWidget {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Color(0xff66496A),
+                        borderRadius: BorderRadius.circular(10.sp),
+                        color: Color(0xff3D1A54),
                       ),
-                      height: 35,
-                      width: 60,
+                      height: 35.sp,
+                      width: 60.sp,
                       child: SvgPicture.asset(
                         "assets/00-cow-pay-brand-logo.svg",
                         package: 'cowpay',
@@ -43,7 +44,7 @@ class CowpayPaymentOptionsCard extends StatelessWidget {
                       'Cowpay',
                       style: TextStyle(
                           color: Colors.black,
-                          fontSize: 18,
+                          fontSize: 18.sp,
                           fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -53,35 +54,32 @@ class CowpayPaymentOptionsCard extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    SvgPicture.asset(
-                      "assets/logos-mastercard.svg",
-                      package: 'cowpay',
-                    ),
-                    SvgPicture.asset(
-                      "assets/logos-visa.svg",
-                      package: 'cowpay',
-                    ),
-                    SvgPicture.asset(
-                      "assets/fawry-en-1-1.svg",
-                      package: 'cowpay',
-                    ),
-                    SvgPicture.asset(
-                      "assets/68-five-tips-for-pci-dss-compliance-1.svg",
-                      package: 'cowpay',
-                    ),
+                    _buildSvgImage("logos-mastercard.svg"),
+                    _buildSvgImage("logos-visa.svg"),
+                    _buildSvgImage("fawry-en-1-1.svg"),
+                    _buildSvgImage("68-five-tips-for-pci-dss-compliance-1.svg"),
                   ],
                 ),
               ),
             ],
           ),
           SizedBox(
-            height: 10,
+            height: 10.sp,
           ),
           Text(
             Localization().localizationMap["cowpayPaymentOptionsText"],
-            style: TextStyle(color: Color(0xff9B9B9C), fontSize: 15),
+            style: TextStyle(color: Color(0xff9B9B9C), fontSize: 15.sp),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildSvgImage(String name) {
+    return Expanded(
+      child: SvgPicture.asset(
+        "assets/$name",
+        package: 'cowpay',
       ),
     );
   }
