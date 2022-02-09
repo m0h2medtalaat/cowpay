@@ -3,7 +3,7 @@ library cowpay;
 import 'package:cowpay/core/helpers/cowpay_helper.dart';
 import 'package:cowpay/core/helpers/localization.dart';
 import 'package:cowpay/core/helpers/screen_size.dart';
-import 'package:cowpay/features/domain/entities/user_entity.dart';
+import 'package:cowpay/features/domain/entities/fawry_entity.dart';
 import 'package:cowpay/features/presentation/ui/generic_views/button_view.dart';
 import 'package:cowpay/features/presentation/ui/generic_views/cowpay_payment_option_card.dart';
 import 'package:flutter/cupertino.dart';

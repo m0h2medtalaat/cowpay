@@ -1,4 +1,4 @@
-import 'package:cowpay/features/domain/entities/user_entity.dart';
+import 'package:cowpay/features/domain/entities/fawry_entity.dart';
 
 class FawryResponseModel extends FawryEntity {
   FawryResponseModel(

@@ -1,6 +1,6 @@
 import 'package:cowpay/core/error/failure.dart';
 import 'package:cowpay/core/usecase/usecase.dart';
-import 'package:cowpay/features/domain/entities/user_entity.dart';
+import 'package:cowpay/features/domain/entities/fawry_entity.dart';
 import 'package:cowpay/features/domain/repositories/cowpay_repository.dart';
 import 'package:dartz/dartz.dart';
 

@@ -6,9 +6,9 @@ import 'package:cowpay/core/formz_models/credit_card_holder_name.dart';
 import 'package:cowpay/core/formz_models/credit_card_number.dart';
 import 'package:cowpay/core/helpers/cowpay_helper.dart';
 import 'package:cowpay/features/data/models/credit_card_request_model.dart';
-import 'package:cowpay/features/data/models/credit_card_response_model.dart';
 import 'package:cowpay/features/data/models/fawry_request_model.dart';
-import 'package:cowpay/features/domain/entities/user_entity.dart';
+import 'package:cowpay/features/domain/entities/credit_card_entity.dart';
+import 'package:cowpay/features/domain/entities/fawry_entity.dart';
 import 'package:cowpay/features/domain/usecases/cash_collection_usecase.dart';
 import 'package:cowpay/features/domain/usecases/creditcard_usecase.dart';
 import 'package:cowpay/features/domain/usecases/fawry_usecase.dart';
@@ -204,10 +204,10 @@ class CowpayBloc extends Bloc<CowpayEvent, CowpayState> {
           description: state.description ?? '',
           signature: signature);
 
-      Either<Failure, CreditCardResponseModel> responseOrFailure =
+      Either<Failure, CreditCardEntity> responseOrFailure =
           await creditCardUseCase.call(creditCardRequestModel);
 
-      yield* _eitherStateOrErrorState<CreditCardResponseModel>(
+      yield* _eitherStateOrErrorState<CreditCardEntity>(
           responseOrFailure, state);
     } catch (error) {
       state.copyWith(
@@ -278,7 +278,6 @@ class CowpayBloc extends Bloc<CowpayEvent, CowpayState> {
         isNotValidExpirationDate = false;
       }
     }
-
     return state.copyWith(
       creditCardExpiryMonth: creditCardExpiryMonth,
       isNotValidExpirationDate: isNotValidExpirationDate,
@@ -327,10 +326,10 @@ class CowpayBloc extends Bloc<CowpayEvent, CowpayState> {
           return state.copyWith(
               status: FormzStatus.submissionSuccess,
               fawryResponseModel: response);
-        } else if (response is CreditCardResponseModel) {
+        } else if (response is CreditCardEntity) {
           return state.copyWith(
               status: FormzStatus.submissionSuccess,
-              creditCardResponseModel: response);
+              creditCardEntity: response);
         }
         return state.copyWith(
           status: FormzStatus.submissionSuccess,

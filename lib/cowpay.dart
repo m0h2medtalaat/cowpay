@@ -326,7 +326,7 @@ class _ChargeButton extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => WebViewScreen(
-                    responseModel: state.creditCardResponseModel!,
+                    creditCardEntity: state.creditCardEntity!,
                   ),
                 ),
               );
