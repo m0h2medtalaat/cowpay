@@ -1,4 +1,4 @@
-import 'package:cowpay/core/error/failure.dart';
+import 'package:api_manager/failures.dart';
 import 'package:cowpay/features/data/models/cash_collection_request_model.dart';
 import 'package:cowpay/features/data/models/cash_collection_response_model.dart';
 import 'package:cowpay/features/data/models/credit_card_request_model.dart';
@@ -11,7 +11,7 @@ abstract class CowpayRepository {
   Future<Either<Failure, FawryEntity>> fawryCharge(
       {required FawryRequestModel fawryRequestModel});
   Future<Either<Failure, CreditCardEntity>> creditCardCharge(
-      {required CreditCardRequestModel creditCardRequestModel});
+      {required CreditCardChargeRequestModel creditCardRequestModel});
   Future<Either<Failure, CashCollectionResponseModel>> cashCollectionCharge(
       {required CashCollectionRequestModel cashCollectionRequestModel});
 }

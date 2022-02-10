@@ -1,8 +1,10 @@
-import 'package:cowpay/core/helpers/cowpay_helper.dart';
-import 'package:cowpay/core/helpers/enum_models.dart';
-
 class UrlsData {
-  CowpayEnvironment cowpayEnvironment = CowpayEnvironment.staging;
+  static final UrlsData _instance = UrlsData._internal();
+
+  factory UrlsData() {
+    return _instance;
+  }
+  UrlsData._internal();
 
   static const String host_production = "https://cowpay.me";
   static const String host_staging = "https://staging.cowpay.me";
@@ -10,21 +12,17 @@ class UrlsData {
   static const basicUrl = '/api/v1/';
 
   //region Fawry
-  static final fawryUrl =
-      CowpayHelper.activeEnvironment!.baseUrl! + basicUrl + 'charge/fawry';
+  static final fawryUrl = basicUrl + 'charge/fawry';
 
   //endregion
 
   //region Credit Card
-  static final creditCardUrl =
-      CowpayHelper.activeEnvironment!.baseUrl! + basicUrl + 'charge/card';
+  static final creditCardUrl = basicUrl + 'charge/card';
 
   //endregion
 
   //region Cash Collection
-  static final cashCollectionUrl = CowpayHelper.activeEnvironment!.baseUrl! +
-      basicUrl +
-      'charge/cash-collection';
+  static final cashCollectionUrl = basicUrl + 'charge/cash-collection';
 //endregion
 
 }

@@ -6,7 +6,7 @@ enum CowpayEnvironment { production, staging }
 enum LocalizationCode { en, ar }
 
 extension CowpayEnvironmenteExtension on CowpayEnvironment {
-  String? get baseUrl {
+  String get baseUrl {
     switch (this) {
       case CowpayEnvironment.production:
         return UrlsData.host_production;

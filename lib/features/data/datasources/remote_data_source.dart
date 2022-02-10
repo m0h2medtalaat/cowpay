@@ -1,63 +1,60 @@
-import 'dart:convert';
-
-import 'package:cowpay/core/constants/network/urls_data.dart';
-import 'package:cowpay/core/network/network_util.dart';
+import 'package:api_manager/api_manager.dart';
+import 'package:api_manager/src/failure/failures.dart';
 import 'package:cowpay/features/data/models/cash_collection_request_model.dart';
 import 'package:cowpay/features/data/models/cash_collection_response_model.dart';
 import 'package:cowpay/features/data/models/credit_card_request_model.dart';
 import 'package:cowpay/features/data/models/credit_card_response_model.dart';
 import 'package:cowpay/features/data/models/fawry_request_model.dart';
 import 'package:cowpay/features/data/models/fawry_response_model.dart';
+import 'package:cowpay/features/data/requests/credit_card_charge_request.dart';
+import 'package:cowpay/features/data/requests/fawry_charge_request.dart';
+import 'package:cowpay/features/domain/entities/credit_card_entity.dart';
 import 'package:cowpay/features/domain/entities/fawry_entity.dart';
+import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 
 abstract class RemoteDataSource {
-  Future<FawryEntity> fawryCharge(
+  Future<Either<Failure, FawryEntity>> fawryCharge(
       {required FawryRequestModel fawryRequestModel});
 
-  Future<CreditCardResponseModel> creditCardCharge(
-      {required CreditCardRequestModel creditCardRequestModel});
+  Future<Either<Failure, CreditCardEntity>> creditCardCharge(
+      {required CreditCardChargeRequestModel creditCardRequestModel});
 
-  Future<CashCollectionResponseModel> cashCollectionCharge(
+  Future<Either<Failure, CashCollectionResponseModel>> cashCollectionCharge(
       {required CashCollectionRequestModel cashCollectionRequestModel});
 }
 
 class RemoteDataSourceImpl implements RemoteDataSource {
-  final NetworkUtil networkUtil;
+  final APIsManager _apIsManager;
 
-  RemoteDataSourceImpl({required this.networkUtil});
+  RemoteDataSourceImpl(this._apIsManager);
 
   @override
-  Future<FawryResponseModel> fawryCharge(
+  Future<Either<Failure, FawryResponseModel>> fawryCharge(
       {required FawryRequestModel fawryRequestModel}) {
     return _fawryChargeCall(fawryRequestModel);
   }
 
   @override
-  Future<CashCollectionResponseModel> cashCollectionCharge(
+  Future<Either<Failure, CashCollectionResponseModel>> cashCollectionCharge(
       {required CashCollectionRequestModel cashCollectionRequestModel}) {
     return _cashCollectionChargeCall(cashCollectionRequestModel);
   }
 
   @override
-  Future<CreditCardResponseModel> creditCardCharge(
-      {required CreditCardRequestModel creditCardRequestModel}) {
+  Future<Either<Failure, CreditCardResponseModel>> creditCardCharge(
+      {required CreditCardChargeRequestModel creditCardRequestModel}) {
     return _creditChargeCall(creditCardRequestModel);
   }
 
   //region Fawry
-  Future<FawryResponseModel> _fawryChargeCall(
+  Future<Either<Failure, FawryResponseModel>> _fawryChargeCall(
       FawryRequestModel fawryRequestModel) async {
     try {
-      var res = await networkUtil.postWithRaw(
-        UrlsData.fawryUrl,
-        body: fawryRequestModel.toJson(),
+      return await _apIsManager.send(
+        request: FawryChargeRequest(fawryRequestModel),
+        responseFromMap: (map) => FawryResponseModel.fromJson(map),
       );
-      FawryResponseModel fawryResponseModel =
-          FawryResponseModel.fromJson(json.decode(json.encode(res)));
-      debugPrint('Success ${fawryResponseModel.statusCode.toString()}');
-
-      return fawryResponseModel;
     } on Exception catch (error) {
       debugPrint(error.toString());
       throw error;
@@ -67,16 +64,13 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 //endregion
 
   //region Credit Card
-  Future<CreditCardResponseModel> _creditChargeCall(
-      CreditCardRequestModel creditCardRequestModel) async {
+  Future<Either<Failure, CreditCardResponseModel>> _creditChargeCall(
+      CreditCardChargeRequestModel creditCardRequestModel) async {
     try {
-      var res = await networkUtil.postWithRaw(UrlsData.creditCardUrl,
-          body: creditCardRequestModel.toJson());
-      CreditCardResponseModel model =
-          CreditCardResponseModel.fromJson(json.decode(json.encode(res)));
-      debugPrint('Success ${model.statusCode.toString()}');
-
-      return model;
+      return await _apIsManager.send(
+        request: CreditCardChargeRequest(creditCardRequestModel),
+        responseFromMap: (map) => CreditCardResponseModel.fromJson(map),
+      );
     } catch (error) {
       debugPrint(error.toString());
       throw error;
@@ -86,8 +80,9 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 //endregion
 
   //region Cash Collection
-  Future<CashCollectionResponseModel> _cashCollectionChargeCall(
-      CashCollectionRequestModel cashCollectionRequestModel) async {
+  Future<Either<Failure, CashCollectionResponseModel>>
+      _cashCollectionChargeCall(
+          CashCollectionRequestModel cashCollectionRequestModel) async {
     try {
       //TODO remove comment
       /*   var res = await _netUtil.post(UrlsData.creditCardUrl,

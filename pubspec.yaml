@@ -21,6 +21,10 @@ dependencies:
   dartz:
   # Service locator
   get_it: ^7.2.0
+  api_manager:
+    git:
+      url: https://github.com/m0h2medtalaat/api_manager
+
 
 dev_dependencies:
   flutter_test:

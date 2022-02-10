@@ -1,4 +1,4 @@
-import 'package:cowpay/core/error/failure.dart';
+import 'package:api_manager/failures.dart';
 import 'package:cowpay/core/formz_models/credit_card_cvv.dart';
 import 'package:cowpay/core/formz_models/credit_card_expiry_month.dart';
 import 'package:cowpay/core/formz_models/credit_card_expiry_year.dart';
@@ -79,11 +79,11 @@ class CowpayBloc extends Bloc<CowpayEvent, CowpayState> {
       FawryRequestModel fawryRequestModel = FawryRequestModel(
           merchantReferenceId: state.merchantReferenceId ?? '',
           amount: state.amount ?? '',
-          customerEmail: state.customerEmail,
+          customerEmail: state.customerEmail ?? '',
           description: state.description ?? '',
           customerMerchantProfileId: state.customerMerchantProfileId ?? '',
-          customerMobile: state.customerMobile,
-          customerName: state.customerName,
+          customerMobile: state.customerMobile ?? '',
+          customerName: state.customerName ?? '',
           signature: signature);
 
       Either<Failure, FawryEntity> responseOrFailure =
@@ -190,19 +190,20 @@ class CowpayBloc extends Bloc<CowpayEvent, CowpayState> {
         state.customerMerchantProfileId ?? '',
         state.amount ?? '',
       );
-      CreditCardRequestModel creditCardRequestModel = CreditCardRequestModel(
-          merchantReferenceId: state.merchantReferenceId ?? '',
-          customerMerchantProfileId: state.customerMerchantProfileId ?? '',
-          customerEmail: state.customerEmail ?? '',
-          customerMobile: state.customerMobile ?? '',
-          customerName: state.creditCardHolderName.value,
-          cvv: creditCardCvv.value,
-          cardNumber: creditCardNumber.value,
-          expiryYear: creditCardExpiryYear.value,
-          expiryMonth: creditCardExpiryMonth.value,
-          amount: state.amount ?? '',
-          description: state.description ?? '',
-          signature: signature);
+      CreditCardChargeRequestModel creditCardRequestModel =
+          CreditCardChargeRequestModel(
+              merchantReferenceId: state.merchantReferenceId ?? '',
+              customerMerchantProfileId: state.customerMerchantProfileId ?? '',
+              customerEmail: state.customerEmail ?? '',
+              customerMobile: state.customerMobile ?? '',
+              customerName: state.creditCardHolderName.value,
+              cvv: creditCardCvv.value,
+              cardNumber: creditCardNumber.value,
+              expiryYear: creditCardExpiryYear.value,
+              expiryMonth: creditCardExpiryMonth.value,
+              amount: state.amount ?? '',
+              description: state.description ?? '',
+              signature: signature);
 
       Either<Failure, CreditCardEntity> responseOrFailure =
           await creditCardUseCase.call(creditCardRequestModel);

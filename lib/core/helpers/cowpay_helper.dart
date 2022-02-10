@@ -2,6 +2,7 @@ library cowpay;
 
 import 'dart:convert';
 
+import 'package:api_manager/api_manager.dart';
 import 'package:crypto/crypto.dart';
 
 import 'enum_models.dart';
@@ -32,6 +33,9 @@ class CowpayHelper {
     CowpayHelper.token = token;
     this._merchantCode = merchantCode;
     this._merchantHash = merchantHash;
+    BaseRequestDefaults.instance.setBaseUrl(
+        activeEnvironment?.baseUrl ?? CowpayEnvironment.staging.baseUrl);
+    BaseRequestDefaults.instance.setToken(token);
   }
 
   static CowpayHelper get instance => _instance;

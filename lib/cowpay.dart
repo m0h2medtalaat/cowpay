@@ -1,5 +1,7 @@
 library cowpay;
 
+import 'package:api_manager/api_manager.dart';
+import 'package:api_manager/failures.dart';
 import 'package:cowpay/core/helpers/cowpay_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -82,6 +84,7 @@ class _CowpayState extends State<Cowpay> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     di.init();
+
     CowpayHelper.instance.init(
       cowpayEnvironment: widget.activeEnvironment,
       token: widget.token,
@@ -136,27 +139,29 @@ class _CowpayState extends State<Cowpay> with SingleTickerProviderStateMixin {
               listeners: [
                 BlocListener<CowpayBloc, CowpayState>(
                   listenWhen: (prev, state) {
-                    return prev.failure != state.failure;
+                    return prev.status != state.status;
                   },
-                  listener: (context, state) {
-                    if (state.failure != null) {
-                      ErrorAlertView alertView = ErrorAlertView(
-                          context: context,
-                          content: state.failure?.message ?? "",
-                          dialogType: DialogType.DIALOG_WARNING);
-                      alertView.ackAlert();
-                    }
-                  },
+                  listener: (context, state) {},
                 ),
                 BlocListener<CowpayBloc, CowpayState>(
                   listenWhen: (prev, state) {
                     return prev.failure != state.failure;
                   },
                   listener: (context, state) {
-                    if (state.failure != null) {
+                    final failure = state.failure;
+                    if (failure is ErrorFailure) {
+                      final error = failure.error;
+                      if (error is MessageResponse) {
+                        ErrorAlertView alertView = ErrorAlertView(
+                            context: context,
+                            content: error.message,
+                            dialogType: DialogType.DIALOG_WARNING);
+                        alertView.ackAlert();
+                      }
+                    } else if (failure != null) {
                       ErrorAlertView alertView = ErrorAlertView(
                           context: context,
-                          content: state.failure?.message ?? "",
+                          content: "Error",
                           dialogType: DialogType.DIALOG_WARNING);
                       alertView.ackAlert();
                     }

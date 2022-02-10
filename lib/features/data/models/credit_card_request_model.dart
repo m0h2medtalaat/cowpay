@@ -1,47 +1,53 @@
-class CreditCardRequestModel {
-  late String merchantReferenceId;
-  late String customerMerchantProfileId;
-  late String cardNumber;
-  late String cvv;
-  late String expiryMonth;
-  late String expiryYear;
-  late String customerName;
-  late String customerEmail;
-  late String customerMobile;
-  late String amount;
-  String? signature;
-  late String description;
+import 'package:api_manager/api_manager.dart';
 
-  CreditCardRequestModel(
-      {required this.merchantReferenceId,
-      required this.customerMerchantProfileId,
-      required this.cardNumber,
-      required this.cvv,
-      required this.expiryMonth,
-      required this.expiryYear,
-      required this.customerName,
-      required this.customerEmail,
-      required this.customerMobile,
-      required this.amount,
-      this.signature,
-      required this.description});
+class CreditCardChargeRequestModel extends RequestModel {
+  final String merchantReferenceId;
+  final String customerMerchantProfileId;
+  final String cardNumber;
+  final String cvv;
+  final String expiryMonth;
+  final String expiryYear;
+  final String customerName;
+  final String customerEmail;
+  final String customerMobile;
+  final String amount;
+  final String signature;
+  final String description;
 
-  CreditCardRequestModel.fromJson(Map<String, dynamic> json) {
-    merchantReferenceId = json['merchant_reference_id'];
-    customerMerchantProfileId = json['customer_merchant_profile_id'];
-    cardNumber = json['card_number'];
-    cvv = json['cvv'];
-    expiryMonth = json['expiry_month'];
-    expiryYear = json['expiry_year'];
-    customerName = json['customer_name'];
-    customerEmail = json['customer_email'];
-    customerMobile = json['customer_mobile'];
-    amount = json['amount'];
-    signature = json['signature'];
-    description = json['description'];
-  }
+  CreditCardChargeRequestModel({
+    required this.merchantReferenceId,
+    required this.customerMerchantProfileId,
+    required this.cardNumber,
+    required this.cvv,
+    required this.expiryMonth,
+    required this.expiryYear,
+    required this.customerName,
+    required this.customerEmail,
+    required this.customerMobile,
+    required this.amount,
+    required this.signature,
+    required this.description,
+    RequestProgressListener? progressListener,
+  }) : super(progressListener);
 
-  Map<String, dynamic> toJson() {
+  @override
+  List<Object?> get props => [
+        merchantReferenceId,
+        customerMerchantProfileId,
+        cardNumber,
+        cvv,
+        expiryMonth,
+        expiryYear,
+        customerName,
+        customerEmail,
+        customerMobile,
+        amount,
+        signature,
+        description,
+      ];
+
+  @override
+  Future<Map<String, dynamic>> toMap() async {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['merchant_reference_id'] = this.merchantReferenceId;
     data['customer_merchant_profile_id'] = this.customerMerchantProfileId;

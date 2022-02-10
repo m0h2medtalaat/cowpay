@@ -1,6 +1,8 @@
+import 'package:api_manager/api_manager.dart';
 import 'package:cowpay/features/domain/entities/credit_card_entity.dart';
 
-class CreditCardResponseModel extends CreditCardEntity {
+class CreditCardResponseModel extends CreditCardEntity
+    implements ResponseModel {
   bool? success;
   int? statusCode;
   String? statusDescription;
