@@ -5,8 +5,8 @@ packages:
     dependency: transitive
     description:
       path: "."
-      ref: HEAD
-      resolved-ref: dc792c010d4762a226bd705bcc91a405cded1168
+      ref: nila
+      resolved-ref: "6c2587cbea95b47d2d90fcb1e6371438b5b12195"
       url: "https://github.com/m0h2medtalaat/api_manager"
     source: git
     version: "0.0.1"

@@ -12,17 +12,16 @@ import 'package:formz/formz.dart';
 
 import 'core/helpers/localization.dart';
 import 'core/helpers/screen_size.dart';
-import 'features/data/models/credit_card_response_model.dart';
-import 'features/presentation/bloc/cowpay_bloc.dart';
-import 'features/presentation/ui/generic_views/button_loading_view.dart';
-import 'features/presentation/ui/generic_views/button_view.dart';
-import 'features/presentation/ui/generic_views/cowpay_payment_option_card.dart';
-import 'features/presentation/ui/generic_views/error_alert_view.dart';
-import 'features/presentation/ui/screens/fawry_screen.dart';
-import 'features/presentation/ui/screens/web_view_screen.dart';
-import 'features/presentation/ui/widgets/credit_card_widget.dart';
-import 'features/presentation/ui/widgets/fawry_widget.dart';
-import 'injection_container.dart' as di;
+import 'cowpay/data/models/credit_card_response_model.dart';
+import 'cowpay/presentation/bloc/cowpay_bloc.dart';
+import 'cowpay/presentation/ui/generic_views/button_loading_view.dart';
+import 'cowpay/presentation/ui/generic_views/button_view.dart';
+import 'cowpay/presentation/ui/generic_views/cowpay_payment_option_card.dart';
+import 'cowpay/presentation/ui/generic_views/error_alert_view.dart';
+import 'cowpay/presentation/ui/screens/fawry_screen.dart';
+import 'cowpay/presentation/ui/screens/web_view_screen.dart';
+import 'cowpay/presentation/ui/widgets/credit_card_widget.dart';
+import 'cowpay/presentation/ui/widgets/fawry_widget.dart';
 import 'injection_container.dart';
 
 export 'package:cowpay/core/helpers/enum_models.dart';
@@ -83,7 +82,7 @@ class _CowpayState extends State<Cowpay> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    di.init();
+    initDependencyInjection();
 
     CowpayHelper.instance.init(
       cowpayEnvironment: widget.activeEnvironment,
@@ -122,7 +121,7 @@ class _CowpayState extends State<Cowpay> with SingleTickerProviderStateMixin {
             providers: [
               BlocProvider<CowpayBloc>(
                 create: (context) {
-                  return sl<CowpayBloc>()
+                  return di<CowpayBloc>()
                     ..add(CowpayStarted(
                         merchantReferenceId: widget.merchantReferenceId,
                         customerMerchantProfileId:

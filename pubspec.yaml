@@ -24,11 +24,14 @@ dependencies:
   api_manager:
     git:
       url: https://github.com/m0h2medtalaat/api_manager
+      ref: nila
+
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  mockito: ^5.1.0
 
 flutter:
   assets:
