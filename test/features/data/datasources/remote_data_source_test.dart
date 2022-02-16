@@ -16,7 +16,9 @@ import 'remote_data_source_test.mocks.dart';
 //   [APIsManager],
 // )
 @GenerateMocks([], customMocks: [
-  MockSpec<APIsManager>(as: #MockAPIsManager, returnNullOnMissingStub: true)
+  MockSpec<APIsManager>(as: #MockAPIsManager, returnNullOnMissingStub: true),
+  MockSpec<RemoteDataSource>(
+      as: #MockRemoteDataSourceImpl, returnNullOnMissingStub: true)
 ])
 void main() {
   // late RemoteDataSourceImpl dataSource;
@@ -119,7 +121,8 @@ void main() {
         //   (map) => FawryResponseModel.fromJson(map),
         // );
         MockAPIsManager mockApisManager = MockAPIsManager();
-        RemoteDataSourceImpl dataSource = RemoteDataSourceImpl(mockApisManager);
+        RemoteDataSourceImpl dataSourceImpl =
+            RemoteDataSourceImpl(mockApisManager);
 
         // mockApisManager.send(
         //   request: FawryChargeRequest(FawryRequestModel(
@@ -154,7 +157,7 @@ void main() {
             type: "fawry",
             paymentGatewayReferenceId: "11")));
         // act
-        dataSource.fawryCharge(
+        dataSourceImpl.fawryCharge(
             fawryRequestModel: FawryRequestModel(
                 merchantReferenceId: "merchantReferenceId",
                 customerMerchantProfileId: "customerMerchantProfileId",
