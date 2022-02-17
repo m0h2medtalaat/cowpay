@@ -1,4 +1,3 @@
-import 'package:cowpay/core/constants/network/urls_data.dart';
 import 'package:cowpay/core/network/network_util.dart';
 import 'package:cowpay/features/data/datasources/remote_data_source.dart';
 import 'package:cowpay/features/data/models/fawry_request_model.dart';
@@ -9,14 +8,16 @@ import 'package:mockito/mockito.dart';
 
 import 'remote_data_source_test.mocks.dart';
 
-@GenerateMocks([NetworkUtil])
+@GenerateMocks([], customMocks: [
+  MockSpec<NetworkUtil>(as: #MockNetworkUtil, returnNullOnMissingStub: true)
+])
 void main() {
-  MockNetworkUtil mockNetworkUtil = MockNetworkUtil();
-
-  RemoteDataSourceImpl remoteDataSourceImpl =
-      RemoteDataSourceImpl(networkUtil: mockNetworkUtil);
-
   group('getConcreteNumberTrivia', () {
+    MockNetworkUtil mockNetworkUtil = MockNetworkUtil();
+
+    RemoteDataSourceImpl remoteDataSourceImpl =
+        RemoteDataSourceImpl(networkUtil: mockNetworkUtil);
+
     FawryResponseModel fawryResponseModel = FawryResponseModel(
         paymentGatewayReferenceId: "paymentGatewayReferenceId",
         merchantReferenceId: "merchantReferenceId",
@@ -32,7 +33,7 @@ void main() {
       () async {
         // arrange
         when(
-          mockNetworkUtil.postWithRaw(UrlsData.fawryUrl,
+          mockNetworkUtil.postWithRaw("https://cowpay.me/api/v1/charge/fawry",
               body: FawryRequestModel(
                       merchantReferenceId: "merchantReferenceId",
                       customerMerchantProfileId: "customerMerchantProfileId",
@@ -51,7 +52,7 @@ void main() {
                 description: "description"));
         // assert
         verify(mockNetworkUtil.postWithRaw(
-          UrlsData.fawryUrl,
+          'https://cowpay.me/api/v1/charge/fawry',
           body: FawryRequestModel(
                   merchantReferenceId: "merchantReferenceId",
                   customerMerchantProfileId: "customerMerchantProfileId",
