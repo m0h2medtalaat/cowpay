@@ -10,8 +10,6 @@ import 'package:mocktail/mocktail.dart';
 
 class MockApisManager extends Mock implements APIsManager {}
 
-class FakeFawryChargeRequest extends Fake implements FawryChargeRequest {}
-
 void main() {
   late RemoteDataSourceImpl dataSource;
   MockApisManager mockApisManager = MockApisManager();
@@ -54,7 +52,7 @@ void main() {
     //TODO:add call vars here
 
     test(
-      '''should perform a GET request on a URL with number
+      '''should perform a Send request on a URL with number
        being the endpoint and with application/json header''',
       () async {
         // arrange
