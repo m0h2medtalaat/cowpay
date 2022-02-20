@@ -1,6 +1,6 @@
 import 'package:api_manager/api_manager.dart';
 
-class FawryChanrgeRequestModel extends RequestModel {
+class FawryChargeRequestModel extends RequestModel {
   final String merchantReferenceId;
   final String customerMerchantProfileId;
   final String customerName;
@@ -10,7 +10,7 @@ class FawryChanrgeRequestModel extends RequestModel {
   final String signature;
   final String description;
 
-  FawryChanrgeRequestModel(
+  FawryChargeRequestModel(
       {required this.merchantReferenceId,
       required this.customerMerchantProfileId,
       required this.customerName,

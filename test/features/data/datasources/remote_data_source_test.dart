@@ -15,7 +15,7 @@ class FakeFawryChargeRequest extends Fake implements FawryChargeRequest {}
 void main() {
   late RemoteDataSourceImpl dataSource;
   MockApisManager mockApisManager = MockApisManager();
-  final FawryChanrgeRequestModel fawryRequestModel = FawryChanrgeRequestModel(
+  final FawryChargeRequestModel fawryRequestModel = FawryChargeRequestModel(
       merchantReferenceId: "merchantReferenceId",
       customerMerchantProfileId: "customerMerchantProfileId",
       customerName: "customerName",

@@ -6,7 +6,7 @@ class FawryChargeRequest with Request, PostRequest {
   const FawryChargeRequest(this.requestModel);
 
   @override
-  final FawryChanrgeRequestModel requestModel;
+  final FawryChargeRequestModel requestModel;
 
   @override
   String get path => UrlsData.fawryUrl;

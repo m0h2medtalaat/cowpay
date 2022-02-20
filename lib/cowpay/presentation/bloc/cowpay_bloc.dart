@@ -76,7 +76,7 @@ class CowpayBloc extends Bloc<CowpayEvent, CowpayState> {
         state.customerMerchantProfileId ?? '',
         state.amount ?? '',
       );
-      FawryChanrgeRequestModel fawryRequestModel = FawryChanrgeRequestModel(
+      FawryChargeRequestModel fawryRequestModel = FawryChargeRequestModel(
           merchantReferenceId: state.merchantReferenceId ?? '',
           amount: state.amount ?? '',
           customerEmail: state.customerEmail ?? '',

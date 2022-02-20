@@ -15,7 +15,7 @@ import 'package:flutter/foundation.dart';
 
 abstract class RemoteDataSource {
   Future<Either<Failure, FawryEntity>> fawryCharge(
-      {required FawryChanrgeRequestModel fawryRequestModel});
+      {required FawryChargeRequestModel fawryRequestModel});
 
   Future<Either<Failure, CreditCardEntity>> creditCardCharge(
       {required CreditCardChargeRequestModel creditCardRequestModel});
@@ -31,7 +31,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   @override
   Future<Either<Failure, FawryResponseModel>> fawryCharge(
-      {required FawryChanrgeRequestModel fawryRequestModel}) {
+      {required FawryChargeRequestModel fawryRequestModel}) {
     return _fawryChargeCall(fawryRequestModel);
   }
 
@@ -49,7 +49,7 @@ class RemoteDataSourceImpl implements RemoteDataSource {
 
   //region Fawry
   Future<Either<Failure, FawryResponseModel>> _fawryChargeCall(
-      FawryChanrgeRequestModel fawryRequestModel) async {
+      FawryChargeRequestModel fawryRequestModel) async {
     try {
       return await _apIsManager.send(
         request: FawryChargeRequest(fawryRequestModel),

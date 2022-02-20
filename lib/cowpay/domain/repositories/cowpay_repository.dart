@@ -9,7 +9,7 @@ import 'package:dartz/dartz.dart';
 
 abstract class CowpayRepository {
   Future<Either<Failure, FawryEntity>> fawryCharge(
-      {required FawryChanrgeRequestModel fawryRequestModel});
+      {required FawryChargeRequestModel fawryRequestModel});
   Future<Either<Failure, CreditCardEntity>> creditCardCharge(
       {required CreditCardChargeRequestModel creditCardRequestModel});
   Future<Either<Failure, CashCollectionResponseModel>> cashCollectionCharge(
