@@ -49,6 +49,7 @@ void main() {
         amount: "amount",
         signature: "signature",
         description: "description");
+
     final FawryChargeRequest fawryChargeRequest =
         FawryChargeRequest(fawryRequestModel);
 
@@ -57,15 +58,18 @@ void main() {
        being the endpoint and with application/json header''',
       () async {
         // arrange
-        setUpMockApiManagerSendSuccess200(Future.value(Right(FawryResponseModel(
+        setUpMockApiManagerSendSuccess200(Future.value(
+          Right(
+            FawryResponseModel(
                 success: true,
                 cowpayReferenceId: 11,
                 merchantReferenceId: "sds",
                 statusCode: 200,
                 statusDescription: "ok",
                 type: "fawry",
-                paymentGatewayReferenceId: "11")))
-            as Future<Either<Failure, FawryResponseModel>>);
+                paymentGatewayReferenceId: "11"),
+          ),
+        ) as Future<Either<Failure, FawryResponseModel>>);
 
         // act
         await dataSource.fawryCharge(fawryRequestModel: fawryRequestModel);
