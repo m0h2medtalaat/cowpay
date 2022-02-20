@@ -15,14 +15,27 @@ class FakeFawryChargeRequest extends Fake implements FawryChargeRequest {}
 void main() {
   late RemoteDataSourceImpl dataSource;
   MockApisManager mockApisManager = MockApisManager();
+  final FawryChanrgeRequestModel fawryRequestModel = FawryChanrgeRequestModel(
+      merchantReferenceId: "merchantReferenceId",
+      customerMerchantProfileId: "customerMerchantProfileId",
+      customerName: "customerName",
+      customerEmail: "customerEmail",
+      customerMobile: "customerMobile",
+      amount: "amount",
+      signature: "signature",
+      description: "description");
+
+  final FawryChargeRequest fawryChargeRequest =
+      FawryChargeRequest(fawryRequestModel);
 
   setUp(() {
-    registerFallbackValue(FakeFawryChargeRequest());
+    registerFallbackValue(fawryChargeRequest);
     registerFallbackValue((map) => FawryResponseModel.fromJson(map));
     dataSource = RemoteDataSourceImpl(mockApisManager);
   });
 
-  Future setUpMockApiManagerSendSuccess200(responseModel) async {
+  Future setUpMockApiManagerSendSuccess200(
+      Future<Either<Failure, FawryResponseModel>> responseModel) async {
     when(() => mockApisManager.send(
           request: any(named: 'request'),
           responseFromMap: any(named: 'responseFromMap'),
@@ -40,19 +53,6 @@ void main() {
   group('fawryCharge', () {
     //TODO:add call vars here
 
-    final FawryChanrgeRequestModel fawryRequestModel = FawryChanrgeRequestModel(
-        merchantReferenceId: "merchantReferenceId",
-        customerMerchantProfileId: "customerMerchantProfileId",
-        customerName: "customerName",
-        customerEmail: "customerEmail",
-        customerMobile: "customerMobile",
-        amount: "amount",
-        signature: "signature",
-        description: "description");
-
-    final FawryChargeRequest fawryChargeRequest =
-        FawryChargeRequest(fawryRequestModel);
-
     test(
       '''should perform a GET request on a URL with number
        being the endpoint and with application/json header''',
@@ -69,14 +69,14 @@ void main() {
                 type: "fawry",
                 paymentGatewayReferenceId: "11"),
           ),
-        ) as Future<Either<Failure, FawryResponseModel>>);
+        ));
 
         // act
         await dataSource.fawryCharge(fawryRequestModel: fawryRequestModel);
         // assert
         verify(() => mockApisManager.send(
-              request: fawryChargeRequest,
-              responseFromMap: (map) => FawryResponseModel.fromJson(map),
+              request: any(named: 'request'),
+              responseFromMap: any(named: 'responseFromMap'),
             ));
       },
     );
