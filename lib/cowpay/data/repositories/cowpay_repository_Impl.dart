@@ -16,7 +16,7 @@ class CowpayRepositoryImpl implements CowpayRepository {
 
   @override
   Future<Either<Failure, FawryEntity>> fawryCharge(
-      {required FawryRequestModel fawryRequestModel}) async {
+      {required FawryChanrgeRequestModel fawryRequestModel}) async {
     return await remoteDataSource.fawryCharge(
         fawryRequestModel: fawryRequestModel);
   }
