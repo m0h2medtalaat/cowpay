@@ -19,8 +19,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: nila
-      resolved-ref: "6c2587cbea95b47d2d90fcb1e6371438b5b12195"
+      ref: HEAD
+      resolved-ref: d0e70dd16daefe905a99c6f60cc3162a99f112ad
       url: "https://github.com/m0h2medtalaat/api_manager"
     source: git
     version: "0.0.1"
@@ -116,7 +116,7 @@ packages:
     source: hosted
     version: "0.10.1"
   dio:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: dio
       url: "https://pub.dartlang.org"

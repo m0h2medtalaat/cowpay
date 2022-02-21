@@ -1,4 +1,5 @@
 import 'package:api_manager/api_manager.dart';
+import 'package:api_manager/failures.dart';
 import 'package:api_manager/src/failure/failures.dart';
 import 'package:cowpay/cowpay/data/datasources/remote_data_source.dart';
 import 'package:cowpay/cowpay/data/models/fawry_request_model.dart';
@@ -25,6 +26,8 @@ void main() {
 
   final FawryChargeRequest fawryChargeRequest =
       FawryChargeRequest(fawryRequestModel);
+  Either<Failure, FawryResponseModel> failure404 =
+      Left(ServiceNotAvailableFailure());
 
   setUp(() {
     registerFallbackValue(fawryChargeRequest);
@@ -40,16 +43,25 @@ void main() {
         )).thenAnswer((_) async => responseModel);
   }
 
-  void setUpMockHttpClientFailure404() {
+  void setUpMockApiManagerFailure404() {
     when(
       () => mockApisManager.send(
-          request: any as Request,
-          responseFromMap: (map) => any as Function(Map<String, dynamic> map)),
-    ).thenAnswer((_) async => Left(Failures.serviceNotAvailableFailure()));
+          request: any(named: 'request'),
+          responseFromMap: any(named: 'responseFromMap')),
+    ).thenAnswer((_) async => failure404);
   }
 
   group('fawryCharge', () {
-    //TODO:add call vars here
+    Either<Failure, FawryResponseModel> responseModel = Right(
+      FawryResponseModel(
+          success: true,
+          cowpayReferenceId: 11,
+          merchantReferenceId: "sds",
+          statusCode: 200,
+          statusDescription: "ok",
+          type: "fawry",
+          paymentGatewayReferenceId: "11"),
+    );
 
     test(
       '''should perform a Send request on a URL with number
@@ -57,16 +69,7 @@ void main() {
       () async {
         // arrange
         setUpMockApiManagerSendSuccess200(Future.value(
-          Right(
-            FawryResponseModel(
-                success: true,
-                cowpayReferenceId: 11,
-                merchantReferenceId: "sds",
-                statusCode: 200,
-                statusDescription: "ok",
-                type: "fawry",
-                paymentGatewayReferenceId: "11"),
-          ),
+          responseModel,
         ));
 
         // act
@@ -78,30 +81,48 @@ void main() {
             ));
       },
     );
-    //
-    // test(
-    //   'should return NumberTrivia when the response code is 200 (success)',
-    //   () async {
-    //     // arrange
-    //     setUpMockApiManagerSendSuccess200();
-    //     // act
-    //     final result = await dataSource.getConcreteNumberTrivia(tNumber);
-    //     // assert
-    //     expect(result, equals(tNumberTriviaModel));
-    //   },
-    // );
-    //
-    // test(
-    //   'should throw a ServerException when the response code is 404 or other',
-    //   () async {
-    //     // arrange
-    //     setUpMockHttpClientFailure404();
-    //     // act
-    //     final call = dataSource.getConcreteNumberTrivia;
-    //     // assert
-    //     expect(() => call(tNumber), throwsA(TypeMatcher<ServerException>()));
-    //   },
-    // );
+
+    test(
+      'should return NumberTrivia when the response code is 200 (success)',
+      () async {
+        // arrange
+
+        setUpMockApiManagerSendSuccess200(
+          Future.value(responseModel),
+        );
+        // act
+        final result = await dataSource.fawryCharge(
+          fawryRequestModel: fawryRequestModel,
+        ) as Right<dynamic, FawryResponseModel>;
+        // assert
+        verify(
+          () => mockApisManager.send(
+            request: any(named: 'request'),
+            responseFromMap: any(named: 'responseFromMap'),
+          ),
+        );
+        // assert
+        expect(
+          result,
+          equals(
+            responseModel,
+          ),
+        );
+      },
+    );
+
+    test(
+      'should throw a ServerException when the response code is 404 or other',
+      () async {
+        // arrange
+        setUpMockApiManagerFailure404();
+        // act
+        Either<Failure, FawryResponseModel> result =
+            await dataSource.fawryCharge(fawryRequestModel: fawryRequestModel);
+        // assert
+        expect(result, equals(failure404));
+      },
+    );
   });
 
   // group('getRandomNumberTrivia', () {
