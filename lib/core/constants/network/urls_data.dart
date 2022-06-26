@@ -9,7 +9,7 @@ class UrlsData {
   static const String host_production = "https://cowpay.me";
   static const String host_staging = "https://staging.cowpay.me";
 
-  static const basicUrl = '/api/v1/';
+  static const basicUrl = '/api/v2/';
 
   //region Fawry
   static final fawryUrl = basicUrl + 'charge/fawry';
@@ -17,7 +17,7 @@ class UrlsData {
   //endregion
 
   //region Credit Card
-  static final creditCardUrl = basicUrl + 'charge/card';
+  static final creditCardUrl = basicUrl + 'charge/card/direct';
 
   //endregion
 

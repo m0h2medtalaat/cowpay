@@ -18,6 +18,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 
 part 'cowpay_event.dart';
+
 part 'cowpay_state.dart';
 
 class CowpayBloc extends Bloc<CowpayEvent, CowpayState> {
@@ -107,7 +108,7 @@ class CowpayBloc extends Bloc<CowpayEvent, CowpayState> {
     int currentYear = DateTime.now().year;
     List<String> yearsList = [];
     for (int i = 0; i < 10; i++) {
-      yearsList.add(currentYear.toString());
+      yearsList.add(currentYear.toString().replaceRange(0, 2, ''));
       currentYear += 1;
     }
 
@@ -203,7 +204,8 @@ class CowpayBloc extends Bloc<CowpayEvent, CowpayState> {
               expiryMonth: creditCardExpiryMonth.value,
               amount: state.amount ?? '',
               description: state.description ?? '',
-              signature: signature);
+              signature: signature,
+              cardHolder: state.creditCardHolderName.value);
 
       Either<Failure, CreditCardEntity> responseOrFailure =
           await creditCardUseCase.call(creditCardRequestModel);

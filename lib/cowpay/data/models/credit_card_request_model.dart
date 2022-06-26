@@ -13,6 +13,7 @@ class CreditCardChargeRequestModel extends RequestModel {
   final String amount;
   final String signature;
   final String description;
+  final String cardHolder;
 
   CreditCardChargeRequestModel({
     required this.merchantReferenceId,
@@ -27,6 +28,7 @@ class CreditCardChargeRequestModel extends RequestModel {
     required this.amount,
     required this.signature,
     required this.description,
+    required this.cardHolder,
     RequestProgressListener? progressListener,
   }) : super(progressListener);
 
@@ -44,6 +46,7 @@ class CreditCardChargeRequestModel extends RequestModel {
         amount,
         signature,
         description,
+        cardHolder,
       ];
 
   @override
@@ -61,6 +64,7 @@ class CreditCardChargeRequestModel extends RequestModel {
     data['amount'] = this.amount;
     data['signature'] = this.signature;
     data['description'] = this.description;
+    data['card_holder'] = this.cardHolder;
     return data;
   }
 }

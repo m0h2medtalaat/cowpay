@@ -5,17 +5,17 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class CowpayExample extends StatelessWidget {
-  double amount = 150.0;
+  double amount = 2.0;
   String customerEmail = "example@mail.com";
   String customerMobile = "01068890002";
   String description = "description";
   String customerMerchantProfileId = "ExmpleId122345682";
   String customerName = "Testing";
   String token =
-      "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiM2E3ZjUxMjBkOWE0ZjM5Y2Y0YjAzOGFlODVmMWY4ZDBmYWM4ZWZhZWFkZDgzZTcyZWZmZDI1YzdlYmM4ZWYxOTlkZjAxNjIwZmMyN2NhOWEiLCJpYXQiOiIxNjI2MDEzNjQ1LjA4NDAwOCIsIm5iZiI6IjE2MjYwMTM2NDUuMDg0MDEzIiwiZXhwIjoiMTY1NzU0OTY0NS4wNzkwMjYiLCJzdWIiOiI2MTgiLCJzY29wZXMiOltdfQ.BSvvHMcdAq-Q10dn1HvSKdXBpecel25oXE9UU9Fm1FsUtrAcDhTrXNGJs_pklmczmBFSXcVTR1Te7W2fwK1uxA";
-  String merchantCode = "Chy9jpiJSONq";
+      "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNzI5MGJiOWNiNTllNDdmMzk1YmExNTNkN2VlZjMzODhmYjVhNDVmZGEzZDE0YmU1MGI5MTFkZjNlNmY3OTM5ZTQ3ZjYxODQ4NzhmNDZmMjQiLCJpYXQiOjE2NTA0NTA4OTAuODQ0NjQ2LCJuYmYiOjE2NTA0NTA4OTAuODQ0NjUxLCJleHAiOjQ4MDYxMjQ0OTAuNzkwODI1LCJzdWIiOiI2OCIsInNjb3BlcyI6W119.dbcCTGtoIAFF0gRD3moqahrANsdf0wbvnzmM-WUvARAvw_f7CKtfUkpE1X-WbvtR0foyQxFu5C_f3l9-lHFYFg";
+  String merchantCode = "sgwDzj24xXAc";
   String merchantHash =
-      "\$2y\$10\$2it43S96/fgf4VdiQKeQDeowX0T9RDmA3fRuZe8pRl8UmOYEAwz.6";
+      "\$2y\$10\$UZDXXAVFHsXgF6azMT6McuLnK88n3aclJMeL8BNt1AI6/NDbTgHwe";
   // String token;
   // String merchantCode;
   // String merchantHash ;

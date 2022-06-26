@@ -50,7 +50,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
             Expanded(
               child: WebView(
                 initialUrl:
-                    '${CowpayHelper.activeEnvironment!.baseUrl}/v2/card/form/${widget.creditCardEntity.cowpayReferenceId}',
+                    '${CowpayHelper.activeEnvironment!.baseUrl}/v2/card/form/${widget.creditCardEntity.token}',
                 javascriptMode: JavascriptMode.unrestricted,
                 onWebViewCreated: (WebViewController webViewController) {
                   _controller.complete(webViewController);
@@ -62,7 +62,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
                   _toasterJavascriptChannel(context),
                 },
                 navigationDelegate: (NavigationRequest request) {
-                  if (request.url.contains('URL2')) {
+                  if (request.url.contains('SUCCESS')) {
                     _successDialog(context);
                     return NavigationDecision.prevent;
                   } else if (request.url.contains('URL3')) {

@@ -250,7 +250,7 @@ class CreditCardWidget extends StatelessWidget {
             list: state.yearsList ?? [],
             onChange: onChangeCreditCardExpiryYear,
             isNotValid: isInValid,
-            hintText: "YYYY",
+            hintText: "YY",
             value: state.creditCardExpiryYear.value,
           );
         });

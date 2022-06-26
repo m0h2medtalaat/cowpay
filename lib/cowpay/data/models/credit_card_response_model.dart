@@ -1,26 +1,20 @@
 import 'package:api_manager/api_manager.dart';
 import 'package:cowpay/cowpay/domain/entities/credit_card_entity.dart';
+import 'package:flutter/foundation.dart';
 
-class CreditCardResponseModel extends CreditCardEntity
-    implements ResponseModel {
-  bool? success;
-  int? statusCode;
-  String? statusDescription;
-  String? type;
-  bool? threeDSecured;
-  String? paymentGatewayReferenceId;
-  String? merchantReferenceId;
-  int? cowpayReferenceId;
+class CreditCardResponseModel extends CreditCardEntity {
 
   CreditCardResponseModel(
-      {success,
-      statusCode,
-      statusDescription,
-      type,
-      threeDSecured,
-      paymentGatewayReferenceId,
-      merchantReferenceId,
-      cowpayReferenceId})
+      {
+        @required success,
+        @required statusCode,
+        @required statusDescription,
+        @required type,
+        @required threeDSecured,
+        @required paymentGatewayReferenceId,
+        @required merchantReferenceId,
+        @required cowpayReferenceId,
+        @required token})
       : super(
           success: success,
           statusCode: statusCode,
@@ -30,7 +24,9 @@ class CreditCardResponseModel extends CreditCardEntity
           paymentGatewayReferenceId: paymentGatewayReferenceId,
           merchantReferenceId: merchantReferenceId,
           cowpayReferenceId: cowpayReferenceId,
+          token: token,
         );
+
   factory CreditCardResponseModel.fromJson(Map<String, dynamic> json) {
     return CreditCardResponseModel(
       success: json['success'],
@@ -41,6 +37,7 @@ class CreditCardResponseModel extends CreditCardEntity
       cowpayReferenceId: json['cowpay_reference_id'],
       merchantReferenceId: json['merchant_reference_id'],
       threeDSecured: json['three_d_secured'] ?? false,
+      token: json['token'],
     );
   }
 }
