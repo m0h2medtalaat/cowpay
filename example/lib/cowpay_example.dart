@@ -12,10 +12,10 @@ class CowpayExample extends StatelessWidget {
   String customerMerchantProfileId = "ExmpleId122345682";
   String customerName = "Testing";
   String token =
-      "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNzI5MGJiOWNiNTllNDdmMzk1YmExNTNkN2VlZjMzODhmYjVhNDVmZGEzZDE0YmU1MGI5MTFkZjNlNmY3OTM5ZTQ3ZjYxODQ4NzhmNDZmMjQiLCJpYXQiOjE2NTA0NTA4OTAuODQ0NjQ2LCJuYmYiOjE2NTA0NTA4OTAuODQ0NjUxLCJleHAiOjQ4MDYxMjQ0OTAuNzkwODI1LCJzdWIiOiI2OCIsInNjb3BlcyI6W119.dbcCTGtoIAFF0gRD3moqahrANsdf0wbvnzmM-WUvARAvw_f7CKtfUkpE1X-WbvtR0foyQxFu5C_f3l9-lHFYFg";
-  String merchantCode = "sgwDzj24xXAc";
+      "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNTI2ZmM1YzNmMTU4MmNlY2RhNTUyOTNiYzcyMTdhZGFlZTE3OTk2YjgxMDlhNTUxNGY1OGNiMjc1ZmRlMzdlNDZhOTRiOWM2NzY4ZWFjNGUiLCJpYXQiOjE2NTI4ODQ3NDguNzg1Nzc3LCJuYmYiOjE2NTI4ODQ3NDguNzg1Nzg0LCJleHAiOjQ4MDg1NTgzNDguNzA0MTc1LCJzdWIiOiI4OTAiLCJzY29wZXMiOltdfQ.M6F7sUxAx8aEd6y963KEBnFkybmhbdbAaWByKfTvbKGWUMH7QgUsMWrnhVWBLqXDZctWdt6UFvi606WUNJiSmA";
+  String merchantCode = "Bi0InJ1bp5gh";
   String merchantHash =
-      "\$2y\$10\$UZDXXAVFHsXgF6azMT6McuLnK88n3aclJMeL8BNt1AI6/NDbTgHwe";
+      "\$2y\$10\$06g0SeTNKoFD0SU1aKcO9.ProYRS4.mk8gyUW82VUJ2KKwtiNb30G";
   // String token;
   // String merchantCode;
   // String merchantHash ;

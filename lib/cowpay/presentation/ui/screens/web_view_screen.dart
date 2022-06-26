@@ -106,8 +106,8 @@ class _WebViewScreenState extends State<WebViewScreen> {
         builder: (BuildContext context) {
           return DialogView(
             dialogType: DialogType.DIALOG_INFO,
-            actionText: "done",
-            content: "Your Payment successfully Done",
+            actionText: "Done",
+            content: "Your Payment Successfully Done",
             onCLick: (_) {
               //TODO: do onSuccess
               Navigator.of(context).pop();
@@ -129,7 +129,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
             // title: "Error",
             dialogType: DialogType.DIALOG_ERROR,
             actionText: "done",
-            content: "Something went wrong  please try again later",
+            content: "Something went wrong, please try again later",
             onCLick: (_) {
               //TODO: do onError
               Navigator.of(context).pop();
